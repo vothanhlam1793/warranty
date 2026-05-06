@@ -17,12 +17,17 @@ from .routers.supplier_orders import router as supplier_orders_router
 from .routers.transactions import router as transactions_router
 from .routers.tasks import router as tasks_router
 from .routers.auth import router as auth_router
+from .routers.supplier_receives import router as supplier_receives_router
+from .routers.checklists import router as checklists_router
 
 app = FastAPI(title="Warranty Management System", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
@@ -55,6 +60,8 @@ app.include_router(suppliers_router)
 app.include_router(supplier_orders_router)
 app.include_router(transactions_router)
 app.include_router(tasks_router)
+app.include_router(supplier_receives_router)
+app.include_router(checklists_router)
 
 
 # ── Serve uploaded evidence files ─────────────────────────────────────────────
@@ -84,7 +91,7 @@ if os.path.isdir(WEB_DIR):
 @app.on_event("startup")
 def on_startup():
     init_db()
-    print("✓ Database ready")
+    print("Database ready")
 
 
 @app.get("/api/health")

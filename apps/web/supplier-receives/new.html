@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Lập phiếu nhận NCC</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item active" href="/supplier-receives/new.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Lập phiếu nhận NCC</span>
+      <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+    </div>
+    <div class="page">
+  <div class="card mb-2"><div class="card-body">
+    <div class="form-grid" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="form-group"><label class="form-label">Nhà cung cấp</label><select id="supplierId" class="form-control"></select></div>
+      <div class="form-group"><label class="form-label">Ngày nhận</label><input id="receivedDate" type="date" class="form-control"/></div>
+      <div class="form-group"><label class="form-label">Người nhận</label><input id="actor" class="form-control" placeholder="Tên nhân viên"/></div>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="loadCandidates()">Tải danh sách B2</button>
+  </div></div>
+
+  <div class="card mb-2"><div class="card-header"><h3>Mã hàng đang B2 của NCC</h3></div>
+    <div class="table-wrap"><table><thead><tr><th></th><th>Mã</th><th>Phiếu</th><th>Sản phẩm</th><th>Serial</th><th>Yêu cầu</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </div>
+
+  <div class="card"><div class="card-body">
+    <div class="form-group"><label class="form-label">Ghi chú phiếu</label><textarea id="note" class="form-control" rows="3"></textarea></div>
+    <button class="btn btn-primary" onclick="submitReceive()">✓ Tạo phiếu nhận & chuyển B2 → C1</button>
+    <a href="/supplier-receives/list.html" class="btn btn-ghost">← Danh sách phiếu nhận</a>
+  </div></div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+let candidates = [];
+document.getElementById('receivedDate').value = new Date().toISOString().slice(0,10);
+
+async function init(){
+  await checkAuth();
+  const sups = await api.get('/api/suppliers');
+  const sel = document.getElementById('supplierId');
+  sel.innerHTML = '<option value="">-- Chọn NCC --</option>' + sups.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+}
+
+async function loadCandidates(){
+  const supplierId = parseInt(document.getElementById('supplierId').value);
+  if(!supplierId) return toast('Chọn NCC','error');
+  candidates = await api.get(`/api/supplier-receives/candidate-items?supplier_id=${supplierId}`);
+  document.getElementById('tbody').innerHTML = candidates.map(x=>`<tr>
+    <td><input type="checkbox" id="ck-${x.ticket_item_id}"/></td>
+    <td><b>${x.item_code||''}</b></td><td>${x.ticket_no||''}</td><td>${x.product_name||''}</td><td>${x.serial_no||''}</td><td>${x.customer_complaint||''}</td>
+  </tr>`).join('');
+}
+
+async function submitReceive(){
+  const supplierId = parseInt(document.getElementById('supplierId').value);
+  if(!supplierId) return toast('Chọn NCC','error');
+  const picked = candidates.filter(x => document.getElementById(`ck-${x.ticket_item_id}`)?.checked);
+  if(!picked.length) return toast('Chọn ít nhất 1 mã hàng','error');
+  const payload = {
+    supplier_id: supplierId,
+    received_date: document.getElementById('receivedDate').value,
+    actor: document.getElementById('actor').value || null,
+    note: document.getElementById('note').value || null,
+    items: picked.map(x => ({ ticket_item_id: x.ticket_item_id }))
+  };
+  const rec = await api.post('/api/supplier-receives', payload);
+  toast(`Đã tạo phiếu nhận ${rec.receive_no}`);
+  setTimeout(()=> location.href = '/supplier-receives/list.html', 500);
+}
+
+init().catch(e=>toast(e.message,'error'));
+</script>
+</body>
+</html>

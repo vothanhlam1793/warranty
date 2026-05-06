@@ -22,6 +22,7 @@
       <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
       <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
       <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
       <div class="nav-group-label">Tài chính</div>
       <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
     </nav>
@@ -159,24 +160,18 @@ function updateItemCodePreviews() {
   });
 }
 
-// Customer autocomplete (search both local DB and KiotViet mock)
+// Customer autocomplete (local DB only)
 setupAutocomplete({
   input: document.getElementById("customerSearch"),
   listEl: document.getElementById("customerList"),
   fetchFn: async (q) => {
-    const [local, kv] = await Promise.all([
-      api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=5`),
-      api.get(`/api/customers/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
-    ]);
-    const seen = new Set(local.map(c => c.name));
-    const kvNew = kv.filter(c => !seen.has(c.name)).map(c => ({ ...c, _from_kv: true }));
-    return [...local, ...kvNew, { _create_new: true, name: `Tạo mới: "${q}"`, _raw_q: q }];
+    const local = await api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=10`);
+    return [...local, { _create_new: true, name: `Tạo mới: "${q}"`, _raw_q: q }];
   },
   onSelect: {
     renderItem: item => {
       if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
-      const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
-      return `${item.name} ${src}<div class="sub">${item.phone || ""}</div>`;
+      return `${item.name}<div class="sub">${item.phone || ""}</div>`;
     },
     pick: async item => {
       if (item._create_new) {
@@ -185,16 +180,7 @@ setupAutocomplete({
         document.getElementById("customerSearch").value = "";
         return;
       }
-      if (item._from_kv) {
-        // Import from KiotViet into local DB
-        const created = await api.post("/api/customers", {
-          name: item.name, phone: item.phone || null,
-          address: item.address || null, kiotviet_id: item.kiotviet_id,
-        });
-        selectCustomer(created);
-      } else {
-        selectCustomer(item);
-      }
+      selectCustomer(item);
     }
   }
 });
@@ -278,35 +264,24 @@ function addItemRow() {
 
   updateItemCodePreviews();
 
-  // Product autocomplete
+  // Product autocomplete (local DB only)
   setupAutocomplete({
     input: document.getElementById(`ps-${id}`),
     listEl: document.getElementById(`pl-${id}`),
     fetchFn: async q => {
-      const [local, kv] = await Promise.all([
-        api.get(`/api/products?q=${encodeURIComponent(q)}&limit=5`),
-        api.get(`/api/products/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
-      ]);
-      const seen = new Set(local.map(p => p.name));
-      const kvNew = kv.filter(p => !seen.has(p.name)).map(p => ({...p, _from_kv:true}));
-      return [...local, ...kvNew, {_create_new:true, name:`Tạo mới: "${q}"`, _raw_q: q}];
+      const local = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=10`);
+      return [...local, {_create_new:true, name:`Tạo mới: "${q}"`, _raw_q: q}];
     },
     onSelect: {
       renderItem: item => {
         if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
-        const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
-        return `${item.name} ${src}<div class="sub">${item.sku || ""}</div>`;
+        return `${item.name}<div class="sub">${item.sku || ""}</div>`;
       },
       pick: async item => {
         let product = item;
         if (item._create_new) {
           product = await api.post("/api/products", { name: item._raw_q });
           toast(`Đã tạo sản phẩm: ${product.name}`);
-        } else if (item._from_kv) {
-          product = await api.post("/api/products", {
-            name: item.name, sku: item.sku || null,
-            kiotviet_item_id: item.kiotviet_item_id, kiotviet_synced: true,
-          });
         }
         document.getElementById(`pid-${id}`).value = product.id;
         document.getElementById(`ps-${id}`).value = product.name;

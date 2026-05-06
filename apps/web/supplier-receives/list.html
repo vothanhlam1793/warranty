@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Phiếu nhận NCC</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item active" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Phiếu nhận NCC</span>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <a class="btn btn-primary btn-sm" href="/supplier-receives/new.html">＋ Lập phiếu nhận</a>
+      </div>
+    </div>
+    <div class="page">
+      <div class="card"><div class="table-wrap"><table>
+        <thead><tr><th>Mã phiếu</th><th>NCC</th><th>Ngày nhận</th><th>Số item</th><th>Người nhận</th><th>Tạo lúc</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table></div></div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+async function load(){
+  await checkAuth();
+  const rows = await api.get('/api/supplier-receives');
+  document.getElementById('tbody').innerHTML = rows.map(r => `<tr onclick="location.href='/supplier-receives/detail.html?id=${r.id}'" style="cursor:pointer">
+    <td><b>${r.receive_no}</b></td><td>${r.supplier_name||''}</td><td>${fmtDate(r.received_date)}</td><td>${r.items?.length||0}</td><td>${r.actor||'—'}</td><td>${(r.created_at||'').slice(0,10)}</td>
+  </tr>`).join('');
+}
+load().catch(e=>toast(e.message,'error'));
+</script>
+</body>
+</html>

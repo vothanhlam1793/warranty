@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Mẫu checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item active" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Mẫu checklist</span>
+      <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+    </div>
+
+    <div class="page">
+      <div class="card mb-2">
+        <div class="card-header"><h2>Tạo mẫu mới</h2></div>
+        <div class="card-body">
+          <div class="form-grid" style="grid-template-columns:2fr 1fr auto">
+            <div class="form-group"><label class="form-label">Tên template</label><input id="name" class="form-control" placeholder="VD: Camera A2 Pre-check"/></div>
+            <div class="form-group"><label class="form-label">Stage</label><select id="stage" class="form-control"><option value="A2_PRECHECK">A2_PRECHECK</option><option value="C1_RETURN">C1_RETURN</option></select></div>
+            <div class="form-group" style="align-self:end"><button class="btn btn-primary" onclick="createTpl()">＋ Tạo</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h2>Danh sách template</h2></div>
+        <div class="card-body" id="list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+async function load() {
+  await checkAuth();
+  const rows = await api.get('/api/checklists/templates');
+  document.getElementById('list').innerHTML = rows.map(x => `
+    <div style="padding:.7rem 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        <b>${x.name}</b>
+        <span class="badge badge-gray">${x.stage}</span>
+        <button class="btn btn-secondary btn-sm" onclick="view(${x.id})">Items</button>
+      </div>
+      <div id="t-${x.id}" style="margin-top:.45rem"></div>
+    </div>
+  `).join('');
+}
+
+async function createTpl() {
+  const name = document.getElementById('name').value.trim();
+  if (!name) return toast('Nhập tên template', 'error');
+  await api.post('/api/checklists/templates', {
+    name,
+    stage: document.getElementById('stage').value,
+    description: null,
+    is_active: true,
+  });
+  document.getElementById('name').value = '';
+  toast('Đã tạo template');
+  await load();
+}
+
+async function view(id) {
+  const t = await api.get(`/api/checklists/templates/${id}`);
+  document.getElementById(`t-${id}`).innerHTML = `
+    <div class="text-sm" style="margin-bottom:.35rem">${t.items.map(i => `• ${i.label}`).join('<br>') || '<span class="text-muted">Chưa có item</span>'}</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+      <input id="item-${id}" class="form-control" style="max-width:420px" placeholder="Nội dung checklist item"/>
+      <button class="btn btn-primary btn-sm" onclick="addItem(${id})">Thêm item</button>
+    </div>
+  `;
+}
+
+async function addItem(id) {
+  const input = document.getElementById(`item-${id}`);
+  const label = (input?.value || '').trim();
+  if (!label) return toast('Nhập nội dung item', 'error');
+  await api.post(`/api/checklists/templates/${id}/items`, {
+    label,
+    required: true,
+    sort_order: 0,
+    input_type: 'boolean',
+  });
+  input.value = '';
+  toast('Đã thêm item');
+  await view(id);
+}
+
+load().catch(e => toast(e.message, 'error'));
+</script>
+</body>
+</html>

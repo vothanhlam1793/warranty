@@ -18,10 +18,12 @@
       <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
       <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
       <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
       <div class="nav-group-label">Danh mục</div>
       <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
       <a class="nav-item active" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
       <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
       <div class="nav-group-label">Tài chính</div>
       <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
     </nav>
@@ -33,6 +35,8 @@
     <div class="page">
       <div class="filter-bar mb-2">
         <input id="searchQ" class="form-control" placeholder="Tìm tên, SĐT..." style="max-width:320px" oninput="load()"/>
+        <button id="syncBtn" class="btn btn-secondary btn-sm" onclick="triggerSync()">Dong bo KiotViet</button>
+        <span id="syncStatus" class="text-sm text-muted" style="align-self:center"></span>
       </div>
       <div class="card">
         <div class="table-wrap">
@@ -67,7 +71,34 @@ async function load() {
       <td class="td-muted">${fmtDate(c.created_at?.slice(0,10))}</td>
     </tr>`).join("");
 }
-load().catch(e => toast(e.message,"error"));
+
+async function refreshSyncStatus() {
+  try {
+    const st = await api.get("/api/customers/sync/status");
+    const c = st.customers?.last_success_at ? fmtDate(st.customers.last_success_at.slice(0,10)) : "chua";
+    const p = st.products?.last_success_at ? fmtDate(st.products.last_success_at.slice(0,10)) : "chua";
+    document.getElementById("syncStatus").textContent = `Sync KH: ${c} | SP: ${p}`;
+  } catch {
+    document.getElementById("syncStatus").textContent = "Khong doc duoc trang thai sync";
+  }
+}
+
+async function triggerSync() {
+  const btn = document.getElementById("syncBtn");
+  btn.disabled = true;
+  btn.textContent = "Dang sync...";
+  try {
+    await api.post("/api/customers/sync", {});
+    toast("Da dong bo du lieu KiotViet");
+    await Promise.all([load(), refreshSyncStatus()]);
+  } catch (e) {
+    toast(e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Dong bo KiotViet";
+  }
+}
+Promise.all([load(), refreshSyncStatus()]).catch(e => toast(e.message,"error"));
 </script>
 </body>
 </html>

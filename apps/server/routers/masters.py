@@ -8,8 +8,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import Customer, Product, Supplier
+from ..models import Customer, Product, Supplier, SyncState
 from ..kiotviet.client import search_customers, search_products
+from ..services.kiotviet_sync import sync_all
 
 # ── Customers ─────────────────────────────────────────────────────────────────
 customers_router = APIRouter(prefix="/api/customers", tags=["customers"])
@@ -127,6 +128,24 @@ def update_product(product_id: int, payload: ProductIn, db: Session = Depends(ge
 @products_router.get("/kiotviet/search")
 def kiotviet_search_products(q: str = Query(""), limit: int = 10):
     return search_products(q, limit)
+
+
+@customers_router.get("/sync/status")
+def sync_status(db: Session = Depends(get_db)):
+    rows = db.query(SyncState).all()
+    return {
+        r.key: {
+            "last_success_at": r.last_success_at.isoformat() if r.last_success_at else None,
+            "last_error": r.last_error,
+            "updated_at": r.updated_at.isoformat() if r.updated_at else None,
+        }
+        for r in rows
+    }
+
+
+@customers_router.post("/sync", status_code=202)
+def trigger_sync(db: Session = Depends(get_db)):
+    return sync_all(db)
 
 
 # ── Suppliers ─────────────────────────────────────────────────────────────────

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Checklist run</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="page" style="max-width:960px;margin:0 auto;padding:1rem">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+    <h2 id="title">Checklist run</h2>
+    <a class="btn btn-ghost btn-sm" href="javascript:history.back()">← Quay lại</a>
+  </div>
+
+  <div class="card mb-2"><div class="card-body" id="meta">Đang tải...</div></div>
+  <div id="saveHint" class="text-sm text-muted" style="margin-bottom:.6rem"></div>
+
+  <div class="card mb-2">
+    <div class="card-header"><h3>Checklist</h3></div>
+    <div class="card-body" id="items"></div>
+  </div>
+
+  <div class="card mb-2">
+    <div class="card-header"><h3>Ảnh minh chứng</h3></div>
+    <div class="card-body">
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        <input type="file" id="up" accept="image/*"/>
+        <input id="caption" class="form-control" style="max-width:320px" placeholder="Chú thích ảnh (optional)"/>
+        <button class="btn btn-secondary btn-sm" onclick="uploadEv()">Upload</button>
+      </div>
+      <div id="evidenceList" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Finalize</h3></div>
+    <div class="card-body">
+      <div class="form-grid" style="grid-template-columns:1fr 2fr">
+        <div class="form-group"><label class="form-label">Người kiểm</label><input id="inspector" class="form-control"/></div>
+        <div class="form-group"><label class="form-label">Ghi chú tổng</label><input id="runNote" class="form-control"/></div>
+      </div>
+      <div class="form-group" style="max-width:340px">
+        <label class="form-label">Kết luận *</label>
+        <select id="finalConclusion" class="form-control"></select>
+      </div>
+      <div id="finalBtns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+      <div class="text-sm text-muted" style="margin-top:.4rem">Điều kiện kết thúc: checklist hoàn thành, có ảnh minh chứng, có kết luận, có tên và ghi chú người kiểm.</div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+const runId = new URLSearchParams(location.search).get('run_id');
+let run = null;
+
+async function load() {
+  await checkAuth();
+  run = await api.get(`/api/checklists/runs/${runId}`);
+  document.getElementById('title').textContent = `Checklist #${run.id}`;
+  document.getElementById('meta').innerHTML = `<b>Stage:</b> ${run.stage} · <b>Kết luận:</b> ${run.conclusion}`;
+  document.getElementById('inspector').value = run.inspector || '';
+  if (!document.getElementById('inspector').value && currentUser?.display_name) {
+    document.getElementById('inspector').value = currentUser.display_name;
+  }
+  document.getElementById('runNote').value = run.note || '';
+
+  if (!run.items.length) {
+    document.getElementById('items').innerHTML = `<div class="text-sm" style="color:var(--danger)">Template của run này chưa có checklist item. Vui lòng vào trang Mẫu checklist để thêm item.</div>`;
+  } else {
+  document.getElementById('items').innerHTML = run.items.map(i => `
+    <div style="margin-bottom:.55rem;padding:.55rem;border:1px solid var(--border);border-radius:8px">
+      <label style="display:flex;align-items:center;gap:.45rem"><input type="checkbox" ${i.checked ? 'checked' : ''} onchange="upd(${i.run_item_id}, this.checked)"/> <b>${i.label}</b> ${i.required ? '<span class="badge badge-yellow">required</span>' : ''}</label>
+      <input class="form-control" style="margin-top:.35rem" placeholder="Ghi chú mục" value="${(i.note || '').replace(/"/g,'&quot;')}" onchange="note(${i.run_item_id}, this.value)"/>
+    </div>`).join('');
+  }
+
+  document.getElementById('evidenceList').innerHTML = (run.evidence || []).map(e => `
+    <div style="position:relative">
+      <img src="http://localhost:8000${e.file_url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"/>
+      <button class="btn btn-ghost btn-sm" style="position:absolute;top:2px;right:2px;background:#fff" onclick="delEv(${e.id})">✕</button>
+    </div>`).join('');
+
+  const isA2 = run.stage === 'A2_PRECHECK';
+  const finalSel = document.getElementById('finalConclusion');
+  finalSel.innerHTML = isA2
+    ? `<option value="">-- Chọn kết luận --</option><option value="completed">Hoàn thành A2</option>`
+    : `<option value="">-- Chọn kết luận --</option><option value="pass">PASS -> C2</option><option value="fail">FAIL -> C3</option>`;
+  document.getElementById('finalBtns').innerHTML = `<button class="btn btn-primary" onclick="finishCheck()">✅ Kết thúc kiểm tra</button>`;
+}
+
+async function upd(id, checked) {
+  try {
+    await api.patch(`/api/checklists/runs/${runId}/items`, { items: [{ run_item_id: id, checked }] });
+    document.getElementById('saveHint').textContent = `✓ Đã lưu lúc ${new Date().toLocaleTimeString('vi-VN')}`;
+  } catch (e) {
+    toast(e.message || 'Lưu thất bại', 'error');
+  }
+}
+
+async function note(id, v) {
+  try {
+    await api.patch(`/api/checklists/runs/${runId}/items`, { items: [{ run_item_id: id, note: v }] });
+    document.getElementById('saveHint').textContent = `✓ Đã lưu lúc ${new Date().toLocaleTimeString('vi-VN')}`;
+  } catch (e) {
+    toast(e.message || 'Lưu thất bại', 'error');
+  }
+}
+
+async function uploadEv() {
+  const f = document.getElementById('up').files[0];
+  if (!f) return toast('Chọn ảnh trước', 'error');
+  const fd = new FormData();
+  fd.append('file', f);
+  fd.append('caption', document.getElementById('caption').value || '');
+  const res = await fetch(`http://localhost:8000/api/checklists/runs/${runId}/evidence`, {
+    method: 'POST',
+    body: fd,
+    credentials: 'include',
+  });
+  if (!res.ok) return toast(await res.text(), 'error');
+  toast('Đã upload ảnh');
+  document.getElementById('up').value = '';
+  document.getElementById('caption').value = '';
+  await load();
+}
+
+async function delEv(evId) {
+  await api.delete(`/api/checklists/runs/${runId}/evidence/${evId}`);
+  await load();
+}
+
+async function finalize(conclusion) {
+  await api.post(`/api/checklists/runs/${runId}/finalize`, {
+    inspector: document.getElementById('inspector').value || null,
+    note: document.getElementById('runNote').value || null,
+    conclusion,
+  });
+  toast('Đã finalize checklist');
+  await load();
+}
+
+async function finishCheck() {
+  const inspector = (document.getElementById('inspector').value || '').trim();
+  const note = (document.getElementById('runNote').value || '').trim();
+  const conclusion = document.getElementById('finalConclusion').value;
+
+  if (!inspector) return toast('Vui lòng nhập người kiểm', 'error');
+  if (!note) return toast('Vui lòng nhập ghi chú người kiểm', 'error');
+  if (!conclusion) return toast('Vui lòng chọn kết luận', 'error');
+
+  if (!run?.items?.length) return toast('Run chưa có checklist item', 'error');
+  const notDone = run.items.filter(i => i.required && !i.checked);
+  if (notDone.length) {
+    return toast(`Còn ${notDone.length} mục required chưa tick`, 'error');
+  }
+
+  if (!run.evidence || run.evidence.length < 1) {
+    return toast('Cần ít nhất 1 ảnh minh chứng trước khi kết thúc', 'error');
+  }
+
+  await finalize(conclusion);
+}
+
+load().catch(e => toast(e.message, 'error'));
+</script>
+</body>
+</html>

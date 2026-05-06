@@ -13,19 +13,13 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import User, UserSession
 
-try:
-    from passlib.context import CryptContext
-    pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    def verify_password(plain: str, hashed: str) -> bool:
-        return pwd_ctx.verify(plain, hashed)
-    def hash_password(plain: str) -> str:
-        return pwd_ctx.hash(plain)
-except ImportError:
-    import hashlib
-    def verify_password(plain: str, hashed: str) -> bool:  # type: ignore
-        return hashlib.sha256(plain.encode()).hexdigest() == hashed
-    def hash_password(plain: str) -> str:  # type: ignore
-        return hashlib.sha256(plain.encode()).hexdigest()
+import bcrypt as _bcrypt
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return _bcrypt.checkpw(plain.encode(), hashed.encode())
+
+def hash_password(plain: str) -> str:
+    return _bcrypt.hashpw(plain.encode(), _bcrypt.gensalt()).decode()
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -84,6 +78,7 @@ def login(payload: LoginIn, response: Response, db: Session = Depends(get_db)):
         value=session_id,
         httponly=True,
         samesite="lax",
+        secure=False,
         max_age=SESSION_TTL_HOURS * 3600,
         path="/",
     )

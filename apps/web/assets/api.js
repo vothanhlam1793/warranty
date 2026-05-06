@@ -17,6 +17,7 @@ const ACTION_LABELS = {
 async function apiFetch(path, opts = {}) {
   const r = await fetch(API + path, {
     headers: { "Content-Type": "application/json", ...opts.headers },
+    credentials: "include",
     ...opts,
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
@@ -76,30 +77,37 @@ function actionBadge(a) {
 
 /* ── Autocomplete ── */
 function setupAutocomplete({ input, listEl, fetchFn, onSelect }) {
-  let active = false;
-  input.addEventListener("input", async () => {
-    const q = input.value.trim();
-    if (q.length < 1) { listEl.innerHTML = ""; listEl.style.display = "none"; return; }
-    const results = await fetchFn(q).catch(() => []);
-    listEl.innerHTML = "";
-    if (!results.length) { listEl.style.display = "none"; return; }
-    listEl.style.display = "block";
-    results.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "autocomplete-item";
-      div.innerHTML = onSelect.renderItem(item);
-      div.addEventListener("click", () => {
-        onSelect.pick(item);
-        listEl.style.display = "none";
+  let timer = null;
+  let reqSeq = 0;
+  input.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+      const q = input.value.trim();
+      if (q.length < 1) { listEl.innerHTML = ""; listEl.style.display = "none"; return; }
+      const mySeq = ++reqSeq;
+      const results = await fetchFn(q).catch(() => []);
+      if (mySeq !== reqSeq) return;
+      listEl.innerHTML = "";
+      if (!results.length) { listEl.style.display = "none"; return; }
+      listEl.style.display = "block";
+      results.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "autocomplete-item";
+        div.innerHTML = onSelect.renderItem(item);
+        div.addEventListener("click", () => {
+          onSelect.pick(item);
+          listEl.style.display = "none";
+        });
+        listEl.appendChild(div);
       });
-      listEl.appendChild(div);
-    });
+    }, 250);
   });
+
   document.addEventListener("click", e => {
     if (!input.contains(e.target) && !listEl.contains(e.target)) {
       listEl.style.display = "none";
     }
-  });
+  }, { passive: true });
 }
 
 /* ── Auth helpers ── */

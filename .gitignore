@@ -10,6 +10,9 @@ ENV/
 *.db
 *.sqlite3
 
+# Environment
+.env
+
 # OS
 .DS_Store
 Thumbs.db

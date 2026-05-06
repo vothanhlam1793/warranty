@@ -104,10 +104,12 @@
       <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
       <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
       <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
       <div class="nav-group-label">Danh mục</div>
       <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
       <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
       <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
       <div class="nav-group-label">Tài chính</div>
       <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
     </nav>
@@ -175,6 +177,39 @@
   </div>
 </div>
 
+<!-- Modal: A2 liên hệ khách -->
+<div class="modal-overlay hidden" id="contactModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h3>📞 Ghi nhận đã liên hệ khách</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('contactModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="contactItemInfo" class="text-sm text-muted mb-2"></p>
+      <div class="form-group mb-2">
+        <label class="form-label">Người thực hiện *</label>
+        <input id="contactActor" class="form-control" placeholder="Tên nhân viên"/>
+      </div>
+      <div class="form-group mb-2">
+        <label class="form-label">Kết quả liên hệ *</label>
+        <select id="contactNextState" class="form-control">
+          <option value="A3">Khách đồng ý gửi NCC (-> A3)</option>
+          <option value="C2">Khách đồng ý chờ trả (-> C2)</option>
+          <option value="C4">Phát sinh thu tiền (-> C4)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ghi chú liên hệ *</label>
+        <textarea id="contactNote" class="form-control" rows="3" placeholder="Nội dung đã trao đổi với khách"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('contactModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitContactAction()">✓ Xác nhận</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-container"></div>
 <script src="./assets/api.js"></script>
 <script>
@@ -197,8 +232,9 @@ const TASK_CONFIG = [
     title: "A2 — Liên hệ khách chốt xử lý",
     guide: "Gọi khách xác nhận phương án xử lý (bảo hành / sửa / đổi...) → chuyển sang A3",
     guideType: "warn",
-    nextState: "A3",
-    nextLabel: "→ A3 Chuẩn bị gửi NCC",
+    nextState: null,
+    nextLabel: null,
+    actionType: "contact_customer",
     showUpload: false,
     overdueAfter: 3,
   },
@@ -208,8 +244,9 @@ const TASK_CONFIG = [
     title: "A3 — Đóng bịch, chuẩn bị gửi NCC",
     guide: "In phiếu NCC, đóng gói hàng, dán mã xử lý lên bịch → chuyển B1 khi đã đóng xong",
     guideType: "warn",
-    nextState: "B1",
-    nextLabel: "→ B1 Đã đóng gói",
+    nextState: null,
+    nextLabel: null,
+    actionType: "create_supplier_order",
     showUpload: false,
     showPrint: true,
     overdueAfter: null,
@@ -220,8 +257,9 @@ const TASK_CONFIG = [
     title: "B1 — Gửi NCC (cần bằng chứng)",
     guide: "Chụp ảnh biên nhận / vận đơn khi giao hàng cho NCC → upload ảnh rồi chuyển B2",
     guideType: "info",
-    nextState: "B2",
-    nextLabel: "→ B2 Đã gửi NCC",
+    nextState: null,
+    nextLabel: null,
+    actionType: "confirm_supplier_sent",
     showUpload: true,
     overdueAfter: null,
   },
@@ -231,8 +269,9 @@ const TASK_CONFIG = [
     title: "B2 — NCC đang xử lý (tối đa 7 ngày)",
     guide: "Theo dõi tiến độ NCC. Quá 7 ngày từ lúc gửi: nhắc NCC trả hàng về",
     guideType: "warn",
-    nextState: "C1",
-    nextLabel: "→ C1 NCC đã trả về",
+    nextState: null,
+    nextLabel: null,
+    actionType: "create_supplier_receive",
     showUpload: false,
     overdueAfter: 7,
   },
@@ -245,10 +284,7 @@ const TASK_CONFIG = [
     nextState: null,
     nextLabel: null,
     showUpload: false,
-    quickStates: [
-      { state: "C2", label: "✓ PASS → C2" },
-      { state: "C3", label: "✗ NO PASS → C3" },
-    ],
+    actionType: "run_c1_checklist",
     overdueAfter: 2,
   },
   {
@@ -288,6 +324,7 @@ const TASK_CONFIG = [
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let tasksData = null;
+let activeContact = null;
 
 // ── Render task groups ────────────────────────────────────────────────────────
 function renderTaskGroups(data) {
@@ -393,6 +430,16 @@ function renderTaskGroups(data) {
           for (const qs of cfg.quickStates) {
             actionHtml += `<button class="btn-task" onclick="quickState(${item.ticket_id},${item.item_id},'${qs.state}',this)">${qs.label}</button>`;
           }
+        } else if (cfg.actionType === "contact_customer") {
+          actionHtml = `<button class="btn-task primary" onclick="openContactModal(${item.ticket_id},${item.item_id},'${item.item_code || ""}','${(item.customer_name || "").replace(/'/g, "\\'")}')">📞 Đã liên hệ KH</button>`;
+        } else if (cfg.actionType === "create_supplier_order") {
+          actionHtml = `<a class="btn-task primary" href="/supplier-orders/new.html?item_id=${item.item_id}">📦 Tạo phiếu gửi NCC</a>`;
+        } else if (cfg.actionType === "confirm_supplier_sent") {
+          actionHtml = `<a class="btn-task" href="/supplier-orders/list.html">🚚 Xác nhận gửi NCC</a>`;
+        } else if (cfg.actionType === "create_supplier_receive") {
+          actionHtml = `<a class="btn-task primary" href="/supplier-receives/new.html">📥 Lập phiếu nhận NCC</a>`;
+        } else if (cfg.actionType === "run_c1_checklist") {
+          actionHtml = `<a class="btn-task primary" href="/tickets/detail.html?id=${item.ticket_id}">🧪 Chạy checklist C1</a>`;
         } else if (cfg.nextState) {
           actionHtml = `<button class="btn-task primary" onclick="quickState(${item.ticket_id},${item.item_id},'${cfg.nextState}',this)">${cfg.nextLabel}</button>`;
         }
@@ -453,6 +500,32 @@ async function quickState(ticketId, itemId, toState, btn) {
     toast(e.message, "error");
     btn.disabled = false;
   }
+}
+
+function openContactModal(ticketId, itemId, itemCode, customerName) {
+  activeContact = { ticketId, itemId };
+  document.getElementById("contactItemInfo").textContent = `${itemCode || "Mã hàng"} · ${customerName || "Khách"}`;
+  document.getElementById("contactActor").value = "";
+  document.getElementById("contactNote").value = "";
+  document.getElementById("contactNextState").value = "A3";
+  openModal("contactModal");
+}
+
+async function submitContactAction() {
+  if (!activeContact) return;
+  const actor = document.getElementById("contactActor").value.trim();
+  const note = document.getElementById("contactNote").value.trim();
+  const toState = document.getElementById("contactNextState").value;
+  if (!actor) return toast("Vui lòng nhập người thực hiện", "error");
+  if (!note) return toast("Vui lòng nhập ghi chú liên hệ", "error");
+  await api.patch(`/api/tickets/${activeContact.ticketId}/items/${activeContact.itemId}/state`, {
+    to_state: toState,
+    note,
+    actor,
+  });
+  closeModal("contactModal");
+  toast(`Đã ghi nhận liên hệ và chuyển -> ${toState}`);
+  await loadTasks();
 }
 
 function triggerUpload(ticketId, itemId) {
