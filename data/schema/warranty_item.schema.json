@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "warranty_item.schema.json",
+  "title": "Warranty Item",
+  "type": "object",
+  "required": [
+    "row_id"
+  ],
+  "properties": {
+    "row_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "ticket_no": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "item_no": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ticket_item_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Composite key: <ticket_no>-<item_no>"
+    },
+    "product_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "serial_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "product_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflow_state": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Original workflow code from source CSV (A1..C8)"
+    },
+    "item_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "current_location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "processing_notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_request": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requested_action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "return_assessment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "received_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "processing_deadline": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "expected_return_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "returned_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "master_data_source": {
+      "type": "string",
+      "enum": [
+        "kiotviet"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

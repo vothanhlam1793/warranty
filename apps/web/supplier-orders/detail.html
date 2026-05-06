@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chi tiết phiếu NCC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item active" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-orders/receive.html"><span class="icon">📥</span>Nhận hàng NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="pageTitle">Chi tiết phiếu NCC</span>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm" id="btnPrint" onclick="printOrder()" style="display:none">🖨 In phiếu</button>
+        <a href="/supplier-orders/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
+      </div>
+    </div>
+    <div class="page" style="max-width:900px">
+      <div id="loadingState" class="loading">Đang tải...</div>
+      <div id="content" style="display:none">
+
+        <!-- Thông tin phiếu -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="card">
+            <div class="card-header"><h2>🏭 Nhà cung cấp</h2></div>
+            <div class="card-body">
+              <p class="font-bold" id="supplierName"></p>
+              <p class="text-muted text-sm" id="supplierContact"></p>
+              <p class="text-muted text-sm" id="supplierPhone"></p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>📋 Phiếu</h2></div>
+            <div class="card-body">
+              <p><b id="orderNo"></b></p>
+              <p class="text-muted text-sm">Trạng thái: <span id="orderStatus"></span></p>
+              <p class="text-muted text-sm">Ngày tạo: <span id="orderCreated"></span></p>
+              <p class="text-muted text-sm" id="orderSentRow" style="display:none">Ngày gửi: <span id="orderSent"></span></p>
+              <p class="text-muted text-sm" id="orderRecvRow" style="display:none">Ngày nhận lại: <span id="orderRecv"></span></p>
+              <p class="text-sm mt-1" id="orderNote"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action: Xác nhận gửi NCC (chỉ khi status=draft) -->
+        <div id="sendPanel" class="card mb-2" style="display:none">
+          <div class="card-header"><h2>📤 Xác nhận đã gửi NCC</h2></div>
+          <div class="card-body">
+            <p class="text-sm text-muted mb-2">Upload ảnh bằng chứng đã giao hàng cho NCC, hoặc nhập ghi chú xác nhận.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Người thực hiện *</label>
+                <input id="sendActor" class="form-control" placeholder="Tên nhân viên..."/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ảnh bằng chứng</label>
+                <div style="display:flex;gap:.5rem;align-items:center">
+                  <button class="btn btn-secondary btn-sm" onclick="document.getElementById('evidenceFileInput').click()">📷 Chọn ảnh</button>
+                  <span id="evidenceFileName" class="text-sm text-muted">Chưa chọn</span>
+                  <input type="file" id="evidenceFileInput" accept="image/*" style="display:none" onchange="onEvidenceFileChange(this)"/>
+                </div>
+                <div id="evidencePreview" style="margin-top:.5rem;display:none">
+                  <img id="evidenceImg" style="height:80px;border-radius:6px;border:2px solid var(--accent)"/>
+                </div>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Ghi chú bổ sung</label>
+                <input id="sendNote" class="form-control" placeholder="Ghi chú (nếu không có ảnh)..."/>
+              </div>
+            </div>
+            <div class="flex gap-1 mt-2" style="justify-content:flex-end">
+              <button class="btn btn-primary" onclick="confirmSend()">📤 Xác nhận đã gửi NCC</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bằng chứng đã gửi -->
+        <div id="evidencePanel" class="card mb-2" style="display:none">
+          <div class="card-header"><h2>📷 Bằng chứng đã gửi NCC</h2></div>
+          <div class="card-body">
+            <a id="evidenceLink" href="#" target="_blank">
+              <img id="evidenceOrderImg" style="height:120px;border-radius:8px;border:2px solid var(--accent);cursor:pointer"/>
+            </a>
+          </div>
+        </div>
+
+        <!-- Danh sách mã hàng -->
+        <div class="card">
+          <div class="card-header"><h2>📦 Mã hàng trong phiếu</h2></div>
+          <div class="card-body" style="padding:0" id="itemsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const orderId = parseInt(params.get("id"));
+let order = null;
+let uploadedEvidenceUrl = null;
+
+const STATUS_LABELS = { draft: "Nháp", sent: "Đã gửi NCC", received: "Đã nhận lại" };
+const STATUS_COLORS = { draft: "badge-gray", sent: "badge-teal", received: "badge-green" };
+const RESULT_LABELS = { doi_moi: "Đổi mới", sua_duoc: "Sửa được", tra_xac: "Trả xác", dang_xu_ly: "Đang xử lý" };
+
+async function loadOrder() {
+  order = await api.get(`/api/supplier-orders/${orderId}`);
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("content").style.display = "block";
+
+  document.getElementById("pageTitle").textContent = order.order_no;
+  document.getElementById("orderNo").textContent = order.order_no;
+  document.getElementById("supplierName").textContent = order.supplier_name || "—";
+  document.getElementById("orderStatus").innerHTML = `<span class="badge ${STATUS_COLORS[order.status]||'badge-gray'}">${STATUS_LABELS[order.status]||order.status}</span>`;
+  document.getElementById("orderCreated").textContent = fmtDate(order.created_at?.slice(0,10));
+  document.getElementById("orderNote").textContent = order.note || "";
+
+  if (order.sent_date) {
+    document.getElementById("orderSentRow").style.display = "";
+    document.getElementById("orderSent").textContent = fmtDate(order.sent_date);
+  }
+  if (order.received_date) {
+    document.getElementById("orderRecvRow").style.display = "";
+    document.getElementById("orderRecv").textContent = fmtDate(order.received_date);
+  }
+
+  // Panel gửi NCC chỉ hiện khi draft
+  if (order.status === "draft") {
+    document.getElementById("sendPanel").style.display = "block";
+  }
+
+  // Bằng chứng
+  if (order.evidence_url) {
+    document.getElementById("evidencePanel").style.display = "block";
+    const fullUrl = "http://localhost:8000" + order.evidence_url;
+    document.getElementById("evidenceLink").href = fullUrl;
+    document.getElementById("evidenceOrderImg").src = fullUrl;
+  }
+
+  // Nút in
+  document.getElementById("btnPrint").style.display = "inline-flex";
+
+  renderItems();
+}
+
+function renderItems() {
+  const el = document.getElementById("itemsList");
+  if (!order.items.length) {
+    el.innerHTML = '<div class="empty-state"><p>Chưa có mã hàng</p></div>';
+    return;
+  }
+  el.innerHTML = order.items.map((oi, idx) => `
+    <div style="border-bottom:1px solid var(--border);padding:1rem 1.25rem">
+      <div style="display:flex;gap:.75rem;align-items:flex-start">
+        <div class="item-num">${idx+1}</div>
+        <div style="flex:1">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.3rem">
+            <b>${oi.product_name || "—"}</b>
+            ${oi.serial_no ? `<span class="badge badge-gray">S/N: ${oi.serial_no}</span>` : ""}
+            ${oi.result ? `<span class="badge badge-teal">${RESULT_LABELS[oi.result]||oi.result}</span>` : ""}
+            ${oi.received_back ? `<span class="badge badge-green">✓ Đã nhận lại</span>` : ""}
+          </div>
+          <p class="text-sm text-muted">Phiếu BH: ${oi.ticket_no||"—"}</p>
+          ${oi.customer_complaint ? `<p class="text-sm text-muted">📝 ${oi.customer_complaint}</p>` : ""}
+          ${oi.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${oi.result_note}</p>` : ""}
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+// Upload ảnh bằng chứng
+function onEvidenceFileChange(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById("evidenceFileName").textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById("evidenceImg").src = e.target.result;
+    document.getElementById("evidencePreview").style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+
+async function confirmSend() {
+  const actor = document.getElementById("sendActor").value.trim();
+  if (!actor) return toast("Nhập tên người thực hiện", "error");
+
+  const fileInput = document.getElementById("evidenceFileInput");
+  const note = document.getElementById("sendNote").value.trim();
+
+  if (!fileInput.files[0] && !note) {
+    return toast("Cần upload ảnh bằng chứng hoặc nhập ghi chú xác nhận", "error");
+  }
+
+  let evidenceUrl = null;
+
+  // Upload ảnh trước nếu có
+  if (fileInput.files[0]) {
+    try {
+      const fd = new FormData();
+      fd.append("file", fileInput.files[0]);
+      const res = await fetch(`http://localhost:8000/api/supplier-orders/${orderId}/upload-evidence`, {
+        method: "POST", body: fd,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      evidenceUrl = data.url;
+    } catch(e) {
+      return toast("Lỗi upload ảnh: " + e.message, "error");
+    }
+  }
+
+  // Gọi /send
+  try {
+    await api.post(`/api/supplier-orders/${orderId}/send`, {
+      actor,
+      evidence_url: evidenceUrl || (note ? `note:${note}` : ""),
+    });
+    toast("Đã xác nhận gửi NCC — các mã hàng chuyển sang B2");
+    setTimeout(() => loadOrder(), 800);
+  } catch(e) {
+    toast(e.message || "Lỗi xác nhận gửi", "error");
+  }
+}
+
+function printOrder() {
+  window.open(`http://localhost:8000/api/supplier-orders/${orderId}/print`);
+}
+
+loadOrder().catch(e => {
+  document.getElementById("loadingState").textContent = "Lỗi: " + e.message;
+});
+</script>
+</body>
+</html>

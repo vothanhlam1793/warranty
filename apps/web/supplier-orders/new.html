@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Phiếu gửi NCC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item active" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Tạo phiếu gửi NCC</span>
+      <a href="/supplier-orders/list.html" class="btn btn-secondary btn-sm">← Quay lại</a>
+    </div>
+    <div class="page" style="max-width:900px">
+
+      <div class="card mb-2">
+        <div class="card-header"><h2>🏭 Nhà cung cấp</h2></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Chọn NCC *</label>
+              <select id="supplierId" class="form-control"><option value="">— Chọn NCC —</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Người tạo phiếu *</label>
+              <input id="orderActor" class="form-control" placeholder="Tên nhân viên..."/>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Ghi chú</label>
+              <input id="orderNote" class="form-control" placeholder="Ghi chú gửi NCC..."/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-header">
+          <h2>📦 Chọn mã hàng gửi</h2>
+          <span class="text-sm text-muted" id="selCount">Đã chọn 0 mã</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="filter-bar" style="padding:1rem 1rem 0">
+            <input id="itemSearch" class="form-control" placeholder="Lọc theo tên sản phẩm, serial..." style="max-width:340px"/>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:36px"><input type="checkbox" id="selectAll" onchange="toggleAll(this)"/></th>
+                  <th>Phiếu BH</th>
+                  <th>Mã xử lý</th>
+                  <th>Sản phẩm</th>
+                  <th>Serial</th>
+                  <th>Trạng thái</th>
+                  <th>Lỗi / Yêu cầu</th>
+                </tr>
+              </thead>
+              <tbody id="itemsTbody"></tbody>
+            </table>
+          </div>
+          <div id="loadingItems" class="loading">Đang tải mã hàng...</div>
+        </div>
+      </div>
+
+      <div class="flex gap-1" style="justify-content:flex-end">
+        <a href="/supplier-orders/list.html" class="btn btn-secondary">Huỷ</a>
+        <button class="btn btn-primary" onclick="submitOrder()">✓ Tạo phiếu gửi NCC</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const preItemIds = (params.get("items") || "").split(",").filter(Boolean).map(Number);
+let allItems = [];
+
+async function init() {
+  const suppliers = await api.get("/api/suppliers");
+  const sel = document.getElementById("supplierId");
+  suppliers.forEach(s => {
+    const o = document.createElement("option");
+    o.value = s.id; o.textContent = s.name;
+    sel.appendChild(o);
+  });
+
+  // Load all open ticket items (not C6)
+  const data = await api.get("/api/tickets?limit=200");
+  allItems = [];
+  data.items.forEach(t => {
+    (t.items || []).forEach(i => {
+      if (i.workflow_state === "A3") {
+        allItems.push({ ...i, ticket_no: t.ticket_no, ticket_id: t.id });
+      }
+    });
+  });
+
+  document.getElementById("loadingItems").style.display = "none";
+  renderItemsTable(allItems);
+
+  document.getElementById("itemSearch").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    renderItemsTable(q ? allItems.filter(i =>
+      (i.product_name||"").toLowerCase().includes(q) ||
+      (i.serial_no||"").toLowerCase().includes(q) ||
+      (i.ticket_no||"").toLowerCase().includes(q) ||
+      (i.item_code||"").toLowerCase().includes(q)
+    ) : allItems);
+  });
+}
+
+function renderItemsTable(items) {
+  document.getElementById("itemsTbody").innerHTML = items.map(i => `
+    <tr>
+      <td><input type="checkbox" class="item-check" value="${i.id}" ${preItemIds.includes(i.id) ? "checked" : ""} onchange="updateCount()"/></td>
+      <td><a href="/tickets/detail.html?id=${i.ticket_id}" onclick="event.stopPropagation()">${i.ticket_no}</a></td>
+      <td>${i.item_code ? `<span style="background:#0e7c66;color:#fff;font-weight:700;font-size:.8rem;padding:.15rem .5rem;border-radius:5px;font-family:monospace">${i.item_code}</span>` : '—'}</td>
+      <td><b>${i.product_name||"—"}</b></td>
+      <td><span class="badge badge-gray">${i.serial_no||"—"}</span></td>
+      <td>${stateBadge(i.workflow_state)}</td>
+      <td class="text-sm text-muted">${i.customer_complaint||"—"}</td>
+    </tr>`).join("");
+  updateCount();
+}
+
+function updateCount() {
+  const n = document.querySelectorAll(".item-check:checked").length;
+  document.getElementById("selCount").textContent = `Đã chọn ${n} mã`;
+}
+
+function toggleAll(cb) {
+  document.querySelectorAll(".item-check").forEach(c => { c.checked = cb.checked; });
+  updateCount();
+}
+
+async function submitOrder() {
+  const supplierId = parseInt(document.getElementById("supplierId").value);
+  if (!supplierId) return toast("Chọn nhà cung cấp", "error");
+  const actor = document.getElementById("orderActor").value.trim();
+  if (!actor) return toast("Nhập tên người tạo phiếu", "error");
+  const checked = [...document.querySelectorAll(".item-check:checked")].map(c => ({ ticket_item_id: parseInt(c.value) }));
+  if (!checked.length) return toast("Chọn ít nhất 1 mã hàng", "error");
+
+  try {
+    const order = await api.post("/api/supplier-orders", {
+      supplier_id: supplierId,
+      note: document.getElementById("orderNote").value || null,
+      actor: actor,
+      items: checked,
+    });
+    toast(`Đã tạo phiếu ${order.order_no}`);
+    setTimeout(() => location.href = `/supplier-orders/list.html`, 800);
+  } catch(e) {
+    toast(e.message || "Lỗi tạo phiếu", "error");
+  }
+}
+
+checkAuth().then(() => init()).catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

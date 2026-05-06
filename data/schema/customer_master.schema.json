@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "customer_master.schema.json",
+  "title": "Customer Master (KiotViet)",
+  "type": "object",
+  "required": [
+    "customer_key",
+    "name",
+    "master_source"
+  ],
+  "properties": {
+    "customer_key": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "master_source": {
+      "type": "string",
+      "enum": [
+        "kiotviet"
+      ]
+    },
+    "kiotviet_customer_id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "legacy_detected_from": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

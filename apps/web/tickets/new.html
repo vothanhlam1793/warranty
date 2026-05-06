@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Tạo phiếu bảo hành</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item active" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Tạo phiếu bảo hành mới</span>
+      <a href="/tickets/list.html" class="btn btn-secondary btn-sm">← Quay lại</a>
+    </div>
+    <div class="page" style="max-width:860px">
+
+      <!-- Thông tin khách hàng -->
+      <div class="card mb-2">
+        <div class="card-header"><h2>👤 Khách hàng</h2></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Tìm khách hàng (KiotViet hoặc nội bộ)</label>
+              <div class="search-wrap" style="position:relative">
+                <input id="customerSearch" class="form-control" placeholder="Nhập tên hoặc SĐT..."/>
+                <div id="customerList" class="autocomplete-list" style="display:none"></div>
+              </div>
+              <div id="customerInfo" class="mt-1" style="display:none">
+                <div class="card" style="padding:.7rem 1rem;background:var(--accent-soft);border-color:var(--accent)">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <b id="selCustomerName"></b>
+                      <span id="selCustomerPhone" class="text-muted text-sm ml-1"></span>
+                    </div>
+                    <button class="btn btn-ghost btn-sm" onclick="clearCustomer()">✕ Xoá</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="newCustomerForm" style="display:none" class="full">
+              <div style="border:1px dashed var(--border);border-radius:var(--radius);padding:1rem;background:var(--surface-2)">
+                <p class="text-sm text-muted mb-1">Tạo khách hàng mới (không tìm thấy trong KiotViet)</p>
+                <div class="form-grid">
+                  <div class="form-group"><label class="form-label">Tên *</label><input id="newCusName" class="form-control" placeholder="Tên khách hàng"/></div>
+                  <div class="form-group"><label class="form-label">SĐT</label><input id="newCusPhone" class="form-control" placeholder="0901..."/></div>
+                  <div class="form-group full"><label class="form-label">Địa chỉ</label><input id="newCusAddr" class="form-control" placeholder="Địa chỉ"/></div>
+                </div>
+                <button class="btn btn-primary btn-sm mt-1" onclick="createAndSelectCustomer()">✓ Tạo & chọn khách hàng này</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thông tin phiếu -->
+      <div class="card mb-2">
+        <div class="card-header"><h2>📋 Thông tin phiếu</h2></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Ngày nhận *</label>
+              <input id="receivedDate" type="date" class="form-control" onchange="onReceivedDateChange()"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dự kiến trả</label>
+              <input id="expectedReturnDate" type="date" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Người tạo</label>
+              <input id="createdBy" class="form-control" placeholder="Tên nhân viên"/>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Ghi chú phiếu</label>
+              <textarea id="ticketNote" class="form-control" placeholder="Ghi chú chung..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách mã hàng -->
+      <div class="card mb-2">
+        <div class="card-header">
+          <h2>📦 Mã hàng trong phiếu</h2>
+          <button class="btn btn-primary btn-sm" onclick="addItemRow()">＋ Thêm mã hàng</button>
+        </div>
+        <div class="card-body" id="itemsContainer">
+          <div class="empty-state" id="itemsEmpty">
+            <div class="icon">📦</div>
+            <p>Chưa có mã hàng nào. Nhấn "+ Thêm mã hàng"</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-1" style="justify-content:flex-end">
+        <a href="/tickets/list.html" class="btn btn-secondary">Huỷ</a>
+        <button class="btn btn-primary" onclick="submitTicket()">✓ Tạo phiếu bảo hành</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let selectedCustomerId = null;
+let itemRows = [];
+let rowCounter = 0;
+
+// ── Init ───────────────────────────────────────────────────────────────────
+document.getElementById("receivedDate").value = new Date().toISOString().slice(0,10);
+
+// Tự điền dự kiến trả = received_date + 14 (dùng ở addItemRow)
+function calcExpectedReturn(receivedDateStr) {
+  if (!receivedDateStr) return "";
+  const d = new Date(receivedDateStr);
+  d.setDate(d.getDate() + 14);
+  return d.toISOString().slice(0, 10);
+}
+
+function onReceivedDateChange() {
+  const rd = document.getElementById("receivedDate").value;
+  const exp = document.getElementById("expectedReturnDate");
+  if (rd && !exp.value) {
+    exp.value = calcExpectedReturn(rd);
+  }
+}
+
+// Auto-fill dự kiến trả khi load
+(function() {
+  const rd = document.getElementById("receivedDate").value;
+  if (rd) document.getElementById("expectedReturnDate").value = calcExpectedReturn(rd);
+})();
+
+checkAuth();
+
+function updateItemCodePreviews() {
+  itemRows.forEach((row, idx) => {
+    const el = document.getElementById(`item-code-preview-${row.id}`);
+    if (el) el.textContent = `Mã xử lý: ?-${idx + 1}`;
+  });
+}
+
+// Customer autocomplete (search both local DB and KiotViet mock)
+setupAutocomplete({
+  input: document.getElementById("customerSearch"),
+  listEl: document.getElementById("customerList"),
+  fetchFn: async (q) => {
+    const [local, kv] = await Promise.all([
+      api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=5`),
+      api.get(`/api/customers/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
+    ]);
+    const seen = new Set(local.map(c => c.name));
+    const kvNew = kv.filter(c => !seen.has(c.name)).map(c => ({ ...c, _from_kv: true }));
+    return [...local, ...kvNew, { _create_new: true, name: `Tạo mới: "${q}"`, _raw_q: q }];
+  },
+  onSelect: {
+    renderItem: item => {
+      if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
+      const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
+      return `${item.name} ${src}<div class="sub">${item.phone || ""}</div>`;
+    },
+    pick: async item => {
+      if (item._create_new) {
+        document.getElementById("newCusName").value = item._raw_q;
+        document.getElementById("newCustomerForm").style.display = "block";
+        document.getElementById("customerSearch").value = "";
+        return;
+      }
+      if (item._from_kv) {
+        // Import from KiotViet into local DB
+        const created = await api.post("/api/customers", {
+          name: item.name, phone: item.phone || null,
+          address: item.address || null, kiotviet_id: item.kiotviet_id,
+        });
+        selectCustomer(created);
+      } else {
+        selectCustomer(item);
+      }
+    }
+  }
+});
+
+function selectCustomer(c) {
+  selectedCustomerId = c.id;
+  document.getElementById("customerSearch").value = "";
+  document.getElementById("customerInfo").style.display = "block";
+  document.getElementById("selCustomerName").textContent = c.name;
+  document.getElementById("selCustomerPhone").textContent = c.phone ? `· ${c.phone}` : "";
+  document.getElementById("newCustomerForm").style.display = "none";
+}
+
+function clearCustomer() {
+  selectedCustomerId = null;
+  document.getElementById("customerInfo").style.display = "none";
+  document.getElementById("customerSearch").value = "";
+}
+
+async function createAndSelectCustomer() {
+  const name = document.getElementById("newCusName").value.trim();
+  if (!name) return toast("Vui lòng nhập tên khách hàng", "error");
+  const c = await api.post("/api/customers", {
+    name,
+    phone: document.getElementById("newCusPhone").value || null,
+    address: document.getElementById("newCusAddr").value || null,
+  });
+  selectCustomer(c);
+  document.getElementById("newCustomerForm").style.display = "none";
+  toast("Đã tạo khách hàng mới");
+}
+
+// ── Item rows ──────────────────────────────────────────────────────────────
+function addItemRow() {
+  document.getElementById("itemsEmpty").style.display = "none";
+  const id = ++rowCounter;
+  itemRows.push({ id, productId: null });
+
+  const el = document.createElement("div");
+  el.id = `item-row-${id}`;
+  el.className = "item-row";
+  el.innerHTML = `
+    <div class="item-num">${id}</div>
+    <div>
+      <div style="margin-bottom:.4rem">
+        <span id="item-code-preview-${id}" style="background:#0e7c66;color:#fff;font-weight:700;font-size:.8rem;padding:.15rem .5rem;border-radius:5px;font-family:monospace">Mã xử lý: ?-${itemRows.length}</span>
+      </div>
+      <div class="form-grid" style="grid-template-columns:2fr 1fr 1fr">
+        <div class="form-group">
+          <label class="form-label">Tên sản phẩm *</label>
+          <div style="position:relative">
+            <input id="ps-${id}" class="form-control" placeholder="Tìm sản phẩm (KiotViet)..."/>
+            <div id="pl-${id}" class="autocomplete-list" style="display:none"></div>
+          </div>
+          <input type="hidden" id="pid-${id}"/>
+          <div id="pinfo-${id}" class="text-sm text-muted mt-1" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Serial / IMEI</label>
+          <input id="serial-${id}" class="form-control" placeholder="Serial number"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Loại xử lý</label>
+          <select id="action-${id}" class="form-control">
+            <option value="bao_hanh">Bảo hành</option>
+            <option value="sua_chua">Sửa chữa</option>
+            <option value="tra_hang">Trả hàng</option>
+            <option value="doi_moi">Đổi mới</option>
+            <option value="khong_ro">Không rõ</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Mô tả lỗi / Yêu cầu khách</label>
+          <input id="complaint-${id}" class="form-control" placeholder="Mô tả lỗi, yêu cầu của khách..."/>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-icon" onclick="removeItemRow(${id})">✕</button>
+  `;
+  document.getElementById("itemsContainer").appendChild(el);
+
+  updateItemCodePreviews();
+
+  // Product autocomplete
+  setupAutocomplete({
+    input: document.getElementById(`ps-${id}`),
+    listEl: document.getElementById(`pl-${id}`),
+    fetchFn: async q => {
+      const [local, kv] = await Promise.all([
+        api.get(`/api/products?q=${encodeURIComponent(q)}&limit=5`),
+        api.get(`/api/products/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
+      ]);
+      const seen = new Set(local.map(p => p.name));
+      const kvNew = kv.filter(p => !seen.has(p.name)).map(p => ({...p, _from_kv:true}));
+      return [...local, ...kvNew, {_create_new:true, name:`Tạo mới: "${q}"`, _raw_q: q}];
+    },
+    onSelect: {
+      renderItem: item => {
+        if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
+        const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
+        return `${item.name} ${src}<div class="sub">${item.sku || ""}</div>`;
+      },
+      pick: async item => {
+        let product = item;
+        if (item._create_new) {
+          product = await api.post("/api/products", { name: item._raw_q });
+          toast(`Đã tạo sản phẩm: ${product.name}`);
+        } else if (item._from_kv) {
+          product = await api.post("/api/products", {
+            name: item.name, sku: item.sku || null,
+            kiotviet_item_id: item.kiotviet_item_id, kiotviet_synced: true,
+          });
+        }
+        document.getElementById(`pid-${id}`).value = product.id;
+        document.getElementById(`ps-${id}`).value = product.name;
+        document.getElementById(`pinfo-${id}`).textContent = product.sku ? `SKU: ${product.sku}` : "";
+        document.getElementById(`pinfo-${id}`).style.display = product.sku ? "block" : "none";
+        const row = itemRows.find(r => r.id === id);
+        if (row) row.productId = product.id;
+      }
+    }
+  });
+}
+
+function removeItemRow(id) {
+  document.getElementById(`item-row-${id}`)?.remove();
+  itemRows = itemRows.filter(r => r.id !== id);
+  if (!itemRows.length) document.getElementById("itemsEmpty").style.display = "block";
+  updateItemCodePreviews();
+}
+
+// ── Submit ─────────────────────────────────────────────────────────────────
+async function submitTicket() {
+  if (!selectedCustomerId) return toast("Vui lòng chọn khách hàng", "error");
+  if (!itemRows.length) return toast("Vui lòng thêm ít nhất 1 mã hàng", "error");
+
+  const items = [];
+  for (const row of itemRows) {
+    const pid = document.getElementById(`pid-${row.id}`)?.value;
+    if (!pid) return toast(`Mã hàng #${row.id}: chưa chọn sản phẩm`, "error");
+    items.push({
+      product_id: parseInt(pid),
+      serial_no: document.getElementById(`serial-${row.id}`)?.value || null,
+      requested_action: document.getElementById(`action-${row.id}`)?.value || "bao_hanh",
+      customer_complaint: document.getElementById(`complaint-${row.id}`)?.value || null,
+    });
+  }
+
+  const payload = {
+    customer_id: selectedCustomerId,
+    received_date: document.getElementById("receivedDate").value,
+    note: document.getElementById("ticketNote").value || null,
+    created_by: document.getElementById("createdBy").value || null,
+    items,
+  };
+
+  const ticket = await api.post("/api/tickets", payload);
+  toast(`Đã tạo phiếu ${ticket.ticket_no}`);
+  setTimeout(() => location.href = `/tickets/detail.html?id=${ticket.id}`, 800);
+}
+</script>
+</body>
+</html>

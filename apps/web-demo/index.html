@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warranty Ops Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-pattern"></div>
+    <main class="layout">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Warranty Operations</p>
+          <h1>Warranty Control Center</h1>
+          <p class="subtitle">
+            Prototype dashboard with KiotViet-oriented master data for products and customers.
+          </p>
+        </div>
+        <div class="legend">
+          <span><b>Master source:</b> KiotViet</span>
+          <span id="lastUpdate">Loading data...</span>
+        </div>
+      </header>
+
+      <section class="metrics" id="metrics"></section>
+
+      <section class="filters">
+        <label>
+          Search ticket / serial / customer
+          <input id="searchInput" type="text" placeholder="Ex: 285, Z9CCMVYB, Anh Nhan" />
+        </label>
+        <label>
+          Workflow state
+          <select id="stateFilter"></select>
+        </label>
+        <label>
+          Action
+          <select id="actionFilter"></select>
+        </label>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Workflow Board</h2>
+          <p>Current queue grouped by processing states (A/B/C).</p>
+        </div>
+        <div class="kanban" id="kanban"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Warranty Items</h2>
+          <p id="tableSummary"></p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Action</th>
+                <th>State</th>
+                <th>Location</th>
+                <th>Received</th>
+                <th>Returned</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel detail" id="detailPanel">
+        <div class="panel-header">
+          <h2>Item Detail</h2>
+          <p>Click a row to inspect notes and timeline fields.</p>
+        </div>
+        <div id="detailContent" class="detail-content">No item selected.</div>
+      </section>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+  </html>

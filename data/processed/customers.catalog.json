@@ -1,0 +1,1850 @@
+[
+  {
+    "customer_key": "cus_anh-b-nh-n-i-s-p",
+    "name": "Anh Bình (Núi Sập)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-b-o-g-v-p",
+    "name": "Anh Bảo (Gò Vấp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-chanh-h-n-i",
+    "name": "Anh Chanh (Hà Nội)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-chi-n",
+    "name": "Anh Chiến",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ch-ng-ti-n-giang",
+    "name": "Anh Chương (Tiền Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-c-ng-h-u",
+    "name": "Anh Công Hữu",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-c-ng",
+    "name": "Anh Cường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-c-ng-0913806080",
+    "name": "Anh Cường - 0913806080",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-c-ng-l",
+    "name": "Anh Cường Lê",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-duy",
+    "name": "Anh Duy",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-duy-phan-rang",
+    "name": "Anh Duy (Phan Rang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-duy-ph-y-n",
+    "name": "Anh Duy (Phú Yên)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-duy-ng-th-p",
+    "name": "Anh Duy (Đồng Tháp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-d-ng-b-c-li-u",
+    "name": "Anh Dương (Bạc Liêu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-giang-diamond",
+    "name": "Anh Giang (Diamond)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-hi-u-q-9",
+    "name": "Anh Hiếu (Q.9)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ho-ng-t-n-b-nh",
+    "name": "Anh Hoàng (Tân Bình)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ho-ng-gia-d-ng",
+    "name": "Anh Hoàng Gia Dụng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-huy-b-c-li-u",
+    "name": "Anh Huy (Bạc Liêu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-o-ph-y-n",
+    "name": "Anh Hào (Phú Yên)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-n",
+    "name": "Anh Hân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-a-q-12",
+    "name": "Anh Hòa (Q.12)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-ng-ki-n-giang",
+    "name": "Anh Hùng (Kiên Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-ng-l-c-t-n",
+    "name": "Anh Hùng (Lộc Tấn)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-nh",
+    "name": "Anh Hạnh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-i-v-ng-t-u",
+    "name": "Anh Hải (Vũng Tàu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-i-0945448443",
+    "name": "Anh Hải - 0945448443",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-u-q-12",
+    "name": "Anh Hậu (Q.12)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-u-t-n-b-nh",
+    "name": "Anh Hậu (Tân Bình)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-ng-ng-nai",
+    "name": "Anh Hồng (Đồng Nai)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-p-q-7",
+    "name": "Anh Hợp (Q.7)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-khang-ti-n-giang",
+    "name": "Anh Khang (Tiền Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-khi-m-g-v-p",
+    "name": "Anh Khiêm (Gò Vấp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-khoa-bi-n-h-a",
+    "name": "Anh Khoa (Biên Hòa)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-khoa-b-nh-d-ng",
+    "name": "Anh Khoa (Bình Dương)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ki-t-an-giang",
+    "name": "Anh Kiệt (An Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ki-t-ch-nh",
+    "name": "Anh Kiệt chủ nhà",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-li-m-b-n-tre",
+    "name": "Anh Liêm (Bến Tre)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-l-m-h-o-b-nh-nh",
+    "name": "Anh Lâm Hảo (Bình Định)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-l-n",
+    "name": "Anh Lân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-l-v-n-t-n",
+    "name": "Anh Lô Văn Tân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-l-c-q1",
+    "name": "Anh Lộc (Q1)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-minh-qu-n-5",
+    "name": "Anh Minh ( Quận 5 )",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-minh-h-n-i",
+    "name": "Anh Minh (Hà Nội)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-minh-th-c",
+    "name": "Anh Minh (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-minh-ph-c-anh-h-nh-nha-trang",
+    "name": "Anh Minh Phước (anh Hạnh Nha Trang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-m-n-h",
+    "name": "Anh Mến Hồ",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nghi-m-c-mau",
+    "name": "Anh Nghiệm Cà Mau",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nguy-n-to-n",
+    "name": "Anh Nguyễn Toàn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nhi-ng-th-p",
+    "name": "Anh Nhi (Đồng Tháp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nhu-n-t-y-ninh",
+    "name": "Anh Nhuận (Tây Ninh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nh-n",
+    "name": "Anh Nhân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-phong-ng-th-p",
+    "name": "Anh Phong (Đồng Tháp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ph-t-ng-nai",
+    "name": "Anh Phát (Đồng Nai)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ph-m-duy",
+    "name": "Anh Phạm Duy",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-quang-q7",
+    "name": "Anh Quang (Q7)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-quy-n-th-c",
+    "name": "Anh Quyên (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-qu-c",
+    "name": "Anh Quốc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-qu-c-camera-g-v-p",
+    "name": "Anh Quốc Camera Gò Vấp",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-sang",
+    "name": "Anh Sang",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-sang-h-c-m-n",
+    "name": "Anh Sang (Hóc Môn)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-sang-s-gear-long-an",
+    "name": "Anh Sang - S-Gear Long An",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-s-i-n",
+    "name": "Anh Sỹ Điện",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thanh",
+    "name": "Anh Thanh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thanh-b-nh-t-n",
+    "name": "Anh Thanh (Bình Tân)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thanh-nh-b",
+    "name": "Anh Thanh (Nhà Bè)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thi-n-q-3",
+    "name": "Anh Thiện (Q.3)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thi-n-q-3-tr-n-cam-anh-ho-ng-0972222435",
+    "name": "Anh Thiện (Q.3)\nTrên cam:\nAnh Hoàng - 0972222435",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thu-n-ph-nhu-n",
+    "name": "Anh Thuận (Phú Nhuận)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-nh-an-giang",
+    "name": "Anh Thành (An Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-nh-ki-n-giang",
+    "name": "Anh Thành (Kiên Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-i-bc",
+    "name": "Anh Thái (BC)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-i-b-c-li-u",
+    "name": "Anh Thái (Bạc Liêu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-n",
+    "name": "Anh Thân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-ng-nguy-n",
+    "name": "Anh Thương Nguyễn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-ng-g-v-p",
+    "name": "Anh Thắng (Gò Vấp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-ng-k-n-ng",
+    "name": "Anh Thắng (Đăk Nông)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ti-n-b-nh-t-n",
+    "name": "Anh Tiến( Bình Tân)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ti-t-ti-n-giang",
+    "name": "Anh Tiết (Tiền Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-to-n-bi-n-h-a",
+    "name": "Anh Toàn (Biên Hòa)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-nh-b-n-l-c",
+    "name": "Anh Trình (Bến Lức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-l-t",
+    "name": "Anh Trí (Đà Lạt)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-ng-b-c-li-u",
+    "name": "Anh Trường (Bạc Liêu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-ng-ti-n-giang",
+    "name": "Anh Trường (Tiền Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-ng-ng-nai",
+    "name": "Anh Trường (Đồng Nai)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-g-v-p",
+    "name": "Anh Tuấn (Gò Vấp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-q11",
+    "name": "Anh Tuấn (Q11)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-l-m",
+    "name": "Anh Tuấn Lâm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-wifi",
+    "name": "Anh Tuấn Wifi",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-ng-th-c",
+    "name": "Anh Tùng (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-n-hashiko",
+    "name": "Anh Tấn Hashiko",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-n-t-i-phan-rang",
+    "name": "Anh Tấn Tài (Phan Rang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-v-n-h-i-ph-ng",
+    "name": "Anh Văn (Hải Phòng)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-xu-n-tr-ng-b-nh-thu-n",
+    "name": "Anh Xuân Trường (Bình Thuận)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-y-ninh",
+    "name": "Anh Ý (Tây Ninh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-a-nha-trang",
+    "name": "Anh Đa (Nha Trang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ang-m-d-i",
+    "name": "Anh Đang (Đầm Dơi)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nh",
+    "name": "Anh Đình",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nh-ti-n-b-nh-nh",
+    "name": "Anh Đình Tiến (Bình Định)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ng-c-chi",
+    "name": "Anh Đông (Củ Chi)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ng-nh-b",
+    "name": "Anh Đông (Nhà Bè)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ng-khoa",
+    "name": "Anh Đăng Khoa",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-o-b-nh-d-ng",
+    "name": "Anh Đạo (Bình Dương)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-cam-ranh",
+    "name": "Anh Đạt (Cam Ranh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-kh-nh-h-a",
+    "name": "Anh Đạt (Khánh Hòa)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-tr-n",
+    "name": "Anh Đạt Trần",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_art-house-shop",
+    "name": "Art House Shop",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_b-i-thanh-tu-n",
+    "name": "Bùi Thanh Tuấn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_b-o-h-nh-0909856315",
+    "name": "Bảo Hành - 0909856315",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_creta",
+    "name": "CRETA",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_cty-nguy-n-o-n",
+    "name": "CTY Nguyễn Đoàn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_camera-kh-i-nguy-n",
+    "name": "Camera Khải Nguyễn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_camera-loan-h",
+    "name": "Camera Loan Hà",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_camera-l-nam",
+    "name": "Camera Lê Nam",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_camera-ng-c-huy",
+    "name": "Camera Ngọc Huy",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_cao-b-long",
+    "name": "Cao Bá Long",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-n-t-n",
+    "name": "Chân Tín",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-u-th-nh-t-n",
+    "name": "Châu Thành Tín",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-u-t-n-ph-t",
+    "name": "Châu Tấn Phát",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-hi-n-vi-n-th-ng-m-i",
+    "name": "Chị Hiền (Viễn Thông Mới)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_cty-huy-d-ng",
+    "name": "Cty Huy Dương",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_cty-tnhh-tmdv-robot-vi-t",
+    "name": "Cty TNHH TMDV Robot Việt",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-cp-c-ng-nghi-p-vi-n-th-ng-vnc-mi-n-trung",
+    "name": "CÔNG TY CP CÔNG NGHIỆP VIỄN THÔNG VNC MIỀN TRUNG",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-tnhh-tm-dv-k-thu-t-nguy-n-o-n",
+    "name": "CÔNG TY TNHH TM DV KỸ THUẬT NGUYỄN ĐOÀN",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-c-ph-n-d-ch-v-c-ng-ngh-tsc",
+    "name": "Công Ty Cổ Phần Dịch Vụ Công Nghệ TSC",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-m-u-ph-t",
+    "name": "Công Ty Mậu Phát",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-tnhh-trung-l-i",
+    "name": "Công Ty TNHH Trung Lợi",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-niitech",
+    "name": "Công ty NIITECH",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-ng-ty-nguy-n-o-n",
+    "name": "Công ty Nguyễn Đoàn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-a-h-ng-anh-hu",
+    "name": "Cửa hàng Anh Huế",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_d-ng-t-n-t-i",
+    "name": "Dương Tấn Tới",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_d-ng-nh-tu-n",
+    "name": "Dương Đình Tuấn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_heni",
+    "name": "HENI",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ho-ng-minh-th-ng",
+    "name": "Hoàng Minh Thương",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ho-ng-ng-c-b-nh",
+    "name": "Hoàng Ngọc Bình",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ho-ng-c-phong",
+    "name": "Hoàng Đức Phong",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_hu-nh-long",
+    "name": "Huỳnh Long",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_hu-nh-minh-t-m",
+    "name": "Huỳnh Minh Tâm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_h-m-kh-i",
+    "name": "Hà Mỹ Khởi",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_h-i-it",
+    "name": "Hải IT",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_h-minh-t",
+    "name": "Hồ Minh Tú",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_h-a-h-i-phong",
+    "name": "Hứa Hải Phong",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_kala",
+    "name": "KALA",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_kho",
+    "name": "KHO",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_kho-creta",
+    "name": "KHO CRETA",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_kh-ch-anh-hu",
+    "name": "Khách anh Huế",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_long-ph-m",
+    "name": "Long Phạm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_long-ph-m-b-nh-d-ng",
+    "name": "Long Phạm (Bình Dương)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-m-kh-nh",
+    "name": "Lâm Khánh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-h-ng-trung",
+    "name": "Lê Hùng Trung",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-h-u",
+    "name": "Lê Hữu",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-s-n",
+    "name": "Lê Sơn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-thanh-ph",
+    "name": "Lê Thanh Phú",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-tr-ng-ph-c-anh-th-nh-q1",
+    "name": "Lê Trọng Phúc (anh Thành Q1)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-v-n-h-ng",
+    "name": "Lê Văn Hùng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-u-h-ng-c-ng",
+    "name": "Lưu Hùng Cường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-ng-duy-tu-n",
+    "name": "Lương Duy Tuấn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_l-i-ph-t-computer",
+    "name": "Lợi Phát Computer",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_minh-h-a-b-r-a",
+    "name": "Minh Hòa (Bà Rịa)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_minh-tr-q-7",
+    "name": "Minh Trí Q.7",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nano",
+    "name": "NANO",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nam-nguy-n",
+    "name": "Nam Nguyễn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-c-ng-ph-c",
+    "name": "Nguyễn Công Phúc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-duy-kh-nh",
+    "name": "Nguyễn Duy Khánh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-ho-ng-nam",
+    "name": "Nguyễn Hoàng Nam",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-huy",
+    "name": "Nguyễn Huy",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-h-u-l-i",
+    "name": "Nguyễn Hữu Lợi",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-nh-t-v",
+    "name": "Nguyễn Nhật Vũ",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-quang-trung",
+    "name": "Nguyễn Quang Trung",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-thanh-phong",
+    "name": "Nguyễn Thanh Phong",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-thanh-tu-n-b-n-tre",
+    "name": "Nguyễn Thanh Tuấn (Bến Tre)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-th-nh-nh-t",
+    "name": "Nguyễn Thành Nhật",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-th-nh-t",
+    "name": "Nguyễn Thành Tú",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-v-n-ch-m",
+    "name": "Nguyễn Văn Châm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-v-n-h-i",
+    "name": "Nguyễn Văn Hợi",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-v-n-quy-t",
+    "name": "Nguyễn Văn Quyết",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nguy-n-o-n",
+    "name": "Nguyễn Đoàn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-c-ng-ph-t",
+    "name": "Ngô Công Phát",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-gia-th-nh",
+    "name": "Ngô Gia Thịnh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-qu-c-vi-t-vnpt-ph-t-n",
+    "name": "Ngô Quốc Việt - VNPT ( Phú Tân)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-v-n-b",
+    "name": "Ngô Văn Bộ",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-v-n-c-a-ng-th-p",
+    "name": "Ngô Văn Của (Đồng Tháp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_nh-ph-n-ph-i-l-c-ph-t",
+    "name": "Nhà Phân Phối Lộc Phát",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_phan-th-nh-lu-n",
+    "name": "Phan Thành Luân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-c-ti-n-a-v-n",
+    "name": "Phước Tiến (A. Vẹn)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-m-h-u-th-nh-b-c-li-u",
+    "name": "Phạm Hữu Thạnh (Bạc Liêu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-m-minh-t-m",
+    "name": "Phạm Minh Tâm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-m-phi-hi-u",
+    "name": "Phạm Phi Hiếu",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-m-th-anh-0889141944",
+    "name": "Phạm Thế Anh\n0889141944",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ph-m-v-n-anh",
+    "name": "Phạm Văn Anh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_qu-ch-hi-u-huy",
+    "name": "Quách Hiếu Huy",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_qu-ch-kim-ho-n",
+    "name": "Quách Kim Hoàn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_qu-c-th-nh",
+    "name": "Quốc Thịnh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_robot-b-nh-d-ng",
+    "name": "Robot Bình Dương",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_thanh-nh-n",
+    "name": "Thanh Nhân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_thanh-nh-n-ti-n-giang",
+    "name": "Thanh Nhẫn (Tiền Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_th-nh-ph-m-t-n-b-nh",
+    "name": "Thành Phạm (Tân BÌnh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_th-i-minh-h-ng",
+    "name": "Thái Minh Hùng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_th-ng-b-n-anh-l-m",
+    "name": "Thông (bạn anh Lâm)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tin-h-c-duy-tr-ng",
+    "name": "Tin Học Duy Trường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tin-h-c-l-ph-m",
+    "name": "Tin Học Lê Phạm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-ng-ph-t-t-ng",
+    "name": "Trương Phát Tường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-ng-thanh-tu-n",
+    "name": "Trương Thanh Tuấn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-ho-ng-khi-m",
+    "name": "Trần Hoàng Khiêm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-ng-c-qu-ng",
+    "name": "Trần Ngọc Quảng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-nh-t-tr-ng",
+    "name": "Trần Nhựt Trường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-ph-ng",
+    "name": "Trần Phương",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-thanh-khanh",
+    "name": "Trần Thanh Khanh",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-n-th-i-ng-c",
+    "name": "Trần Thái Ngọc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tr-nh-ch-c",
+    "name": "Trịnh Chí Đức",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_tu-n-anh-th-c",
+    "name": "Tuấn Anh (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_t-p-h-a-an-nhi-n",
+    "name": "Tạp hóa An Nhiên",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_vi-t-nh-ch-c-ng",
+    "name": "Vi Tính Chí Cường",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_vi-t-nh-thi-n-sa",
+    "name": "Vi Tính Thiên Sa",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_vi-t-nh-nguy-n-h-ng",
+    "name": "Vi tính Nguyễn Hùng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_vi-t-nh-v-n-man",
+    "name": "Vi tính Văn Man",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_vinh-nguy-n-0938624940",
+    "name": "Vinh Nguyễn\n0938624940",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_v-ho-i-l-m",
+    "name": "Võ Hoài Lâm",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_v-c-tu-n",
+    "name": "Vũ Đức Tuấn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_v-ng-cao-quan-t",
+    "name": "Vương Cao Quan Tỷ",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-an-an-giang",
+    "name": "anh An (An Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-an-tinhocgeta",
+    "name": "anh An (Tinhocgeta)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-an-ph-t",
+    "name": "anh An Phát",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-chi-n-ng-th-p",
+    "name": "anh Chiến (Đồng Tháp)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-hi-n-an-giang",
+    "name": "anh Hiền (An Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-huy-v-ng-t-u",
+    "name": "anh Huy (Vũng Tàu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-h-u-q12",
+    "name": "anh Hậu (Q12)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-khanh-b-nh-t-n",
+    "name": "anh Khanh (Bình Tân)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-minh-tr-q-7",
+    "name": "anh Minh Trí (Q.7)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nh-n-ng-nai",
+    "name": "anh Nhân (Đồng Nai)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ph-c-ki-n-giang",
+    "name": "anh Phước (Kiên Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-sa",
+    "name": "anh Sa",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-thi-c-chi",
+    "name": "anh Thi (Củ Chi)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-nh-ph-m-t-n-b-nh",
+    "name": "anh Thành Phạm (Tân Bình)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-th-i-b-nh-th-nh",
+    "name": "anh Thái (Bình Thạnh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ti-n-th-c",
+    "name": "anh Tiến (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-trung-bmt",
+    "name": "anh Trung (BMT)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-b-n-tre",
+    "name": "anh Trí ( Bến Tre)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tr-ki-n-giang",
+    "name": "anh Trí (Kiên Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-long-an",
+    "name": "anh Tuấn (Long An)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-tu-n-q-11",
+    "name": "anh Tuấn (Q.11)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-nh-b-n-tre",
+    "name": "anh Tính (Bến Tre)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-ki-n-giang",
+    "name": "anh Tú (Kiên Giang)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-t-v-ng-t-u",
+    "name": "anh Tú (Vũng Tàu)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-v-n-b-n-tre",
+    "name": "anh Vân (Bến Tre)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-v-it-xu-n-di-n",
+    "name": "anh Vũ IT (Đỗ Xuân Diễn)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-v-n",
+    "name": "anh Vẹn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-xu-n",
+    "name": "anh Xuân",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-nh-th-c",
+    "name": "anh Ánh (Thủ Đức)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-ng-tr-vinh",
+    "name": "anh Đăng (Trà Vinh)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_anh-o-bd",
+    "name": "anh Đạo (BD)",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-s-n",
+    "name": "chú Sơn",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ch-a-r-ai",
+    "name": "chưa rõ ai",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_td-b-o-ng-c",
+    "name": "ĐTDĐ Bảo Ngọc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_i-n-l-nh-ph-ng-nam",
+    "name": "Điện Lạnh Phương Nam",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_i-n-t-t-n-h-p",
+    "name": "Điện Tử Tân Hợp",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_i-n-m-y-xu-n-vi-t",
+    "name": "Điện máy Xuân Việt",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_i-n-t-th-nh-ph-c",
+    "name": "Điện tử Thành Phúc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_o-n-vi-t-th-ng",
+    "name": "Đoàn Việt Thắng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_o-n-xu-n-l-c",
+    "name": "Đoàn Xuân Lộc",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_o-minh-tr-ng",
+    "name": "Đào Minh Trọng",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_ng-giang",
+    "name": "Đông Giang",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-h-o",
+    "name": "Đắc Hảo",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "customer_key": "cus_c-h-a",
+    "name": "Đức Hòa",
+    "master_source": "kiotviet",
+    "kiotviet_customer_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  }
+]

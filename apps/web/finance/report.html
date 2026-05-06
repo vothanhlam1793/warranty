@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Báo cáo Thu / Chi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item active" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Báo cáo Thu / Chi</span>
+    </div>
+    <div class="page">
+      <div class="filter-bar mb-2">
+        <div class="form-group">
+          <label class="form-label">Từ ngày</label>
+          <input id="fromDate" type="date" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đến ngày</label>
+          <input id="toDate" type="date" class="form-control"/>
+        </div>
+        <div style="align-self:flex-end">
+          <button class="btn btn-primary" onclick="load()">Xem báo cáo</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid mb-2" id="metrics"></div>
+
+      <div class="card">
+        <div class="card-header"><h2>Chi tiết giao dịch</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Thời gian</th>
+                <th>Loại</th>
+                <th>Số tiền</th>
+                <th>Mã hàng</th>
+                <th>Ghi chú</th>
+                <th>Người tạo</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div id="loading" class="loading">Đang tải...</div>
+        <div id="empty" class="empty-state" style="display:none">
+          <div class="icon">💰</div><p>Chưa có giao dịch nào</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+const now = new Date();
+const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,"0");
+document.getElementById("fromDate").value = `${y}-${m}-01`;
+document.getElementById("toDate").value = now.toISOString().slice(0,10);
+
+async function load() {
+  const from = document.getElementById("fromDate").value;
+  const to   = document.getElementById("toDate").value;
+  let url = `/api/transactions/report`;
+  const qs = [];
+  if (from) qs.push(`from_date=${from}`);
+  if (to)   qs.push(`to_date=${to}`);
+  if (qs.length) url += "?" + qs.join("&");
+
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("empty").style.display = "none";
+  document.getElementById("tbody").innerHTML = "";
+
+  const r = await api.get(url);
+  document.getElementById("loading").style.display = "none";
+
+  document.getElementById("metrics").innerHTML = `
+    <div class="metric accent">
+      <div class="m-label">Tổng thu</div>
+      <div class="m-value">${fmtMoney(r.total_thu)}</div>
+      <div class="m-sub">Từ khách hàng</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Tổng chi</div>
+      <div class="m-value">${fmtMoney(r.total_chi)}</div>
+      <div class="m-sub">Cho NCC / nội bộ</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Lợi nhuận</div>
+      <div class="m-value" style="color:${r.profit >= 0 ? 'var(--accent)' : 'var(--danger)'}">${fmtMoney(r.profit)}</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Số giao dịch</div>
+      <div class="m-value">${r.transaction_count}</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Mã hàng còn xử lý</div>
+      <div class="m-value">${r.stats.open_items}</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Mã hoàn thành</div>
+      <div class="m-value">${r.stats.done_items}</div>
+    </div>
+  `;
+
+  if (!r.transactions.length) {
+    document.getElementById("empty").style.display = "block";
+    return;
+  }
+
+  document.getElementById("tbody").innerHTML = r.transactions.map(t => `
+    <tr>
+      <td class="td-muted">${t.created_at.replace("T"," ").slice(0,16)}</td>
+      <td>${t.type === "thu"
+        ? '<span class="badge badge-green">Thu</span>'
+        : '<span class="badge badge-red">Chi</span>'}</td>
+      <td><b style="color:${t.type==="thu"?"var(--accent)":"var(--danger)"}">${fmtMoney(t.amount)}</b></td>
+      <td class="td-muted">${t.ticket_item_id || "—"}</td>
+      <td>${t.note || "—"}</td>
+      <td class="td-muted">${t.created_by || "—"}</td>
+    </tr>`).join("");
+}
+
+load().catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

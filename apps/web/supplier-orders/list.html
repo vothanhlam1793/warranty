@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Phiếu gửi NCC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item active" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-orders/receive.html"><span class="icon">📥</span>Nhận hàng NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Danh sách phiếu gửi NCC</span>
+      <a href="/supplier-orders/new.html" class="btn btn-primary btn-sm">＋ Tạo phiếu gửi NCC</a>
+    </div>
+    <div class="page">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Số phiếu</th>
+                <th>NCC</th>
+                <th>Số mã</th>
+                <th>Trạng thái</th>
+                <th>Ngày gửi</th>
+                <th>Ngày nhận lại</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div id="loading" class="loading">Đang tải...</div>
+        <div id="empty" class="empty-state" style="display:none">
+          <div class="icon">🚚</div><p>Chưa có phiếu gửi NCC nào</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Receive Back Modal -->
+<div class="modal-overlay hidden" id="receiveModal">
+  <div class="modal" style="width:min(760px,96vw)">
+    <div class="modal-header">
+      <h3>Tiếp nhận NCC trả về</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('receiveModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label class="form-label">Ngày nhận</label>
+        <input id="receivedBackDate" type="date" class="form-control" style="max-width:200px"/>
+      </div>
+      <div id="receiveItems"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('receiveModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitReceiveBack()">✓ Xác nhận nhận hàng về</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+let activeOrderId = null;
+let activeOrderItems = [];
+
+const STATUS_LABELS = { draft:"Nháp", sent:"Đã gửi NCC", received:"Đã nhận về" };
+const STATUS_BADGE  = { draft:"badge-gray", sent:"badge-yellow", received:"badge-green" };
+
+async function load() {
+  const orders = await api.get("/api/supplier-orders");
+  document.getElementById("loading").style.display = "none";
+  if (!orders.length) { document.getElementById("empty").style.display = "block"; return; }
+
+  document.getElementById("tbody").innerHTML = orders.map(o => `
+    <tr>
+      <td><a href="/supplier-orders/detail.html?id=${o.id}"><b>${o.order_no}</b></a></td>
+      <td>${o.supplier_name || "—"}</td>
+      <td><span class="badge badge-gray">${o.items.length} mã</span></td>
+      <td><span class="badge ${STATUS_BADGE[o.status]}">${STATUS_LABELS[o.status]}</span></td>
+      <td class="td-muted">${fmtDate(o.sent_date)}</td>
+      <td class="td-muted">${fmtDate(o.received_date)}</td>
+      <td onclick="event.stopPropagation()">
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+          <a href="/supplier-orders/detail.html?id=${o.id}" class="btn btn-secondary btn-sm">🔍 Chi tiết</a>
+          <button class="btn btn-secondary btn-sm" onclick="window.open('http://localhost:8000/api/supplier-orders/${o.id}/print')">🖨 In phiếu</button>
+          ${o.status === "sent" ? `<button class="btn btn-secondary btn-sm" onclick="openReceiveModal(${o.id})">📥 Nhận về</button>` : ""}
+        </div>
+      </td>
+    </tr>`).join("");
+}
+
+async function sendOrder(id) {
+  if (!confirm("Xác nhận gửi phiếu này cho NCC?")) return;
+  await api.post(`/api/supplier-orders/${id}/send`, {});
+  toast("Đã gửi NCC, các mã chuyển sang B1");
+  load();
+}
+
+async function openReceiveModal(orderId) {
+  activeOrderId = orderId;
+  const order = await api.get(`/api/supplier-orders/${orderId}`);
+  activeOrderItems = order.items;
+  document.getElementById("receivedBackDate").value = new Date().toISOString().slice(0,10);
+  document.getElementById("receiveItems").innerHTML = order.items.map((oi, idx) => `
+    <div style="border:1px solid var(--border);border-radius:var(--radius);padding:.8rem;margin-bottom:.6rem">
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem;align-items:center">
+        <b>${oi.product_name || "—"}</b>
+        <span class="badge badge-gray">${oi.serial_no || "—"}</span>
+        <span class="td-muted text-sm">(Phiếu ${oi.ticket_no})</span>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 2fr">
+        <div class="form-group">
+          <label class="form-label">Kết quả</label>
+          <select id="res-${oi.ticket_item_id}" class="form-control">
+            <option value="dang_xu_ly">Đang xử lý</option>
+            <option value="sua_duoc">Sửa được</option>
+            <option value="doi_moi">Đổi mới</option>
+            <option value="tra_xac">Trả xác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ghi chú kết quả</label>
+          <input id="resnote-${oi.ticket_item_id}" class="form-control" placeholder="Chi tiết xử lý..."/>
+        </div>
+      </div>
+    </div>`).join("");
+  openModal("receiveModal");
+}
+
+async function submitReceiveBack() {
+  const items = activeOrderItems.map(oi => ({
+    ticket_item_id: oi.ticket_item_id,
+    result: document.getElementById(`res-${oi.ticket_item_id}`)?.value,
+    result_note: document.getElementById(`resnote-${oi.ticket_item_id}`)?.value || null,
+  }));
+  await api.post(`/api/supplier-orders/${activeOrderId}/receive-back`, {
+    received_date: document.getElementById("receivedBackDate").value,
+    items,
+  });
+  closeModal("receiveModal");
+  toast("Đã ghi nhận nhận hàng từ NCC");
+  load();
+}
+
+load().catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

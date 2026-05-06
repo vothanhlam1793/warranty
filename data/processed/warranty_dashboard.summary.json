@@ -1,0 +1,41 @@
+{
+  "total_items": 2020,
+  "open_items": 1673,
+  "closed_items": 347,
+  "by_workflow_state": {
+    "C6": 1448,
+    "C2": 5,
+    "B2": 4,
+    "A2": 2,
+    "C8": 1,
+    "C5": 1,
+    "B4": 1,
+    "B1": 1
+  },
+  "by_location": {
+    "KHÁCH": 939,
+    "CRETA": 280,
+    "KHO": 148,
+    "CNM": 54,
+    "Anh Trúc": 11,
+    "Imou": 9,
+    "IMOU": 6,
+    "Quang Thắng": 3,
+    "Phát Đạt": 1,
+    "TAISO": 1,
+    "anh Trúc": 1
+  },
+  "top_requested_actions": {
+    "Bảo hành": 726,
+    "Sửa chữa": 489,
+    "Trả hàng": 181,
+    "Sửa": 10,
+    "Không rõ": 6,
+    "Sữa chữa": 6,
+    "Đổi mới": 3,
+    "Hàng mượn": 2,
+    "Trả lại": 1,
+    "Reset": 1,
+    "Trả hàng/BH": 1
+  }
+}

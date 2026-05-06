@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sản phẩm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item active" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Sản phẩm</span>
+    </div>
+    <div class="page">
+      <div class="filter-bar mb-2">
+        <input id="searchQ" class="form-control" placeholder="Tìm tên, SKU..." style="max-width:320px"/>
+        <span id="count" class="text-sm text-muted" style="align-self:center"></span>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tên sản phẩm</th><th>SKU</th><th>KiotViet ID</th><th>Nguồn</th></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div id="loading" class="loading">Đang tải...</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+let debounce;
+document.getElementById("searchQ").addEventListener("input", () => {
+  clearTimeout(debounce); debounce = setTimeout(load, 300);
+});
+
+async function load() {
+  const q = document.getElementById("searchQ").value;
+  const products = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=200`);
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("count").textContent = `${products.length} sản phẩm`;
+  document.getElementById("tbody").innerHTML = products.map(p => `
+    <tr>
+      <td><b>${p.name}</b></td>
+      <td class="td-muted">${p.sku||"—"}</td>
+      <td>${p.kiotviet_item_id ? `<span class="badge badge-teal">${p.kiotviet_item_id}</span>` : "—"}</td>
+      <td>${p.kiotviet_synced
+        ? '<span class="badge badge-teal">KiotViet</span>'
+        : '<span class="badge badge-gray">Nội bộ</span>'}</td>
+    </tr>`).join("");
+}
+load().catch(e => toast(e.message,"error"));
+</script>
+</body>
+</html>

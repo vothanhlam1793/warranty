@@ -1,0 +1,77 @@
+{
+  "state_count": 18,
+  "states": [
+    {
+      "code": "A1",
+      "title": "Xem thông tin / Test hàng"
+    },
+    {
+      "code": "A2",
+      "title": "Liên hệ khách hàng - chốt xử lý"
+    },
+    {
+      "code": "A3",
+      "title": "Chuyển xử lý"
+    },
+    {
+      "code": "B1",
+      "title": "Tiếp nhận - chuyển xử lý"
+    },
+    {
+      "code": "B2",
+      "title": "Xử lý"
+    },
+    {
+      "code": "B3",
+      "title": "Kết quả xử lý"
+    },
+    {
+      "code": "B4",
+      "title": "Xử lý dài hạn > 2 tháng"
+    },
+    {
+      "code": "C1",
+      "title": "Kiểm tra trước trả khách"
+    },
+    {
+      "code": "C2",
+      "title": "PASS - xuất phiếu trả"
+    },
+    {
+      "code": "C3",
+      "title": "NO PASS - liên hệ để chuyển tiếp"
+    },
+    {
+      "code": "C4",
+      "title": "Cần xuất phiếu thanh toán"
+    },
+    {
+      "code": "C5",
+      "title": "Đã xuất phiếu xong"
+    },
+    {
+      "code": "C6",
+      "title": "DONE - HOÀN THÀNH (KHÁCH)"
+    },
+    {
+      "code": "C7",
+      "title": "Cần kiểm tra - ngoài tầm kiểm soát"
+    },
+    {
+      "code": "C8",
+      "title": "Hàng chờ trả - do chung đợt"
+    },
+    {
+      "code": "TỔNG",
+      "title": ""
+    },
+    {
+      "code": "CÒN XỬ LÝ",
+      "title": ""
+    },
+    {
+      "code": "Xác nhận",
+      "title": ""
+    }
+  ]
+}

@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chi tiết phiếu bảo hành</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item active" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="pageTitle">Chi tiết phiếu</span>
+      <div class="topbar-actions">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8000/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
+        <a href="/tickets/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
+      </div>
+    </div>
+    <div class="page">
+      <div id="loadingState" class="loading">Đang tải...</div>
+      <div id="content" style="display:none">
+
+        <!-- Header info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="card">
+            <div class="card-header"><h2>👤 Khách hàng</h2></div>
+            <div class="card-body">
+              <p class="font-bold" id="cusName"></p>
+              <p class="text-muted text-sm" id="cusPhone"></p>
+              <p class="text-muted text-sm" id="cusAddr"></p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>📋 Phiếu</h2></div>
+            <div class="card-body">
+              <p><b id="ticketNo"></b></p>
+              <p class="text-muted text-sm">Ngày nhận: <span id="receivedDate"></span></p>
+              <p class="text-muted text-sm">Người tạo: <span id="createdBy"></span></p>
+              <p class="text-sm mt-1" id="ticketNote"></p>
+              <!-- Deadline bar -->
+              <div id="deadlineBar" style="margin-top:.75rem;padding:.6rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface-2)">
+                <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+                  <span style="font-size:.8rem;color:var(--ink-3)">Deadline:</span>
+                  <b id="deadlineDate" style="font-size:.9rem"></b>
+                  <span id="deadlineBadge"></span>
+                  <span id="extensionNote" style="font-size:.75rem;color:var(--ink-3)"></span>
+                </div>
+                <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap" id="deadlineActions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items -->
+        <div class="card">
+          <div class="card-header">
+            <h2>📦 Mã hàng trong phiếu</h2>
+            <button class="btn btn-primary btn-sm" onclick="openSendNccModal()">🚚 Gửi NCC</button>
+          </div>
+          <div class="card-body" style="padding:0" id="itemsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: kiểm tra / ghi chú hành động -->
+<div class="modal-overlay hidden" id="actionModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="actionModalTitle">Ghi nhận hành động</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('actionModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label class="form-label">Người thực hiện <span style="color:var(--danger)">*</span></label>
+        <input id="actionActor" class="form-control" placeholder="Tên nhân viên"/>
+      </div>
+      <div class="form-group mb-2" id="actionNoteGroup">
+        <label class="form-label" id="actionNoteLabel">Ghi chú <span style="color:var(--danger)">*</span></label>
+        <textarea id="actionNote" class="form-control" rows="3" placeholder="Nhập ghi chú..."></textarea>
+      </div>
+      <div class="form-group mb-2" id="actionExpectedGroup" style="display:none">
+        <label class="form-label">Dự kiến trả</label>
+        <input id="actionExpected" type="date" class="form-control"/>
+      </div>
+      <!-- C1: 2 nút PASS / NO PASS -->
+      <div id="actionPassBtns" style="display:none;gap:.5rem;margin-top:.5rem" class="flex">
+        <button class="btn btn-primary" style="flex:1" onclick="submitAction('C2')">✓ PASS – chờ trả khách</button>
+        <button class="btn btn-secondary" style="flex:1;color:var(--danger);border-color:var(--danger)" onclick="submitAction('C3')">✗ NO PASS – xử lý tiếp</button>
+      </div>
+    </div>
+    <div class="modal-footer" id="actionModalFooter">
+      <button class="btn btn-secondary" onclick="closeModal('actionModal')">Huỷ</button>
+      <button class="btn btn-primary" id="actionSubmitBtn" onclick="submitAction(null)">✓ Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Hoàn tác trạng thái -->
+<div class="modal-overlay hidden" id="rollbackModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>↩ Hoàn tác bước cuối</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('rollbackModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="text-sm text-muted mb-2" id="rollbackItemInfo"></p>
+      <div class="form-group mb-2">
+        <label class="form-label">Người thực hiện</label>
+        <input id="rollbackActor" class="form-control" placeholder="Tên nhân viên"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lý do hoàn tác <span style="color:var(--danger)">*</span></label>
+        <textarea id="rollbackReason" class="form-control" rows="3" placeholder="Nhập lý do hoàn tác..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('rollbackModal')">Huỷ</button>
+      <button class="btn btn-primary" style="background:var(--danger);border-color:var(--danger)" onclick="submitRollback()">↩ Xác nhận hoàn tác</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: xem logs -->
+<div class="modal-overlay hidden" id="logsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Lịch sử xử lý</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('logsModal')">✕</button>
+    </div>
+    <div class="modal-body" id="logsContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('logsModal')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: thêm thu/chi -->
+<div class="modal-overlay hidden" id="txnModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Ghi thu / chi</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('txnModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label class="form-label">Loại</label>
+        <select id="txnType" class="form-control">
+          <option value="thu">Thu – Tiền từ khách</option>
+          <option value="chi">Chi – Tiền cho NCC / nội bộ</option>
+        </select>
+      </div>
+      <div class="form-group mb-2">
+        <label class="form-label">Số tiền (đ)</label>
+        <input id="txnAmount" type="number" class="form-control" placeholder="150000"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ghi chú</label>
+        <input id="txnNote" class="form-control" placeholder="Phí sửa chữa, thay linh kiện..."/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('txnModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitTxn()">✓ Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- Modal: gia hạn deadline -->
+<div class="modal-overlay hidden" id="extendModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Gia hạn deadline</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('extendModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label class="form-label">Số ngày gia hạn thêm *</label>
+        <input id="extDays" type="number" min="1" max="30" class="form-control" placeholder="vd: 7"/>
+      </div>
+      <div class="form-group mb-2">
+        <label class="form-label">Lý do gia hạn *</label>
+        <input id="extReason" class="form-control" placeholder="vd: NCC chưa trả hàng, đang chờ linh kiện..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Người thực hiện</label>
+        <input id="extActor" class="form-control" placeholder="Tên nhân viên"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('extendModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitExtend()">✓ Xác nhận gia hạn</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/api.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const ticketId = parseInt(params.get("id"));
+let ticket = null;
+let activeItemId = null;
+
+async function loadTicket() {
+  ticket = await api.get(`/api/tickets/${ticketId}`);
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("content").style.display = "block";
+  document.getElementById("pageTitle").textContent = ticket.ticket_no;
+  document.getElementById("ticketNo").textContent = ticket.ticket_no;
+  document.getElementById("cusName").textContent = ticket.customer_name || "—";
+  document.getElementById("cusPhone").textContent = ticket.customer_phone || "";
+  document.getElementById("receivedDate").textContent = fmtDate(ticket.received_date);
+  document.getElementById("createdBy").textContent = ticket.created_by || "—";
+  document.getElementById("ticketNote").textContent = ticket.note || "";
+  renderDeadline(ticket);
+  renderItems();
+}
+
+function renderDeadline(t) {
+  const dlDate = document.getElementById("deadlineDate");
+  const dlBadge = document.getElementById("deadlineBadge");
+  const extNote = document.getElementById("extensionNote");
+  const dlActions = document.getElementById("deadlineActions");
+
+  if (!t.deadline_date) {
+    dlDate.textContent = "Chưa có";
+    dlBadge.innerHTML = "";
+    dlActions.innerHTML = "";
+    return;
+  }
+
+  dlDate.textContent = fmtDate(t.deadline_date);
+
+  // Badge trạng thái
+  if (t.is_overdue_deadline) {
+    const overdue = Math.abs(t.days_to_deadline);
+    document.getElementById("deadlineBar").style.background = "#fff1f2";
+    document.getElementById("deadlineBar").style.borderColor = "#fca5a5";
+    dlBadge.innerHTML = `<span style="background:#b91c1c;color:#fff;font-size:.75rem;font-weight:700;padding:.15rem .5rem;border-radius:5px">🚨 Trễ ${overdue} ngày</span>`;
+  } else if (t.is_urgent) {
+    document.getElementById("deadlineBar").style.background = "#fffbeb";
+    document.getElementById("deadlineBar").style.borderColor = "#fcd34d";
+    dlBadge.innerHTML = `<span style="background:#d97706;color:#fff;font-size:.75rem;font-weight:700;padding:.15rem .5rem;border-radius:5px">⚠ Còn ${t.days_to_deadline} ngày</span>`;
+  } else {
+    dlBadge.innerHTML = `<span style="color:var(--ink-3);font-size:.8rem">Còn ${t.days_to_deadline} ngày</span>`;
+  }
+
+  // Ghi chú gia hạn
+  if (t.extension_days > 0) {
+    extNote.textContent = `(đã gia hạn +${t.extension_days} ngày)`;
+  } else {
+    extNote.textContent = "";
+  }
+
+  // Nút hành động
+  const hasOpen = t.open_count > 0;
+  let actionsHtml = "";
+  if (hasOpen) {
+    actionsHtml += `<button class="btn btn-secondary btn-sm" onclick="openExtendModal()">＋ Gia hạn</button>`;
+    if (t.is_overdue_deadline && !t.notified_late) {
+      actionsHtml += `<button class="btn btn-secondary btn-sm" style="color:var(--danger);border-color:var(--danger)" onclick="doNotifyLate()">📞 Ghi nhận đã báo khách trễ</button>`;
+    } else if (t.notified_late) {
+      actionsHtml += `<span style="font-size:.78rem;color:var(--accent)">✓ Đã báo khách trễ</span>`;
+    }
+  }
+  dlActions.innerHTML = actionsHtml;
+}
+
+// Modal gia hạn
+function openExtendModal() {
+  openModal("extendModal");
+}
+
+async function submitExtend() {
+  const days = parseInt(document.getElementById("extDays").value);
+  const reason = document.getElementById("extReason").value.trim();
+  const actor = document.getElementById("extActor").value.trim();
+  if (!days || days <= 0) return toast("Nhập số ngày gia hạn", "error");
+  if (!reason) return toast("Nhập lý do gia hạn", "error");
+  await api.post(`/api/tickets/${ticketId}/extend-deadline`, { extra_days: days, reason, actor: actor || null });
+  closeModal("extendModal");
+  toast(`Đã gia hạn thêm ${days} ngày`);
+  await loadTicket();
+}
+
+async function doNotifyLate() {
+  const note = prompt("Ghi chú nội dung đã báo khách (bỏ trống nếu không có):");
+  if (note === null) return;
+  await api.post(`/api/tickets/${ticketId}/notify-late`, {
+    note: note || "Đã gọi báo khách hàng về việc trễ hạn",
+    actor: null,
+  });
+  toast("Đã ghi nhận đã báo khách");
+  await loadTicket();
+}
+
+function renderItems() {
+  const el = document.getElementById("itemsList");
+  if (!ticket.items.length) {
+    el.innerHTML = '<div class="empty-state"><p>Chưa có mã hàng</p></div>';
+    return;
+  }
+
+  el.innerHTML = ticket.items.map((item, idx) => `
+    <div style="border-bottom:1px solid var(--border);padding:1rem 1.25rem">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem">
+        <div style="display:flex;gap:.75rem;flex:1;align-items:flex-start">
+          <div class="item-num">${idx+1}</div>
+          <div style="flex:1">
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.35rem">
+              ${item.item_code ? `<span style="background:#0e7c66;color:#fff;font-weight:700;font-size:.85rem;padding:.2rem .6rem;border-radius:6px;letter-spacing:.04em;font-family:monospace">${item.item_code}</span>` : ""}
+              <b>${item.product_name || "—"}</b>
+              ${item.serial_no ? `<span class="badge badge-gray">S/N: ${item.serial_no}</span>` : ""}
+              ${stateBadge(item.workflow_state)}
+              ${actionBadge(item.requested_action)}
+            </div>
+            ${item.customer_complaint ? `<p class="text-sm text-muted">📝 ${item.customer_complaint}</p>` : ""}
+            ${item.diagnosis_note ? `<p class="text-sm" style="color:var(--info)">🔧 ${item.diagnosis_note}</p>` : ""}
+            ${item.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${item.result_note}</p>` : ""}
+            ${item.evidence_url ? `
+              <div style="margin-top:.4rem">
+                <a href="http://localhost:8000${item.evidence_url}" target="_blank">
+                  <img src="http://localhost:8000${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
+                </a>
+              </div>` : ""}
+            <div style="display:flex;gap:.75rem;margin-top:.35rem;flex-wrap:wrap">
+              ${item.expected_return_date ? `<span class="text-sm text-muted">📅 Dự kiến trả: ${fmtDate(item.expected_return_date)}</span>` : ""}
+              ${item.returned_date ? `<span class="badge badge-green">✓ Đã trả ${fmtDate(item.returned_date)}</span>` : ""}
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">
+          ${renderItemActions(item)}
+          <button class="btn btn-ghost btn-sm" onclick="openLogsModal(${item.id})">📜 Lịch sử</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+function renderItemActions(item) {
+  const s = item.workflow_state;
+  const id = item.id;
+  let btns = '';
+
+  if (s === 'A1') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'A1')">🔍 Xong kiểm tra</button>`;
+  } else if (s === 'A2') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'A2')">✓ Xác nhận gửi NCC</button>`;
+  } else if (s === 'A3') {
+    btns += `<span class="text-sm text-muted" style="padding:.3rem .5rem">⏳ Chờ lập phiếu NCC</span>`;
+  } else if (s === 'B1') {
+    btns += `<span class="text-sm text-muted" style="padding:.3rem .5rem">⏳ Chờ xác nhận gửi NCC</span>`;
+  } else if (s === 'B2') {
+    btns += `<span class="text-sm text-muted" style="padding:.3rem .5rem">⏳ NCC đang xử lý</span>`;
+  } else if (s === 'C1') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C1')">🔎 Kiểm tra kết quả NCC</button>`;
+  } else if (s === 'C2') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C2')">📦 Đóng gói xong</button>`;
+  } else if (s === 'C3') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C3')">💰 Cần thu tiền</button>`;
+    btns += `<button class="btn btn-secondary btn-sm" onclick="openActionModal(${id},'C3_pass')">✓ Xử lý được (PASS)</button>`;
+  } else if (s === 'C4') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="openTxnModal(${id})">💰 Ghi nhận thu tiền</button>`;
+  } else if (s === 'C5') {
+    btns += `<button class="btn btn-primary btn-sm" onclick="document.getElementById('upinput-${id}').click()">📷 Xác nhận trả khách</button>`;
+    btns += `<input type="file" id="upinput-${id}" style="display:none" accept="image/*" onchange="uploadEvidence(${ticket.id},${id},this)"/>`;
+  } else if (s === 'C6') {
+    btns += `<span class="badge badge-green">✓ Hoàn thành</span>`;
+  }
+
+  // Nút hoàn tác — chỉ hiện khi không phải A1 và C6
+  if (s !== 'A1' && s !== 'C6') {
+    btns += `<button class="btn btn-ghost btn-sm" style="color:var(--danger);font-size:.8rem" onclick="openRollbackModal(${id},'${item.item_code || id}','${s}')">↩ Hoàn tác</button>`;
+  }
+
+  return btns;
+}
+
+// ── Rollback ──────────────────────────────────────────────────────────────────
+let rollbackItemId = null;
+
+function openRollbackModal(itemId, itemCode, currentState) {
+  rollbackItemId = itemId;
+  document.getElementById('rollbackItemInfo').textContent =
+    `Mã: ${itemCode || itemId} — trạng thái hiện tại: ${currentState}`;
+  document.getElementById('rollbackReason').value = '';
+  document.getElementById('rollbackActor').value = '';
+  openModal('rollbackModal');
+}
+
+async function submitRollback() {
+  const reason = document.getElementById('rollbackReason').value.trim();
+  const actor  = document.getElementById('rollbackActor').value.trim();
+  if (!reason) return toast('Bắt buộc nhập lý do hoàn tác', 'error');
+  try {
+    await api.post(`/api/tickets/${ticketId}/items/${rollbackItemId}/rollback`, { reason, actor: actor || null });
+    closeModal('rollbackModal');
+    toast('Đã hoàn tác thành công');
+    await loadTicket();
+  } catch(e) {
+    toast(e.message || 'Lỗi hoàn tác', 'error');
+  }
+}
+
+// ── Action modal theo nghiệp vụ ───────────────────────────────────────────────
+let actionTargetState = null; // state sẽ chuyển tới khi submit
+
+const ACTION_CONFIG = {
+  A1: { title: 'Xong kiểm tra → Liên hệ KH',      notePlaceholder: 'Kết quả kiểm tra, tình trạng hàng...', toState: 'A2', showExpected: true, defaultExpected: () => ticket?.deadline_date || '' },
+  A2: { title: 'Xác nhận sẵn sàng gửi NCC',        notePlaceholder: 'Ghi chú chuẩn bị gửi NCC...',         toState: 'A3', showExpected: false },
+  C1: { title: 'Kiểm tra kết quả NCC trả về',       notePlaceholder: 'Kết quả kiểm tra sau khi NCC trả...', toState: null, showPass: true      },
+  C2: { title: 'Xác nhận đóng gói – Chờ trả khách', notePlaceholder: 'Ghi chú đóng gói...',                 toState: 'C5', showExpected: false },
+  C3: { title: 'Xác nhận cần thu tiền',             notePlaceholder: 'Lý do thu tiền, số tiền dự kiến...',  toState: 'C4', showExpected: false },
+  C3_pass: { title: 'Xử lý được – chuyển PASS',    notePlaceholder: 'Ghi chú kết quả xử lý...',            toState: 'C2', showExpected: false },
+};
+
+function openActionModal(itemId, actionKey) {
+  activeItemId = itemId;
+  const cfg = ACTION_CONFIG[actionKey];
+  if (!cfg) return;
+
+  actionTargetState = cfg.toState;
+
+  document.getElementById('actionModalTitle').textContent = cfg.title;
+  document.getElementById('actionActor').value = '';
+  document.getElementById('actionNote').value = '';
+  document.getElementById('actionNote').placeholder = cfg.notePlaceholder || 'Nhập ghi chú...';
+
+  // Dự kiến trả
+  const expGroup = document.getElementById('actionExpectedGroup');
+  expGroup.style.display = cfg.showExpected ? 'block' : 'none';
+  if (cfg.showExpected) {
+    const defaultVal = typeof cfg.defaultExpected === 'function' ? cfg.defaultExpected() : '';
+    document.getElementById('actionExpected').value = defaultVal || '';
+  }
+
+  // PASS / NO PASS (C1)
+  const passBtns = document.getElementById('actionPassBtns');
+  const footer   = document.getElementById('actionModalFooter');
+  if (cfg.showPass) {
+    passBtns.style.display = 'flex';
+    footer.style.display = 'none';
+  } else {
+    passBtns.style.display = 'none';
+    footer.style.display = 'flex';
+  }
+
+  openModal('actionModal');
+}
+
+async function submitAction(overrideToState) {
+  const actor = document.getElementById('actionActor').value.trim();
+  const note  = document.getElementById('actionNote').value.trim();
+  const toState = overrideToState || actionTargetState;
+
+  if (!actor) return toast('Bắt buộc nhập tên người thực hiện', 'error');
+  if (!note)  return toast('Bắt buộc nhập ghi chú', 'error');
+  if (!toState) return toast('Không xác định được trạng thái tiếp theo', 'error');
+
+  const body = { to_state: toState, note, actor, diagnosis_note: note };
+  const exp = document.getElementById('actionExpected')?.value;
+  if (exp) body.expected_return_date = exp;
+
+  try {
+    await api.patch(`/api/tickets/${ticketId}/items/${activeItemId}/state`, body);
+    closeModal('actionModal');
+    toast('Đã cập nhật');
+    await loadTicket();
+  } catch(e) {
+    toast(e.message || 'Lỗi', 'error');
+  }
+}
+
+// Giữ lại để không vỡ các chỗ gọi cũ (openStateModal không còn dùng nhưng tránh JS error)
+function openStateModal() {}
+function submitStateChange() {}
+
+// Logs modal
+async function openLogsModal(itemId) {
+  const logs = await api.get(`/api/tickets/${ticketId}/items/${itemId}/logs`);
+  const el = document.getElementById("logsContent");
+  if (!logs.length) { el.innerHTML = '<p class="text-muted">Chưa có lịch sử</p>'; }
+  else {
+    el.innerHTML = `<div class="timeline">${logs.map(l => `
+      <div class="tl-event">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-meta">${l.created_at.replace("T"," ").slice(0,16)} ${l.actor ? `· ${l.actor}` : ""}</div>
+          <div class="tl-content">
+            ${l.from_state ? `<span class="badge state-${l.from_state}">${l.from_state}</span> → ` : ""}
+            <span class="badge state-${l.to_state}">${l.to_state}</span>
+            ${l.note ? `<p class="text-sm mt-1">${l.note}</p>` : ""}
+          </div>
+        </div>
+      </div>`).join("")}</div>`;
+  }
+  openModal("logsModal");
+}
+
+// Transaction modal
+function openTxnModal(itemId) {
+  activeItemId = itemId;
+  document.getElementById("txnAmount").value = "";
+  document.getElementById("txnNote").value = "";
+  openModal("txnModal");
+}
+
+async function submitTxn() {
+  const amount = parseFloat(document.getElementById("txnAmount").value);
+  if (!amount) return toast("Nhập số tiền", "error");
+  await api.post("/api/transactions", {
+    ticket_item_id: activeItemId,
+    type: document.getElementById("txnType").value,
+    amount,
+    note: document.getElementById("txnNote").value || null,
+  });
+  closeModal("txnModal");
+  toast("Đã ghi thu/chi");
+}
+
+// Send NCC modal - redirect to supplier orders new
+function openSendNccModal() {
+  const itemIds = ticket.items.map(i => i.id).join(",");
+  location.href = `/supplier-orders/new.html?items=${itemIds}&ticket=${ticketId}`;
+}
+
+// Upload ảnh bằng chứng
+async function uploadEvidence(tId, itemId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append("file", file);
+  try {
+    const res = await fetch(`http://localhost:8000/api/tickets/${tId}/items/${itemId}/evidence`, {
+      method: "POST", body: fd,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    toast("Đã upload ảnh bằng chứng");
+    await loadTicket();
+  } catch(e) {
+    toast("Lỗi upload: " + e.message, "error");
+  }
+}
+
+checkAuth().then(() => {
+  loadTicket().catch(e => { document.getElementById("loadingState").textContent = "Lỗi: " + e.message; });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,5567 @@
+[
+  {
+    "product_key": "prd_12v-actiontec-44",
+    "name": "12V Actiontec - 44",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_16-ngu-n-actiontec",
+    "name": "16 nguồn Actiontec",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_438-a22ep-g-v2-imou-kbt",
+    "name": "438 - A22EP-G-V2-IMOU (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_500gb-sg",
+    "name": "500GB SG",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_7208hqhi-m1-e-hdd",
+    "name": "7208HQHI-M1/E + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep",
+    "name": "A22EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-a",
+    "name": "A22EP-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-g",
+    "name": "A22EP-G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-g-th-hikvision-64gb-en",
+    "name": "A22EP-G + Thẻ Hikvision 64GB đen",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-g-v2",
+    "name": "A22EP-G-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-g-v2-imou-kbt",
+    "name": "A22EP-G-V2-IMOU (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-l",
+    "name": "A22EP-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a22ep-l-sandisk-32gb",
+    "name": "A22EP-L + Sandisk 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a32ep",
+    "name": "A32EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a32ep-3mp",
+    "name": "A32EP 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a32ep-l",
+    "name": "A32EP-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a32ep-l-th-32gb-hikvision-en",
+    "name": "A32EP-L + Thẻ 32GB HIKVISION ĐEN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a42p",
+    "name": "A42P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a42p-d",
+    "name": "A42P-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a42p-d-v2-imou-kbt",
+    "name": "A42P-D-V2-IMOU (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a42p-l",
+    "name": "A42P-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_a42p-l-h-p",
+    "name": "A42P-L + hộp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ae-dc5313-c6pro",
+    "name": "AE-DC5313-C6PRO",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_acbel-12v-5a",
+    "name": "Acbel 12V-5A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_actiontec-12v-2a",
+    "name": "Actiontec 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_adapter-12v-5a",
+    "name": "Adapter 12V-5A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b1a21p",
+    "name": "B1A21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b1a21p-vn",
+    "name": "B1A21P-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b2a21p",
+    "name": "B2A21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b32p-v2",
+    "name": "B32P-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bnc-f5-30c",
+    "name": "BNC F5 30c",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt-950gs-20b",
+    "name": "BT-950GS-20B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt-950sm-25a",
+    "name": "BT-950SM-25A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt-950sm-25b",
+    "name": "BT-950SM-25B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt950-gs20-converter-2-s-i-quang-1000m-8-c-i",
+    "name": "BT950 GS20 - Converter 2 sợi quang - 1000M - 8 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt950-sm25-converter-2-s-i-quang-100m-8-c-i",
+    "name": "BT950 SM25 - Converter 2 sợi quang 100M - 8 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt950-sm25a-converter-1-s-i-quang-100m",
+    "name": "BT950 SM25A - Converter 1 sợi quang - 100M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_bt950-sm25b-converter-1-s-i-quang-100m",
+    "name": "BT950 SM25B - Converter 1 sợi quang - 100M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-1080p-xanh-6",
+    "name": "Balun 1080P Xanh (6)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-5mp-ch-t-5-b",
+    "name": "Balun 5MP Chốt đỏ  - 5 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-5mp-ch-t-11-b",
+    "name": "Balun 5MP Chốt đỏ (11 bộ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-5mp-ch-t-t-t-12",
+    "name": "Balun 5MP Chốt đỏ - tốt  (12)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-5mp-ch-t-t-t-12-b",
+    "name": "Balun 5MP Chốt đỏ - tốt (12 bộ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-5mp-ch-t-t-t-b",
+    "name": "Balun 5MP Chốt đỏ - tốt (Bộ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-21-ang-g-i-cnm-18-b",
+    "name": "Balun chốt đỏ - 21 (đang gởi CNM: 18 bộ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-3-b",
+    "name": "Balun chốt đỏ - 3 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-4-b",
+    "name": "Balun chốt đỏ - 4 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-4-b-2-v",
+    "name": "Balun chốt đỏ - 4 bộ (2 vỏ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-6",
+    "name": "Balun chốt đỏ - 6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-7-b",
+    "name": "Balun chốt đỏ - 7 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-8-b",
+    "name": "Balun chốt đỏ - 8 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-9-b",
+    "name": "Balun chốt đỏ - 9 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-ch-t-5mp-1-b",
+    "name": "Balun chốt đỏ 5mp - 1 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_balun-xanh-1-b",
+    "name": "Balun xanh - 1 bộ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-ph-t-wiffi-4g-mixie-full-box",
+    "name": "BỘ PHÁT WIFFI 4G MIXIE full box",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-bton-sm25-a-b",
+    "name": "Bộ BTON SM25 A/B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-chia-poe-1-ra-2-mercury-2-c-i",
+    "name": "Bộ chia POE 1 ra 2 Mercury 2 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-chia-poe-1-ra-3-aptek",
+    "name": "Bộ chia POE 1 ra 3 APTEK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-chuy-n-bnc-sang-quang-8-port-1080p",
+    "name": "Bộ chuyển BNC sang quang 8 port - 1080P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-chuy-n-i-hdmi-qua-lan-60m-1-4-hd",
+    "name": "Bộ chuyển đổi HDMI qua LAN 60m - 1.4 HD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-k-o-d-i-hdmi-60-m-t",
+    "name": "Bộ kéo dài HDMI 60 mét",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-ngu-n-12v-40ah",
+    "name": "Bộ nguồn 12V-40AH",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-ph-t-wifi-4g-lte-cpe-huawei-b593",
+    "name": "Bộ phát Wifi 4G LTE CPE Huawei B593",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-ph-t-wifi-4g-tenda-4g05-n300",
+    "name": "Bộ phát Wifi 4G TENDA 4G05 N300",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-ph-t-wifi-tp-link-archer-c50",
+    "name": "Bộ phát Wifi TP-Link Archer C50",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_b-test-m-ng-a-n-ng-sy-168-rj45-rj11-usb",
+    "name": "Bộ test mạng đa năng SY-168 RJ45 + RJ11 + USB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c1c",
+    "name": "C1C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c1c-th-32gb-dss",
+    "name": "C1C + Thẻ 32GB DSS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c1c-b",
+    "name": "C1C-B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c22ep",
+    "name": "C22EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c22ep-a",
+    "name": "C22EP-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c22ep-a-th-32gb",
+    "name": "C22EP-A + Thẻ 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c22ep-d",
+    "name": "C22EP-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c32ep",
+    "name": "C32EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c3n",
+    "name": "C3N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c3tn-1080p-2-8mm-c-i",
+    "name": "C3TN (1080P - 2.8mm) (Cái)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c3tn-3mp",
+    "name": "C3TN (3MP)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c4w",
+    "name": "C4W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6cn",
+    "name": "C6CN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n",
+    "name": "C6N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-32gb-sandisk",
+    "name": "C6N + 32GB SANDISK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-th-32gb-kington",
+    "name": "C6N + Thẻ 32GB Kington",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-1080p",
+    "name": "C6N 1080P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-2-0",
+    "name": "C6N 2.0",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-2mp",
+    "name": "C6N 2MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-4-0",
+    "name": "C6N 4.0",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c6n-4mp",
+    "name": "C6N 4MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c8c",
+    "name": "C8C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c8pf",
+    "name": "C8PF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c8w",
+    "name": "C8W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c8w-4mp",
+    "name": "C8W 4MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-imou-d-ng-s22",
+    "name": "CAM IMOU DẠNG S22",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_camera-ezviz-k-m",
+    "name": "CAMERA EZVIZ K MÃ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c1c",
+    "name": "CS-C1C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c1c-32gb-hik-en",
+    "name": "CS-C1C + 32GB HIK Đen",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c1c-b",
+    "name": "CS-C1C-B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c3n",
+    "name": "CS-C3N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c3tn-1080-color-c-m-u",
+    "name": "CS-C3TN (1080 Color) - có màu",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c3w",
+    "name": "CS-C3W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c3w-pro-4-0mp",
+    "name": "CS-C3W PRO 4.0MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6n-1080p-ngu-n",
+    "name": "CS-C6N (1080P) + nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6n-1080p-th-kingston-32gb",
+    "name": "CS-C6N (1080P) + thẻ Kingston 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6n",
+    "name": "CS-C6N - .",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6n-1080p",
+    "name": "CS-C6N 1080P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6n-2mp",
+    "name": "CS-C6N 2MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c6w",
+    "name": "CS-C6W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c8c",
+    "name": "CS-C8C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c8pf",
+    "name": "CS-C8PF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-c8w-4mp-w1",
+    "name": "CS-C8W (4MP, W1)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cb8",
+    "name": "CS-CB8",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cb8-sp",
+    "name": "CS-CB8/SP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv246",
+    "name": "CS-CV246",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv246-a0-1c2wfr",
+    "name": "CS-CV246 (A0-1C2WFR)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv246-ezviz",
+    "name": "CS-CV246 EZVIZ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv246-ezviz-ch-n",
+    "name": "CS-CV246 EZVIZ + Chân đế",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv310",
+    "name": "CS-CV310",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv310-1080p-c3w-2-8mm",
+    "name": "CS-CV310 1080P (C3W - 2.8mm)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv310-1080p-c3w-1080p",
+    "name": "CS-CV310 1080P (C3W 1080P)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv310-1080p-c3wn-1080p",
+    "name": "CS-CV310 1080P (C3WN 1080P)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-cv310-c3wn",
+    "name": "CS-CV310 C3WN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h3c-4mp-2-8mm-c-m-u",
+    "name": "CS-H3C (4mp,2.8mm, có màu )",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h3c-kh-ng-m-u",
+    "name": "CS-H3C (không màu)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h3c-2-0-c-m-u",
+    "name": "CS-H3C 2.0 có màu",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h6c-3mp-w1",
+    "name": "CS-H6C (3MP,W1)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h6c-pro-3mp-full-h-p",
+    "name": "CS-H6C PRO (3MP) full hộp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h6c-pro-5mp",
+    "name": "CS-H6C PRO (5MP)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h6c-pro-5mp-th",
+    "name": "CS-H6C PRO (5MP) + thẻ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h6c-pro-3mp",
+    "name": "CS-H6C PRO 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h8-5mp",
+    "name": "CS-H8 (5MP)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h8-3mp",
+    "name": "CS-H8 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h8c-4mp-4mm",
+    "name": "CS-H8C (4MP, 4mm)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h8c-4mp",
+    "name": "CS-H8C 4MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-h8c-pro-3-0mp",
+    "name": "CS-H8C PRO 3.0MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-ty1-th-64gb-hik-xanh",
+    "name": "CS-TY1 + thẻ 64GB HIK xanh",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cs-ty2",
+    "name": "CS-TY2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ip-hik-kh-ng-m",
+    "name": "Cam IP HIK không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-kb-kh-ng-m",
+    "name": "Cam KB không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-dome-kb",
+    "name": "Cam dome KB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-dome-questek",
+    "name": "Cam dome Questek",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ezviz-d-ng-c3n",
+    "name": "Cam ezviz dạng C3N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ezviz-d-ng-c3tn-h3c",
+    "name": "Cam ezviz dạng C3TN/H3C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ezviz-d-ng-c3w",
+    "name": "Cam ezviz dạng C3W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ezviz-ko-m",
+    "name": "Cam ezviz ko mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-ezviz-ko-m-cv-310",
+    "name": "Cam ezviz ko mã CV-310",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-imou-d-ng-c22-ko-m",
+    "name": "Cam imou dạng c22 ko mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-kh-ng-m",
+    "name": "Cam không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_cam-th-n-n-i-kh-ng-m",
+    "name": "Cam thân nội không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_camera-nlmt-4g-sc-pt04gb",
+    "name": "Camera NLMT 4G SC-PT04GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_camera-ezviz-kh-ng-m",
+    "name": "Camera ezviz không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_camera-ezviz-xoay-ngo-i-tr-i-kh-ng-m",
+    "name": "Camera ezviz xoay ngoài trời, không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_chu-t-philips-kh-ng-d-y",
+    "name": "Chuột Philips không dây",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ch-n-b-ch-b-t-c-t-size-v-a-x6",
+    "name": "Chân bích bắt cột size vừa (x6)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ch-n-dome",
+    "name": "Chân đế Dome",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_converter-bton-100m-a",
+    "name": "Converter BTON 100M A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_converter-bton-100m-b",
+    "name": "Converter BTON 100M B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_converter-net-link-htb-3100b",
+    "name": "Converter net Link HTB-3100B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_converter-netlink-htb-3100a",
+    "name": "Converter netLink HTB-3100A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_converter-netlink-htb-3100b",
+    "name": "Converter netLink HTB-3100B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-p-s-c-ng-h",
+    "name": "Cáp sạc đồng hồ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-p-xo-n-4-l-i-vi-t-h-n-pvc-st-500m-rulo-nh-a-cu-n",
+    "name": "Cáp xoắn 4 lõi Việt Hàn - PVC - ST - 500m - rulo nhựa (Cuộn)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-p-xo-n-4-l-i-vi-t-h-n-cat3-hdpe-st-300m",
+    "name": "Cáp xoắn 4 lõi Việt Hàn CAT3 - HDPE - ST - 300m",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_d73300-6b-t-m-pin",
+    "name": "D73300/6B + Tấm pin",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dahua-64gb",
+    "name": "DAHUA 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-c3a",
+    "name": "DH-C3A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-cs4010-8et-60",
+    "name": "DH-CS4010-8ET-60",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-h2ae",
+    "name": "DH-H2AE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-h3ae",
+    "name": "DH-H3AE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-b1a21p",
+    "name": "DH-HAC-B1A21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-b1a21p-dss",
+    "name": "DH-HAC-B1A21P (DSS)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1000sp-s3",
+    "name": "DH-HAC-HFW1000SP-S3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1200tlp-s5",
+    "name": "DH-HAC-HFW1200TLP-S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1200tp-s5",
+    "name": "DH-HAC-HFW1200TP-S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1239cp-a-led",
+    "name": "DH-HAC-HFW1239CP-A-LED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1239cp-a-led-kbt",
+    "name": "DH-HAC-HFW1239CP-A-LED (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1239tlmp-a-led-s2",
+    "name": "DH-HAC-HFW1239TLMP-A-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1239tlmp-a-led-s2-kbt",
+    "name": "DH-HAC-HFW1239TLMP-A-LED-S2 (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-hfw1509tlmp-a-led-s2",
+    "name": "DH-HAC-HFW1509TLMP-A-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hac-t1a21p",
+    "name": "DH-HAC-T1A21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hfw1230m-i1-v2-n",
+    "name": "DH-HFW1230M-I1-V2 (NĐ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-hfw1230mp-s-i2",
+    "name": "DH-HFW1230MP-S-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hdw1230c-a-v7",
+    "name": "DH-IPC-HDW1230C-A-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hdw1230sp-s5",
+    "name": "DH-IPC-HDW1230SP-S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hdw1230sp-s5-dss",
+    "name": "DH-IPC-HDW1230SP-S5 (DSS)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hdw1235c-a-v7",
+    "name": "DH-IPC-HDW1235C-A-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hdw2439tp-as-led-s2",
+    "name": "DH-IPC-HDW2439TP-AS-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1225m-i1",
+    "name": "DH-IPC-HFW1225M-I1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230dt-stw",
+    "name": "DH-IPC-HFW1230DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230m",
+    "name": "DH-IPC-HFW1230M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230m-a-i1-v5",
+    "name": "DH-IPC-HFW1230M-A-I1-V5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230m-a-i1-v7",
+    "name": "DH-IPC-HFW1230M-A-I1-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230m-a-vn",
+    "name": "DH-IPC-HFW1230M-A-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230m-i1-v2",
+    "name": "DH-IPC-HFW1230M-I1-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230mp-as-i2",
+    "name": "DH-IPC-HFW1230MP-AS-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw1230sp-s4",
+    "name": "DH-IPC-HFW1230SP-S4 .",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw2349sp-sa-led-s2",
+    "name": "DH-IPC-HFW2349SP-SA-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw2431tp-as-s2",
+    "name": "DH-IPC-HFW2431TP-AS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-ipc-hfw6253m-i1",
+    "name": "DH-IPC-HFW6253M-I1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-nvr1104hs-s3-h-kbt",
+    "name": "DH-NVR1104HS-S3/H (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-pfs3005-5et-l",
+    "name": "DH-PFS3005-5ET-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-pfs3005-5gt-l",
+    "name": "DH-PFS3005-5GT-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-pfs3006-4et-36",
+    "name": "DH-PFS3006-4ET-36",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-pfs3008-8et-l",
+    "name": "DH-PFS3008-8ET-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-pfs3010-8et-65",
+    "name": "DH-PFS3010-8ET-65",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-sd2a200-gn-aw-pv",
+    "name": "DH-SD2A200-GN-AW-PV",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-sd2a200hb-gn-aw-pv-s2",
+    "name": "DH-SD2A200HB-GN-AW-PV-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-sd2a500nb-gny-a-pv",
+    "name": "DH-SD2A500NB-GNY-A-PV",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-sd49225db-hny",
+    "name": "DH-SD49225DB-HNY",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr-5232an-x",
+    "name": "DH-XVR-5232AN-X",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr1b04-i",
+    "name": "DH-XVR1B04-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr1b04-i-dss",
+    "name": "DH-XVR1B04-I (DSS)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr1b04-i-vn",
+    "name": "DH-XVR1B04-I-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr1b08-i",
+    "name": "DH-XVR1B08-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr1b08-i-vn",
+    "name": "DH-XVR1B08-I-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr4104c",
+    "name": "DH-XVR4104C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr5104hs-i3",
+    "name": "DH-XVR5104HS-I3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr5104hs-x-n-hdd",
+    "name": "DH-XVR5104HS-X (NĐ) + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr5116hs-x",
+    "name": "DH-XVR5116HS-X",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dh-xvr5232an-i3",
+    "name": "DH-XVR5232AN-I3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr1104hs-s3-h",
+    "name": "DHI-NVR1104HS-S3/H",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr1108hs-s3-h",
+    "name": "DHI-NVR1108HS-S3/H",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr1108hs-s3-h-vn",
+    "name": "DHI-NVR1108HS-S3/H-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr2108hc-4ks",
+    "name": "DHI-NVR2108HC-4KS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr4108hs-4ks2",
+    "name": "DHI-NVR4108HS-4KS2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr4108hs-4ks2-l",
+    "name": "DHI-NVR4108HS-4KS2/L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr4108hs-4ks2-l-hdd",
+    "name": "DHI-NVR4108HS-4KS2/L + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr4116hs-4ks2",
+    "name": "DHI-NVR4116HS-4KS2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-nvr4116hs-4ks2-l-kbt",
+    "name": "DHI-NVR4116HS-4KS2/L (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-xvr408c",
+    "name": "DHI-XVR408C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-xvr5116hs",
+    "name": "DHI-XVR5116HS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dhi-xvr5116hs-s2",
+    "name": "DHI-XVR5116HS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dn-sd6c82fb-gn",
+    "name": "DN-SD6C82FB-GN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1021g0-i",
+    "name": "DS-2CD1021G0-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1021g2-liu-4mm",
+    "name": "DS-2CD1021G2-LIU 4mm",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g0-i-l",
+    "name": "DS-2CD1023G0-I(L)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g0-iu",
+    "name": "DS-2CD1023G0-IU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g0-iuf",
+    "name": "DS-2CD1023G0-IUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g0e",
+    "name": "DS-2CD1023G0E",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g0e-i-l",
+    "name": "DS-2CD1023G0E-I (L)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1023g2-liuf",
+    "name": "DS-2CD1023G2-LIUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1027g0-l",
+    "name": "DS-2CD1027G0-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1043g0-iuf",
+    "name": "DS-2CD1043G0-IUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1047g0-luf",
+    "name": "DS-2CD1047G0-LUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1123g0-iuf",
+    "name": "DS-2CD1123G0-IUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1143g0-iuf",
+    "name": "DS-2CD1143G0-IUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1143g2-liuf",
+    "name": "DS-2CD1143G2-LIUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1323g0-iu",
+    "name": "DS-2CD1323G0-IU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd1343g0-iuf",
+    "name": "DS-2CD1343G0-IUF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2020f-i",
+    "name": "DS-2CD2020F-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2021g1-i",
+    "name": "DS-2CD2021G1-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2025fhwd-i",
+    "name": "DS-2CD2025FHWD-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2043g2-iu",
+    "name": "DS-2CD2043G2-IU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2720f-i",
+    "name": "DS-2CD2720F-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2723g2-izs",
+    "name": "DS-2CD2723G2-IZS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2t22wd-i8",
+    "name": "DS-2CD2T22WD-I8",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2t43g0-i8",
+    "name": "DS-2CD2T43G0-I8",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cd2t46g2-isu-sl",
+    "name": "DS-2CD2T46G2-ISU/SL",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce10kf0t-fs",
+    "name": "DS-2CE10KF0T-FS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16b2-ipf",
+    "name": "DS-2CE16B2-IPF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16c0t-it5",
+    "name": "DS-2CE16C0T-IT5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-ir",
+    "name": "DS-2CE16D0T-IR",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-irp",
+    "name": "DS-2CE16D0T-IRP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-it3",
+    "name": "DS-2CE16D0T-IT3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-itfs",
+    "name": "DS-2CE16D0T-ITFS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-lfs",
+    "name": "DS-2CE16D0T-LFS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d0t-lts",
+    "name": "DS-2CE16D0T-LTS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16d3t-it",
+    "name": "DS-2CE16D3T-IT",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce16h0t-itfs",
+    "name": "DS-2CE16H0T-ITFS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce17d0t-it3fs",
+    "name": "DS-2CE17D0T-IT3FS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce17h0t-it3f",
+    "name": "DS-2CE17H0T-IT3F",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2ce70kf0t-mfs",
+    "name": "DS-2CE70KF0T-MFS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cv1043g2-lidwf",
+    "name": "DS-2CV1043G2-LIDWF",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cv2q21fd-iw",
+    "name": "DS-2CV2Q21FD-IW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cv2q21fd-iw-w",
+    "name": "DS-2CV2Q21FD-IW (W)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cv2q21fd-iw-w-c-i",
+    "name": "DS-2CV2Q21FD-IW (W) (Cái)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2cv2u21fd-iw",
+    "name": "DS-2CV2U21FD-IW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2de2c400iw-de-w",
+    "name": "DS-2DE2C400IW-DE/W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2de4225iw-de",
+    "name": "DS-2DE4225IW-DE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-2sid625-i",
+    "name": "DS-2SID625-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-3200vn",
+    "name": "DS-3200VN .",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-3e0106p-e-m",
+    "name": "DS-3E0106P-E/M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-3e0106p-e-m-k-m-ngu-n",
+    "name": "DS-3E0106P-E/M + Kèm nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-3e0109p-e-m-b",
+    "name": "DS-3E0109P-E/M(B)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-3e0310p-e-m",
+    "name": "DS-3E0310P-E/M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7104hghi-e1",
+    "name": "DS-7104HGHI-E1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7104hghi-f1",
+    "name": "DS-7104HGHI-F1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7104hghi-k1-s",
+    "name": "DS-7104HGHI-K1 (S)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7104hqhi-k1",
+    "name": "DS-7104HQHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7104ni-q1-4p",
+    "name": "DS-7104NI-Q1/4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7108hghi-f1-n",
+    "name": "DS-7108HGHI-F1/N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7108hqhi-k1",
+    "name": "DS-7108HQHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7108ni-q1",
+    "name": "DS-7108NI-Q1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7116hghi-f1",
+    "name": "DS-7116HGHI-F1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7116hghi-f1-n",
+    "name": "DS-7116HGHI-F1/N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7116hqhi-f1-n",
+    "name": "DS-7116HQHI-F1/N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hghi-f1",
+    "name": "DS-7204HGHI-F1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hghi-f1-hdd",
+    "name": "DS-7204HGHI-F1 + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hghi-f1-hdd-500gb",
+    "name": "DS-7204HGHI-F1 + HDD 500GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hghi-m1",
+    "name": "DS-7204HGHI-M1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hghi-m1-h-p-k-m-ph-ki-n",
+    "name": "DS-7204HGHI-M1 + hộp + kèm phụ kiện",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hqhi-k1",
+    "name": "DS-7204HQHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204hqhi-k1-e",
+    "name": "DS-7204HQHI-K1/E",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7204huhi-k1-uhk",
+    "name": "DS-7204HUHI-K1/UHK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7208hghi-f1-n",
+    "name": "DS-7208HGHI-F1/N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7208hghi-k1-s",
+    "name": "DS-7208HGHI-K1 (S)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7208hghi-sh",
+    "name": "DS-7208HGHI-SH",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7208hqhi-k1",
+    "name": "DS-7208HQHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7208huhi-k1-uhk-c-ng",
+    "name": "DS-7208HUHI-K1/UHK + ổ cứng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7216hghi-f2",
+    "name": "DS-7216HGHI-F2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7216hqhi-k1",
+    "name": "DS-7216HQHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7608ni-k1-c",
+    "name": "DS-7608NI-K1(C)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-7616ni-k2",
+    "name": "DS-7616NI-K2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-b3200vn",
+    "name": "DS-B3200VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ds-d3200vn",
+    "name": "DS-D3200VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dss-32gb-xanh",
+    "name": "DSS 32GB XANH",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_dss-32gb-en",
+    "name": "DSS 32GB ĐEN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_eap115",
+    "name": "EAP115",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_eb8-3mp-4g",
+    "name": "EB8 3MP - 4G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ew1200g-pro",
+    "name": "EW1200G Pro",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ezviz-kh-ng-m",
+    "name": "EZVIZ không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ezviz-kh-ng-m-th-kioxia-64gb",
+    "name": "EZVIZ không mã + Thẻ KIOXIA 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ezviz-kh-ng-m-th-mixie-32gb",
+    "name": "EZVIZ không mã + Thẻ MIXIE 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ezviz-d-ng-c3n",
+    "name": "Ezviz dạng C3N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ezviz-d-ng-c8w",
+    "name": "Ezviz dạng C8W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f22fep",
+    "name": "F22FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f22fp",
+    "name": "F22FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f22p",
+    "name": "F22P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f22p-h-p",
+    "name": "F22P + hộp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f22p-kbt",
+    "name": "F22P KBT",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42fep-d",
+    "name": "F42FEP-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42fep-d-32gb-hik-en",
+    "name": "F42FEP-D + 32GB Hik đen",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42fp",
+    "name": "F42FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42fp-d",
+    "name": "F42FP-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42p",
+    "name": "F42P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f42p-d",
+    "name": "F42P-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_f46fep",
+    "name": "F46FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_g26ep-th-32gb",
+    "name": "G26EP + thẻ 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_gwn7802",
+    "name": "GWN7802",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h3c-1080p-c-m-u",
+    "name": "H3C 1080P có màu",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h3c-3mp",
+    "name": "H3C 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-3mp",
+    "name": "H6C 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-5mp",
+    "name": "H6C 5MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-pro-3mp-th-sandisk-64gb",
+    "name": "H6C PRO 3MP + Thẻ Sandisk 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-pro-3mp-full-h-p",
+    "name": "H6C PRO 3MP full hộp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-pro-3mp",
+    "name": "H6C Pro 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h6c-pro-3mp-th-hik-64g",
+    "name": "H6C Pro 3MP + thẻ Hik 64G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h7c",
+    "name": "H7C",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h8c-2mp",
+    "name": "H8C 2MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h8c-pro-3mp",
+    "name": "H8C PRO 3MP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h8c-r100",
+    "name": "H8C R100",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h9c-5mp-5mp",
+    "name": "H9C (5MP + 5MP)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hac-hfw1200sp-s4",
+    "name": "HAC-HFW1200SP-S4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hds-2220irp8",
+    "name": "HDS-2220IRP8",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hds-pt2021irpw",
+    "name": "HDS-PT2021IRPW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hdw1230c-a-v7",
+    "name": "HDW1230C-A-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hdw1230dt-stw",
+    "name": "HDW1230DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hdw2230tp-as-s2",
+    "name": "HDW2230TP-AS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1000sp",
+    "name": "HFW1000SP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1200sp-s4",
+    "name": "HFW1200SP-S4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1200tlp-vn",
+    "name": "HFW1200TLP-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1200tp-s5",
+    "name": "HFW1200TP-S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230dt-stw",
+    "name": "HFW1230DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230dt-stw-kbt",
+    "name": "HFW1230DT-STW (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230m-a-i1-v7",
+    "name": "HFW1230M-A-I1-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230m-a-i1-vx",
+    "name": "HFW1230M-A-I1-VX",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230m-a-vn",
+    "name": "HFW1230M-A-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230m-i1-v2",
+    "name": "HFW1230M-I1-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230mp-as-i2",
+    "name": "HFW1230MP-AS-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230mp-s-i2",
+    "name": "HFW1230MP-S-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230tp-a",
+    "name": "HFW1230TP-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1230v-a-i4-b",
+    "name": "HFW1230V-A-I4-B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1235m-a-i1-v7",
+    "name": "HFW1235M-A-I1-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1239tlmp-a-led-s2",
+    "name": "HFW1239TLMP-A-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1239tp-a-led",
+    "name": "HFW1239TP-A-LED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1400sp",
+    "name": "HFW1400SP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1500sp",
+    "name": "HFW1500SP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw1509tlmp-a-led-s2",
+    "name": "HFW1509TLMP-A-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw2230sp-s-s2",
+    "name": "HFW2230SP-S-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw2239mp-as-led-b-s2",
+    "name": "HFW2239MP-AS-LED-B-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw2239sp-sa-led-s2",
+    "name": "HFW2239SP-SA-LED-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw2431tp-as-s2",
+    "name": "HFW2431TP-AS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hfw4230mp-4g-as-i2",
+    "name": "HFW4230MP-4G-AS-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hiksemi-xanh-64gb",
+    "name": "HIKSEMI xanh 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hiksemi-xanh-64gb-kh-ng-v",
+    "name": "HIKSEMI xanh 64GB không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hikvision-en-64g",
+    "name": "HIKVISION đen 64G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hikvision-en-64gb",
+    "name": "HIKVISION đen 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hikvision-en-64gb-kh-ng-v",
+    "name": "HIKVISION đen 64GB không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_hrui-4p",
+    "name": "HRUI 4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_h-p-k-thu-t",
+    "name": "Hộp kỹ thuật",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_imou-32gb-hik-32gb",
+    "name": "IMOU 32GB + HIK 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_imou-64gb",
+    "name": "IMOU 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_imou-ipc-a32ep-l",
+    "name": "IMOU IPC-A32EP-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_imou-ipc-s51fep",
+    "name": "IMOU IPC-S51FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_imou-kh-ng-m",
+    "name": "IMOU không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-a-imou",
+    "name": "IPC-A22EP-A-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-g",
+    "name": "IPC-A22EP-G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-g-imou-dss",
+    "name": "IPC-A22EP-G-IMOU (DSS)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-g-v2-imou",
+    "name": "IPC-A22EP-G-V2-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-g-v2-imou-kbt-c-i",
+    "name": "IPC-A22EP-G-V2-IMOU (KBT) (Cái)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-h-v2-imou",
+    "name": "IPC-A22EP-H-V2-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-l",
+    "name": "IPC-A22EP-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-l-ngu-n",
+    "name": "IPC-A22EP-L + Nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-l-imou-dss",
+    "name": "IPC-A22EP-L-IMOU (DSS)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a22ep-l-v2",
+    "name": "IPC-A22EP-L-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a323p-l-th-hiksemi-64gb",
+    "name": "IPC-A323P-L + thẻ Hiksemi 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a32ep-imou",
+    "name": "IPC-A32EP-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a32ep-l",
+    "name": "IPC-A32EP-L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a32ep-l-th-hikvision-64gb",
+    "name": "IPC-A32EP-L + thẻ Hikvision 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-a42p-d-imou",
+    "name": "IPC-A42P-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c22ep",
+    "name": "IPC-C22EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c22ep-a",
+    "name": "IPC-C22EP-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c22ep-a-sandisk-32gb",
+    "name": "IPC-C22EP-A + SANDISK 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c22ep-a-imou",
+    "name": "IPC-C22EP-A-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c32ep",
+    "name": "IPC-C32EP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-c32sp",
+    "name": "IPC-C32SP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22fep-d-imou",
+    "name": "IPC-F22FEP-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22fp",
+    "name": "IPC-F22FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22fp-d",
+    "name": "IPC-F22FP-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22fp-imou",
+    "name": "IPC-F22FP-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22p-d-imou",
+    "name": "IPC-F22P-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22p-imou",
+    "name": "IPC-F22P-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f22p-imou-dss-c-i",
+    "name": "IPC-F22P-IMOU (DSS) (Cái)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f32fp",
+    "name": "IPC-F32FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f32fp-th-hiksemi-64gb",
+    "name": "IPC-F32FP + Thẻ HIKSEMI 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f32p-imou",
+    "name": "IPC-F32P-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42fep-th-dss-32gb",
+    "name": "IPC-F42FEP + Thẻ DSS 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42fep-d-imou",
+    "name": "IPC-F42FEP-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42fp-d-imou",
+    "name": "IPC-F42FP-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42fp-d-imou-kbt",
+    "name": "IPC-F42FP-D-IMOU (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42p-d-imou",
+    "name": "IPC-F42P-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-f42p-imou",
+    "name": "IPC-F42P-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-g42p-imou",
+    "name": "IPC-G42P-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-gk2dp-5c0w",
+    "name": "IPC-GK2DP-5C0W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-gs7ep-5m0we",
+    "name": "IPC-GS7EP-5M0WE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hdw1230c-a-v2",
+    "name": "IPC-HDW1230C-A-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hdw1230dt1-s5",
+    "name": "IPC-HDW1230DT1-S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hdw2230tp-as-s2",
+    "name": "IPC-HDW2230TP-AS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hdw2433dt-a-il-n",
+    "name": "IPC-HDW2433DT-A-IL (NĐ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1230dt-stw",
+    "name": "IPC-HFW1230DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1230m-a-i1-v7",
+    "name": "IPC-HFW1230M-A-I1-V7",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1230m-i1-v2",
+    "name": "IPC-HFW1230M-I1-V2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1230mp-s-i2",
+    "name": "IPC-HFW1230MP-S-I2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1239v-a-led-b",
+    "name": "IPC-HFW1239V-A-LED-B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1240dt-stw",
+    "name": "IPC-HFW1240DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw1430dt-stw",
+    "name": "IPC-HFW1430DT-STW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw2231mp-as-i2-b-s2",
+    "name": "IPC-HFW2231MP-AS-I2-B-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw2431sp-s-s2",
+    "name": "IPC-HFW2431SP-S-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-hfw2431tp-as-s2",
+    "name": "IPC-HFW2431TP-AS-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-k2mp-5h1we",
+    "name": "IPC-K2MP-5H1WE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-k42p-imou",
+    "name": "IPC-K42P-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-k7fp-3h0we",
+    "name": "IPC-K7FP-3H0WE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-k7fp-5h0te",
+    "name": "IPC-K7FP-5H0TE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s21fap-imou",
+    "name": "IPC-S21FAP-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s21fp",
+    "name": "IPC-S21FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s21fp-imou-kbt",
+    "name": "IPC-S21FP-IMOU (KBT)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s21ftp",
+    "name": "IPC-S21FTP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s22fp",
+    "name": "IPC-S22FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s2xep-6m0s",
+    "name": "IPC-S2XEP-6M0S",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s2xp-6m0wed",
+    "name": "IPC-S2XP-6M0WED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s2xp-6m0wed-imou-full-box",
+    "name": "IPC-S2XP-6M0WED-IMOU full box",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s31fep",
+    "name": "IPC-S31FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s31fep-th-64gb",
+    "name": "IPC-S31FEP + Thẻ 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s3ep-5m0we",
+    "name": "IPC-S3EP-5M0WE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s42fp-sandisk-32gb",
+    "name": "IPC-S42FP + SANDISK 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s42fp-d-imou",
+    "name": "IPC-S42FP-D-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s51fep-imou",
+    "name": "IPC-S51FEP-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s7dp-5m0wez",
+    "name": "IPC-S7DP-5M0WEZ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s7xfp-8u0wed",
+    "name": "IPC-S7XFP-8U0WED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s7xp-10m0wed",
+    "name": "IPC-S7XP-10M0WED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ipc-s7xp-6m0wed-imou",
+    "name": "IPC-S7XP-6M0WED-IMOU",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_jd-z200-200w",
+    "name": "JD-Z200 200W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kc-8108h1",
+    "name": "KC-8108H1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kh-8232d5",
+    "name": "KH-8232D5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kh-n4003",
+    "name": "KH-N4003",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kn-4002wn",
+    "name": "KN-4002WN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kn-b21-d",
+    "name": "KN-B21-D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kn-h21p",
+    "name": "KN-H21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kn-h21pw",
+    "name": "KN-H21PW",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kn-h41p",
+    "name": "KN-H41P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-2003an",
+    "name": "KX-2003AN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-2003c4",
+    "name": "KX-2003C4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-2003ian",
+    "name": "KX-2003iAN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-2004ca",
+    "name": "KX-2004CA",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-2k8104d4",
+    "name": "KX-2K8104D4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-3001wn",
+    "name": "KX-3001WN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-4k8116n2",
+    "name": "KX-4K8116N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-4k8216n2-2-hdd",
+    "name": "KX-4K8216N2 + 2 HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-4k8232n2",
+    "name": "KX-4K8232N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7104ai-vn",
+    "name": "KX-7104Ai-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7104sd6",
+    "name": "KX-7104SD6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7104sd6-hdd",
+    "name": "KX-7104SD6 + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7104td5",
+    "name": "KX-7104TD5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7104td6",
+    "name": "KX-7104TD6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7108ai-vn",
+    "name": "KX-7108AI-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7108ai",
+    "name": "KX-7108Ai",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7108sd6",
+    "name": "KX-7108SD6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7108th1",
+    "name": "KX-7108TH1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7116h1",
+    "name": "KX-7116H1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7216h1",
+    "name": "KX-7216H1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-7216hghi-k1",
+    "name": "KX-7216HGHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-8104d5",
+    "name": "KX-8104D5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-8108d5",
+    "name": "KX-8108D5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-8108d6",
+    "name": "KX-8108D6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-8108h1",
+    "name": "KX-8108H1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-8108n2",
+    "name": "KX-8108N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2003n3-a",
+    "name": "KX-A2003N3-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2011s4",
+    "name": "KX-A2011S4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2011tn3",
+    "name": "KX-A2011TN3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2012wn-a",
+    "name": "KX-A2012WN-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2013wn-a",
+    "name": "KX-A2013WN-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2111c4",
+    "name": "KX-A2111C4",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2111n2",
+    "name": "KX-A2111N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2111n3",
+    "name": "KX-A2111N3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a2111n3-vn",
+    "name": "KX-A2111N3-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a4112n2",
+    "name": "KX-A4112N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a4k8104n3",
+    "name": "KX-A4K8104N3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a4k8116sn2",
+    "name": "KX-A4K8116SN2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a5w",
+    "name": "KX-A5W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a7104sd6",
+    "name": "KX-A7104SD6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a7108sd6",
+    "name": "KX-A7108SD6",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-a8128n2",
+    "name": "KX-A8128N2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-ad2111cn-a",
+    "name": "KX-AD2111CN-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-c2011sn3",
+    "name": "KX-C2011SN3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-c2121s5",
+    "name": "KX-C2121S5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-c2121s5-a",
+    "name": "KX-C2121S5-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-cai7108th1",
+    "name": "KX-CAi7108TH1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-cf2203l",
+    "name": "KX-CF2203L",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-cf2203l-a",
+    "name": "KX-CF2203L-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-cf2203l-a-vn",
+    "name": "KX-CF2203L-A-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-cf4001n3-a",
+    "name": "KX-CF4001N3-A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-d2008pn",
+    "name": "KX-D2008PN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-d8104th1",
+    "name": "KX-D8104TH1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-dai8116h3",
+    "name": "KX-DAi8116H3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-h30wn",
+    "name": "KX-H30WN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_kx-y2002sn3",
+    "name": "KX-Y2002SN3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_l63200",
+    "name": "L63200",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_l63300",
+    "name": "L63300",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_l6560-4b",
+    "name": "L6560/4B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_lexar-64gb",
+    "name": "LEXAR 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ls1005",
+    "name": "LS1005",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_mr6400-eu",
+    "name": "MR6400 (EU)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_main-wifi-kh-ng-v",
+    "name": "Main wifi không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_main-u-ghi-kh-ng-v",
+    "name": "Main đầu ghi không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_mercury-mwb505",
+    "name": "Mercury MWB505",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_m-n-h-nh-lcd-7",
+    "name": "Màn hình LCD 7\"",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_m-i-che-camera-b-ch-c-2-c-i",
+    "name": "Mái che camera + bịch ốc - 2 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nt-1f1e-sc20a",
+    "name": "NT-1F1E-SC20A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr-104mh-d-w",
+    "name": "NVR-104MH-D/W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr1104hs-n-h264",
+    "name": "NVR1104HS (NĐ)_H264",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr1104hs-w-s2",
+    "name": "NVR1104HS-W-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr1108hs-s3-h-vn",
+    "name": "NVR1108HS-S3/H-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr1108hs-w-s2-hdd",
+    "name": "NVR1108HS-W-S2 + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr2108hs-4ks2-n",
+    "name": "NVR2108HS-4KS2 (NĐ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr301-08s2-c-ng",
+    "name": "NVR301-08S2 + Ổ cứng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr4116hs-4ks2-n",
+    "name": "NVR4116HS-4KS2 NĐ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr4116hs-4ks3",
+    "name": "NVR4116HS-4KS3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_nvr5232-4ks2-n",
+    "name": "NVR5232-4KS2 NĐ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_netlink-htb-gs03-a-b-1000m",
+    "name": "Netlink HTB-GS03-A/B 1000M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_netlink-htb3100a-b-converter-1-s-i-quang-100m",
+    "name": "Netlink HTB3100A/B - Converter 1 sợi quang - 100M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_netlink-htb3100a-b-100m",
+    "name": "Netlink HTB3100A/B 100M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-12v-20a",
+    "name": "Nguồn 12V-20A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-24v-3a",
+    "name": "Nguồn 24V-3A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-5v-2a-ch-n-d-p",
+    "name": "Nguồn 5V-2A chân dẹp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-aoem",
+    "name": "Nguồn AOEM",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-acbel-12v-5a",
+    "name": "Nguồn Acbel 12V-5A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-actiontec",
+    "name": "Nguồn Actiontec",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-actiontec-12v-2a-1-c-i",
+    "name": "Nguồn Actiontec 12V-2A - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-actiontec-12v-2a-2-c-i",
+    "name": "Nguồn Actiontec 12V-2A 2 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-acbel-12v-5a-1-c-i",
+    "name": "Nguồn Adapter Acbel 12V-5A - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-acbel-12v-5a-2-c-i",
+    "name": "Nguồn Adapter Acbel 12V-5A - 2 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-acbel-12v-5a-3-c-i",
+    "name": "Nguồn Adapter Acbel 12V-5A - 3 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-actiontec-v1-12v-2a",
+    "name": "Nguồn Adapter Actiontec V1 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-actiontec-v2-12v-2a-1",
+    "name": "Nguồn Adapter Actiontec V2 12V-2A  (1)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-oem-12v-2a",
+    "name": "Nguồn Adapter OEM 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-sony-12v-2a",
+    "name": "Nguồn Adapter SONY 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-converter-5v-2a-ch-n-to-4-c-i",
+    "name": "Nguồn Converter 5V-2A - chân to - 4 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-converter-5v-2a-ch-n-to-x4",
+    "name": "Nguồn Converter 5V-2A chân to (x4)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-diamond-da-4cb",
+    "name": "Nguồn DIAMOND-DA 4CB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-moso-x3",
+    "name": "Nguồn MOSO (x3)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-moso-12v-2a",
+    "name": "Nguồn MOSO 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-oem-12v-2a-1-c-i",
+    "name": "Nguồn OEM 12V-2A - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-s22fp",
+    "name": "Nguồn S22FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-samsung-5v-2a-ch-n-d-p",
+    "name": "Nguồn Samsung 5V-2A chân dẹp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-tp-link-x16",
+    "name": "Nguồn TP-Link (x16)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-tp-link-12v-2a",
+    "name": "Nguồn TP-Link 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-adapter-acbel-12v-5a",
+    "name": "Nguồn adapter Acbel 12V-5A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-t-ong-12v-30a",
+    "name": "Nguồn tổ ong 12V-30A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-t-ong-12v-30a-33a",
+    "name": "Nguồn tổ ong 12V-30A(33A)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-t-ng-12v-15a",
+    "name": "Nguồn tổng 12V-15A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ngu-n-t-ng-12v-20a",
+    "name": "Nguồn tổng 12V-20A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_onv-4p",
+    "name": "ONV 4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_onv-4p-h1064pls",
+    "name": "ONV 4P - H1064PLS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_onv-8p",
+    "name": "ONV 8P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ptz-hik-kh-ng-m",
+    "name": "PTZ HIK KHÔNG MÃ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_q21",
+    "name": "Q21",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_qu-t-nlmt-sf-1115",
+    "name": "Quạt NLMT SF-1115",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_qu-t-t-n-nhi-t",
+    "name": "Quạt tản nhiệt",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew3200gx-pro",
+    "name": "RG--EW3200GX PRO",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-e-130-ge",
+    "name": "RG-E-130(GE)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-eg210g-p-v3-k-m-ngu-n-d-y-ngu-n",
+    "name": "RG-EG210G-P-V3 + Kèm nguồn + dây nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew1200",
+    "name": "RG-EW1200",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew1200-k-m-d-y-m-ng-ngu-n",
+    "name": "RG-EW1200 + Kèm dây mạng + Nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew1200-ngu-n",
+    "name": "RG-EW1200 + Nguồn",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew1200-pro",
+    "name": "RG-EW1200 Pro",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew1200g-pro",
+    "name": "RG-EW1200G PRO",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-ew300-pro",
+    "name": "RG-EW300 PRO",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-rap2200-e",
+    "name": "RG-RAP2200 (E)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_rg-rap2200-f",
+    "name": "RG-RAP2200(F)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s21fp",
+    "name": "S21FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s21ftp",
+    "name": "S21FTP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s21ftp-h-p",
+    "name": "S21FTP + Hộp",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s22fp",
+    "name": "S22FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s2xp-10m0wed-th-sd-256gb",
+    "name": "S2XP-10M0WED + Thẻ SD 256GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s2xp-6m0wed",
+    "name": "S2XP-6M0WED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s31fep",
+    "name": "S31FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s41fp",
+    "name": "S41FP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s51fep",
+    "name": "S51FEP",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_s7xp-10m0wed",
+    "name": "S7XP-10M0WED",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sandisk-32gb",
+    "name": "SANDISK 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sandisk-32gb-kh-ng-v",
+    "name": "SANDISK 32GB không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sandisk-64gb",
+    "name": "SANDISK 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sandisk-64gb-kh-ng-v",
+    "name": "SANDISK 64GB không vỏ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sg-500gb",
+    "name": "SG 500GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sg-500gb-renew",
+    "name": "SG 500GB (renew)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_sw-tenda-1gb",
+    "name": "SW TENDA 1GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_seagate-1tb",
+    "name": "Seagate 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_seagate-2tb",
+    "name": "Seagate 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_seagate-500gb",
+    "name": "Seagate 500GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_seagate-6tb",
+    "name": "Seagate 6TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_splitter-poe",
+    "name": "Splitter POE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-aptek",
+    "name": "Switch APTEK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-aptek-kh-ng-m",
+    "name": "Switch APTEK không mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-huno-8p",
+    "name": "Switch Huno 8P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-onv-4p",
+    "name": "Switch ONV 4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-onv-8p",
+    "name": "Switch ONV 8P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-48v-0-5a",
+    "name": "Switch POE 48V-0.5A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-8p-zincom",
+    "name": "Switch POE 8P Zincom",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-hrui-10p",
+    "name": "Switch POE HRUI 10P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-4-port",
+    "name": "Switch POE ONV 4 Port",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-4-port-100mbps",
+    "name": "Switch POE ONV 4 Port (100Mbps)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-6p",
+    "name": "Switch POE ONV 6P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-8-port",
+    "name": "Switch POE ONV 8 Port",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-8-port-100mbps",
+    "name": "Switch POE ONV 8 Port (100Mbps)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-8p",
+    "name": "Switch POE ONV 8P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-onv-4-port-100mbps-2-c-i",
+    "name": "Switch POE Onv 4 Port (100Mbps) - 2  cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-tp-link",
+    "name": "Switch POE TP LINK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-zincom-4-port-100mbps",
+    "name": "Switch POE Zincom 4 Port (100Mbps)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-zincom-8-port",
+    "name": "Switch POE Zincom 8 port",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-zincom-4p",
+    "name": "Switch PoE Zincom 4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-zincom-8p",
+    "name": "Switch PoE Zincom 8P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-poe-zincom-8p-100mbps",
+    "name": "Switch PoE Zincom 8P (100Mbps)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-ruijie-rg-es218gc-p",
+    "name": "Switch Ruijie RG-ES218GC-P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-ruijie-xs-s1960-24gt4sfp-h-28p-1g",
+    "name": "Switch Ruijie XS-S1960-24GT4SFP-H 28P 1G",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-tp-link-tl-ls1008g-8-port-1-0gbps",
+    "name": "Switch TP-Link TL-LS1008G 8 port (1.0Gbps)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-tp-link-tl-sg1008d-8-port-1-0gbps-5-c-i",
+    "name": "Switch TP-Link TL-SG1008D 8 port (1.0Gbps) - 5 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-tp-link-tl-sg1016d-16-port",
+    "name": "Switch TP-Link TL-SG1016D 16 port",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_switch-zincom-4p",
+    "name": "Switch Zincom 4P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_t1a21p-vn",
+    "name": "T1A21P-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_t2a21p",
+    "name": "T2A21P",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ta22cp-32gb-mixie",
+    "name": "TA22CP + 32GB MIXIE",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tenda-n300-wi-fi-4g03",
+    "name": "TENDA N300 Wi-Fi 4G03",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-sf1005d",
+    "name": "TL-SF1005D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-sf1008d",
+    "name": "TL-SF1008D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-sg1016d",
+    "name": "TL-SG1016D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-sg1024d",
+    "name": "TL-SG1024D",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-wr820n",
+    "name": "TL-WR820N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tl-wr840n",
+    "name": "TL-WR840N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tp-link-12v-2a",
+    "name": "TP-Link 12V-2A",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tp-link-archer-c50",
+    "name": "TP-Link Archer C50",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tp-link-mr6400-eu",
+    "name": "TP-Link MR6400 (EU)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tp-link-tl-wr820n",
+    "name": "TP-Link TL-WR820N",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_tsb-4tb",
+    "name": "TSB 4TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-32gb-sandisk",
+    "name": "Thẻ 32GB Sandisk",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-32gb-sandisk-3-c-i",
+    "name": "Thẻ 32GB Sandisk - 3 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-hik-en",
+    "name": "Thẻ 64GB HIK ĐEN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-hik-en-1-c-i",
+    "name": "Thẻ 64GB HIK Đen - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-sandisk",
+    "name": "Thẻ 64GB SANDISK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-hikvision-en",
+    "name": "Thẻ 64Gb Hikvision đen",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-dahua",
+    "name": "Thẻ 64gb Dahua",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-64gb-hikvision",
+    "name": "Thẻ 64gb Hikvision",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-dahua-64gb",
+    "name": "Thẻ DAHUA 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-dss-32gb-5-c-i",
+    "name": "Thẻ DSS 32GB - 5 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-hiksemi-64gb-x5",
+    "name": "Thẻ HIKSEMI 64GB x5",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-hiksemi-xanh-64gb",
+    "name": "Thẻ HIKSEMI XANH 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-hiksemi-64gb",
+    "name": "Thẻ Hiksemi 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-hikvision-xanh-64gb",
+    "name": "Thẻ Hikvision Xanh 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-hikvision-en-64gb",
+    "name": "Thẻ Hikvision đen 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-lexar-128gb",
+    "name": "Thẻ Lexar 128GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-sandisk-128gb",
+    "name": "Thẻ SANDISK 128GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-sandisk-256gb",
+    "name": "Thẻ Sandisk 256GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-sandisk-32gb",
+    "name": "Thẻ Sandisk 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-sandisk-64gb",
+    "name": "Thẻ Sandisk 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-128gb-sandisk",
+    "name": "Thẻ nhớ 128GB Sandisk",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-128gb-sd",
+    "name": "Thẻ nhớ 128gb SD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-32gb-hikvision-en-c-i-9-c-i",
+    "name": "Thẻ nhớ 32GB HIKVISION ĐEN (Cái) - 9 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-32gb-hikvision-en-1-c-i",
+    "name": "Thẻ nhớ 32GB HIKVISION ĐEN - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-32gb-hikvision-en-4-c-i",
+    "name": "Thẻ nhớ 32GB HIKVISION ĐEN - 4 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-32gb-sandisk",
+    "name": "Thẻ nhớ 32GB SANDISK",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-hik-en",
+    "name": "Thẻ nhớ 64GB HIK đen",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-hikvision-en",
+    "name": "Thẻ nhớ 64GB HIKVISION ĐEN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-hikvision",
+    "name": "Thẻ nhớ 64GB Hikvision",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-lexar",
+    "name": "Thẻ nhớ 64GB Lexar",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-sandisk",
+    "name": "Thẻ nhớ 64GB Sandisk",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64g-hik-xanh",
+    "name": "Thẻ nhớ 64g HIK xanh",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-hiksemi",
+    "name": "Thẻ nhớ 64gb Hiksemi",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-64gb-imou",
+    "name": "Thẻ nhớ 64gb imou",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-dss-32gb",
+    "name": "Thẻ nhớ DSS 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-dss-64gb",
+    "name": "Thẻ nhớ DSS 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-dahua-64gb",
+    "name": "Thẻ nhớ Dahua 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-hiksemi-64gb",
+    "name": "Thẻ nhớ HIKSEMI 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-hiksemi-xanh-64gb",
+    "name": "Thẻ nhớ HIKSEMI xanh 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-hikvision-64gb",
+    "name": "Thẻ nhớ HIKVISION 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-hikvison-64gb",
+    "name": "Thẻ nhớ HIKVISON 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-hik-64gb",
+    "name": "Thẻ nhớ Hik 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-128gb",
+    "name": "Thẻ nhớ SANDISK 128GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-512gb",
+    "name": "Thẻ nhớ SANDISK 512GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-64gb",
+    "name": "Thẻ nhớ SANDISK 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-ultra-32gb",
+    "name": "Thẻ nhớ SANDISK ULTRA 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-ultra-32gb-box-class10",
+    "name": "Thẻ nhớ SANDISK ULTRA 32GB Box Class10",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-ultra-32gb-box-class10-c-i-1-c-i",
+    "name": "Thẻ nhớ SANDISK ULTRA 32GB Box Class10 (Cái) - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-ultra-32gb-box-class10-1-c-i",
+    "name": "Thẻ nhớ SANDISK ULTRA 32GB Box Class10 - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-ultra-64gb-box-class10-1-c-i",
+    "name": "Thẻ nhớ SANDISK ULTRA 64GB Box Class10 - 1 cái",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_th-nh-sandisk-32gb",
+    "name": "Thẻ nhớ Sandisk 32GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_toshiba-1tb",
+    "name": "Toshiba 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_t-rack-4u",
+    "name": "Tủ Rack 4U",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_uho-s2e",
+    "name": "UHO-S2E",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_unv-64gb",
+    "name": "UNV 64GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wd-1tb",
+    "name": "WD 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wd-2tb",
+    "name": "WD 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wd-t-m-2tb",
+    "name": "WD Tím 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wd-t-m-1tb",
+    "name": "WD tím 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wd-t-m-3tb",
+    "name": "WD tím 3TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_wifi-t-m-xa-mercury-mwb-505",
+    "name": "Wifi tầm xa Mercury MWB 505",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr-5116hs-x",
+    "name": "XVR 5116HS-X",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr1a04",
+    "name": "XVR1A04",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr1b04-i-vn",
+    "name": "XVR1B04-I-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr1b04-i-vn-hdd",
+    "name": "XVR1B04-I-VN + HDD",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr1b08-i-vn",
+    "name": "XVR1B08-I-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr4104hs",
+    "name": "XVR4104HS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr4108c-s2",
+    "name": "XVR4108C-S2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr4116hs-i",
+    "name": "XVR4116HS-I",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5104hs-i3-vn",
+    "name": "XVR5104HS-I3-VN",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5104hs-x-n",
+    "name": "XVR5104HS-X (NĐ)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5104hs-x1",
+    "name": "XVR5104HS-X1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5108hs",
+    "name": "XVR5108HS",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5108hs-x",
+    "name": "XVR5108HS-X",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_xvr5232an-i3",
+    "name": "XVR5232AN-I3",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ch-n-dome-2",
+    "name": "chân đế dome - 2",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ids-7208hqhi-m1-s",
+    "name": "iDS-7208HQHI-M1/S",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ids-7216hqhi-m1-s",
+    "name": "iDS-7216HQHI-M1/S",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_ids-e08hqhi-b",
+    "name": "iDS-E08HQHI-B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_jack-bnc-f5-10",
+    "name": "jack BNC +F5 - 10",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-300w",
+    "name": "Đèn NLMT 300W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-d73300-6b",
+    "name": "Đèn NLMT D73300/6B",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-d73300-6b-t-m-pin",
+    "name": "Đèn NLMT D73300/6B + Tấm pin",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-jd-t200-200w-t-m-pin-nlmt-ch-n",
+    "name": "Đèn NLMT JD-T200 (200W) + tấm pin NLMT, chân đế",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-jd-z200",
+    "name": "Đèn NLMT JD-Z200",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-jde6300",
+    "name": "Đèn NLMT JDE6300",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-l63100",
+    "name": "Đèn NLMT L63100",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-l63100-t-m-pin",
+    "name": "Đèn NLMT L63100 + tấm pin",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-l63200-200w",
+    "name": "Đèn NLMT L63200 200W",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-l63300",
+    "name": "Đèn NLMT L63300",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-l64300-3m",
+    "name": "Đèn NLMT L64300/3M",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_n-nlmt-kh-ng-r-m",
+    "name": "Đèn NLMT không rõ mã",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-dahua-ko-r-m-c-ch-hoa",
+    "name": "Đầu ghi DAHUA ko rõ mã (có chữ hoa)",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-dh-xvr1a04",
+    "name": "Đầu ghi DH-XVR1A04",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-ds-7208hghi-k1",
+    "name": "Đầu ghi DS-7208HGHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-ds-7216hghi-k1",
+    "name": "Đầu ghi DS-7216HGHI-K1",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-longse",
+    "name": "Đầu ghi Longse",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_u-ghi-escort",
+    "name": "Đầu ghi escort",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-1tb-toshiba",
+    "name": "Ổ CỨNG 1TB TOSHIBA",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-2tb-sg",
+    "name": "Ổ CỨNG 2TB SG",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-m-th-ng-minh-ezviz",
+    "name": "Ổ cắm thông minh EZVIZ",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-2tb-seagate",
+    "name": "Ổ cứng 2TB Seagate",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-500gb-seagate",
+    "name": "Ổ cứng 500Gb Seagate",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-2tb",
+    "name": "Ổ cứng SEAGATE 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-sg-1tb",
+    "name": "Ổ cứng SG 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-sg-2tb",
+    "name": "Ổ cứng SG 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-sg-4tb",
+    "name": "Ổ cứng SG 4TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-sg-4tb-ch-nh-h-ng",
+    "name": "Ổ cứng SG 4TB chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-sg-500gb",
+    "name": "Ổ cứng SG 500GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-1tb",
+    "name": "Ổ cứng Seagate 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-500gb",
+    "name": "Ổ cứng Seagate 500GB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-skyhawk-1tb",
+    "name": "Ổ cứng Seagate Skyhawk 1TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-skyhawk-1tb-ch-nh-h-ng",
+    "name": "Ổ cứng Seagate Skyhawk 1TB - chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-skyhawk-4tb-ch-nh-h-ng",
+    "name": "Ổ cứng Seagate Skyhawk 4TB - chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-skyhawk-500gb-renew",
+    "name": "Ổ cứng Seagate Skyhawk 500GB - renew",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-seagate-skyhawk-6tb-ch-nh-h-ng",
+    "name": "Ổ cứng Seagate Skyhawk 6TB - chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-wd-1tb-renew",
+    "name": "Ổ cứng WD 1TB - renew",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-wd-4tb-t-m",
+    "name": "Ổ cứng WD 4TB tím",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-wd-t-m-2tb",
+    "name": "Ổ cứng WD tím 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-wd-t-m-2tb-renew",
+    "name": "Ổ cứng WD tím 2TB renew",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-wd-xanh-2tb",
+    "name": "Ổ cứng WD xanh 2TB",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-western-digital-t-m-1tb-ch-nh-h-ng",
+    "name": "Ổ cứng Western Digital TÍM 1TB - chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-western-digital-t-m-2tb-ch-nh-h-ng",
+    "name": "Ổ cứng Western Digital TÍM 2TB - chính hãng",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  },
+  {
+    "product_key": "prd_c-ng-western-digital-t-m-500gb-renew",
+    "name": "Ổ cứng Western Digital TÍM 500GB - renew",
+    "master_source": "kiotviet",
+    "kiotviet_item_id": null,
+    "legacy_detected_from": "warranty_items.csv"
+  }
+]

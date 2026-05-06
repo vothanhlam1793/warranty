@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "warranty_report_state.schema.json",
+  "title": "Warranty Report State Metadata",
+  "type": "object",
+  "required": [
+    "state_count",
+    "states"
+  ],
+  "properties": {
+    "state_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "title"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

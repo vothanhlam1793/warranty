@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard — Warranty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="./assets/app.css"/>
+  <style>
+    /* ── Task cards ── */
+    .task-section { margin-bottom: 1rem; }
+    .task-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: .75rem;
+    }
+    .task-group-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem 1rem;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+    .task-group-header:hover { background: var(--border); }
+    .task-group-title { font-weight: 700; font-size: .95rem; flex: 1; }
+    .task-group-count {
+      font-size: .78rem; font-weight: 700;
+      background: var(--ink); color: #fff;
+      padding: .15rem .5rem; border-radius: 100px;
+    }
+    .task-group-count.overdue { background: var(--danger); }
+    .task-guide {
+      font-size: .78rem; color: var(--ink-3);
+      padding: .4rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: #fffbeb;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .task-guide.info { background: var(--info-soft); color: var(--info); }
+    .task-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-item:hover { background: var(--surface-2); }
+    .task-item.overdue { background: #fff5f5; }
+    .task-item.overdue:hover { background: #ffe4e4; }
+    .task-item-code {
+      background: #0e7c66; color: #fff;
+      font-weight: 700; font-size: .75rem;
+      padding: .15rem .45rem; border-radius: 5px;
+      font-family: monospace; white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .task-item-info { flex: 1; min-width: 0; }
+    .task-item-name { font-weight: 600; font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .task-item-sub { font-size: .76rem; color: var(--ink-3); margin-top: 1px; }
+    .task-days {
+      font-size: .75rem; font-weight: 700;
+      padding: .1rem .4rem; border-radius: 5px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .task-days.normal { background: var(--surface-2); color: var(--ink-3); }
+    .task-days.warn { background: var(--warn-soft); color: var(--warn); }
+    .task-days.danger { background: var(--danger-soft); color: var(--danger); }
+    .task-actions { display: flex; gap: .3rem; flex-shrink: 0; }
+    .btn-task { font-size: .75rem; padding: .25rem .65rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-weight: 600; transition: all .12s; white-space: nowrap; }
+    .btn-task:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-task.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-task.primary:hover { background: var(--accent-hover); }
+    .btn-task.danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+    .task-empty { padding: .75rem 1rem; color: var(--ink-3); font-size: .85rem; font-style: italic; }
+    .task-body.collapsed { display: none; }
+    /* evidence thumbnail */
+    .evidence-thumb { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; }
+    /* upload hidden input */
+    .upload-input { display: none; }
+    /* summary bar */
+    .task-summary {
+      display: flex; gap: .75rem; align-items: center;
+      padding: .6rem 1rem; background: var(--ink);
+      color: #e8ede9; border-radius: var(--radius);
+      margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .task-summary b { color: #7de8cf; font-size: 1.1rem; }
+    .task-summary .sep { color: rgba(255,255,255,.2); }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item active" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Dashboard</span>
+      <div class="topbar-actions">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <button class="btn btn-secondary btn-sm" onclick="loadAll()">↻ Làm mới</button>
+        <a href="/tickets/new.html" class="btn btn-primary btn-sm">＋ Tạo phiếu mới</a>
+      </div>
+    </div>
+
+    <div class="page">
+      <!-- Metrics -->
+      <div id="metrics" class="metrics-grid"></div>
+
+      <!-- Việc cần làm hôm nay -->
+      <div class="task-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <h2 style="font-size:1rem;font-weight:800">Việc cần làm hôm nay</h2>
+          <span id="taskSummaryBadge" style="font-size:.8rem;color:var(--ink-3)"></span>
+        </div>
+        <div id="taskSummary" class="task-summary" style="display:none"></div>
+        <div id="taskGroups"><div class="loading">Đang tải...</div></div>
+      </div>
+
+      <!-- Pipeline + Phiếu gần đây -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div class="card">
+          <div class="card-header"><h2>Pipeline xử lý</h2></div>
+          <div class="card-body" id="pipeline"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Phiếu gần đây</h2>
+            <a href="/tickets/list.html" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Phiếu</th><th>Khách</th><th>Mã hàng</th><th>Ngày</th></tr></thead>
+                <tbody id="recent-tickets"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xem ảnh -->
+<div class="modal-overlay hidden" id="imgModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h3>Bằng chứng</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('imgModal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <img id="imgModalSrc" src="" style="max-width:100%;border-radius:8px"/>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="./assets/api.js"></script>
+<script>
+// ── Config nhóm việc cần làm ─────────────────────────────────────────────────
+const TASK_CONFIG = [
+  {
+    states: ["A1"],
+    icon: "📥",
+    title: "A1 — Test hàng mới tiếp nhận",
+    guide: "Kiểm tra tình trạng hàng, xác nhận lỗi với kỹ thuật → chuyển sang A2",
+    guideType: "warn",
+    nextState: "A2",
+    nextLabel: "→ A2 Liên hệ KH",
+    showUpload: false,
+    overdueAfter: 3,
+  },
+  {
+    states: ["A2"],
+    icon: "📞",
+    title: "A2 — Liên hệ khách chốt xử lý",
+    guide: "Gọi khách xác nhận phương án xử lý (bảo hành / sửa / đổi...) → chuyển sang A3",
+    guideType: "warn",
+    nextState: "A3",
+    nextLabel: "→ A3 Chuẩn bị gửi NCC",
+    showUpload: false,
+    overdueAfter: 3,
+  },
+  {
+    states: ["A3"],
+    icon: "📦",
+    title: "A3 — Đóng bịch, chuẩn bị gửi NCC",
+    guide: "In phiếu NCC, đóng gói hàng, dán mã xử lý lên bịch → chuyển B1 khi đã đóng xong",
+    guideType: "warn",
+    nextState: "B1",
+    nextLabel: "→ B1 Đã đóng gói",
+    showUpload: false,
+    showPrint: true,
+    overdueAfter: null,
+  },
+  {
+    states: ["B1"],
+    icon: "🚚",
+    title: "B1 — Gửi NCC (cần bằng chứng)",
+    guide: "Chụp ảnh biên nhận / vận đơn khi giao hàng cho NCC → upload ảnh rồi chuyển B2",
+    guideType: "info",
+    nextState: "B2",
+    nextLabel: "→ B2 Đã gửi NCC",
+    showUpload: true,
+    overdueAfter: null,
+  },
+  {
+    states: ["B2"],
+    icon: "⏳",
+    title: "B2 — NCC đang xử lý (tối đa 7 ngày)",
+    guide: "Theo dõi tiến độ NCC. Quá 7 ngày từ lúc gửi: nhắc NCC trả hàng về",
+    guideType: "warn",
+    nextState: "C1",
+    nextLabel: "→ C1 NCC đã trả về",
+    showUpload: false,
+    overdueAfter: 7,
+  },
+  {
+    states: ["C1"],
+    icon: "🔍",
+    title: "C1 — NCC trả về, kiểm tra lại",
+    guide: "Test hàng sau khi NCC trả về → PASS chuyển C2, NO PASS chuyển C3",
+    guideType: "info",
+    nextState: null,
+    nextLabel: null,
+    showUpload: false,
+    quickStates: [
+      { state: "C2", label: "✓ PASS → C2" },
+      { state: "C3", label: "✗ NO PASS → C3" },
+    ],
+    overdueAfter: 2,
+  },
+  {
+    states: ["C2", "C3"],
+    icon: "📲",
+    title: "C2/C3 — Gọi khách, chuẩn bị trả",
+    guide: "Liên hệ khách thông báo hàng đã về. Thu tiền nếu có → đóng gói chuyển C5",
+    guideType: "warn",
+    nextState: "C5",
+    nextLabel: "→ C5 Đã đóng gói",
+    showUpload: false,
+    overdueAfter: null,
+  },
+  {
+    states: ["C4"],
+    icon: "💰",
+    title: "C4 — Thu tiền khách",
+    guide: "Lập phiếu thu tiền trước khi trả hàng → sau khi thu xong chuyển C5",
+    guideType: "warn",
+    nextState: "C5",
+    nextLabel: "→ C5 Đã thu tiền",
+    showUpload: false,
+    overdueAfter: null,
+  },
+  {
+    states: ["C5"],
+    icon: "🎁",
+    title: "C5 — Trả khách (cần xác nhận trong 2 ngày)",
+    guide: "Chụp ảnh xác nhận khách nhận hàng trong vòng 2 ngày → upload ảnh rồi chuyển C6",
+    guideType: "info",
+    nextState: "C6",
+    nextLabel: "✓ C6 Hoàn thành",
+    showUpload: true,
+    overdueAfter: 2,
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let tasksData = null;
+
+// ── Render task groups ────────────────────────────────────────────────────────
+function renderTaskGroups(data) {
+  tasksData = data;
+  const groups = data.groups;
+  const container = document.getElementById("taskGroups");
+
+  // Summary bar
+  const sumBar = document.getElementById("taskSummary");
+  if (data.total_pending > 0) {
+    sumBar.style.display = "flex";
+    const overdueDeadline = data.total_deadline_overdue > 0
+      ? `<span class="sep">|</span><span style="color:#fca5a5">Trễ 14 ngày: <b style="color:#f87171">${data.total_deadline_overdue}</b>${data.total_not_notified > 0 ? ` <span style="color:#fcd34d">(${data.total_not_notified} chưa báo KH)</span>` : ''}</span>`
+      : '';
+    const urgentStr = data.total_urgent > 0
+      ? `<span class="sep">|</span><span style="color:#fcd34d">Sắp hết hạn: <b>${data.total_urgent}</b></span>`
+      : '';
+    sumBar.innerHTML = `
+      <span>Tổng việc cần làm: <b>${data.total_pending}</b></span>
+      <span class="sep">|</span>
+      ${data.total_overdue > 0
+        ? `<span style="color:#fca5a5">Quá hạn xử lý: <b style="color:#f87171">${data.total_overdue}</b></span>`
+        : `<span style="color:#6ee7b7">Không có việc quá hạn xử lý</span>`}
+      ${overdueDeadline}
+      ${urgentStr}
+    `;
+  } else {
+    sumBar.style.display = "flex";
+    sumBar.innerHTML = `<span style="color:#6ee7b7;font-weight:700">Tuyệt vời! Không có việc tồn đọng hôm nay.</span>`;
+  }
+
+  let html = "";
+  for (const cfg of TASK_CONFIG) {
+    // Gom items từ nhiều state
+    const items = cfg.states.flatMap(s => groups[s] || []);
+    const overdue = items.filter(i => i.is_overdue).length;
+    const countClass = overdue > 0 ? "overdue" : "";
+
+    html += `<div class="task-group">
+      <div class="task-group-header" onclick="toggleGroup(this)">
+        <span>${cfg.icon}</span>
+        <span class="task-group-title">${cfg.title}</span>
+        <span class="task-group-count ${countClass}">${items.length}</span>
+        <span style="color:var(--ink-3);font-size:.85rem" id="chevron-${cfg.states.join('-')}">▾</span>
+      </div>`;
+
+    // Guide
+    const guideClass = cfg.guideType === "info" ? "task-guide info" : "task-guide";
+    html += `<div class="${guideClass}">💡 ${cfg.guide}</div>`;
+
+    html += `<div class="task-body">`;
+
+    if (!items.length) {
+      html += `<div class="task-empty">Không có việc cần làm trong nhóm này.</div>`;
+    } else {
+      for (const item of items) {
+        const daysClass = item.is_overdue ? "danger" : (item.days_waiting >= Math.max((cfg.overdueAfter||99)-1, 1) ? "warn" : "normal");
+        const daysLabel = item.days_waiting === 0 ? "hôm nay" : `${item.days_waiting}n`;
+        const isDeadlineOverdue = item.is_deadline_overdue;
+        const isUrgent = item.is_urgent;
+        const notifiedLate = item.notified_late;
+
+        // Deadline badge
+        let deadlineBadge = "";
+        if (isDeadlineOverdue) {
+          const overdueDays = Math.abs(item.days_to_deadline);
+          deadlineBadge = `<span style="background:#b91c1c;color:#fff;font-size:.7rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;white-space:nowrap" title="Trễ deadline ${overdueDays} ngày">🚨 Trễ ${overdueDays}n</span>`;
+          if (!notifiedLate) {
+            deadlineBadge += `<span style="background:#7c3aed;color:#fff;font-size:.68rem;font-weight:700;padding:.1rem .35rem;border-radius:4px;white-space:nowrap">Chưa báo KH</span>`;
+          } else {
+            deadlineBadge += `<span style="background:#166534;color:#fff;font-size:.68rem;font-weight:600;padding:.1rem .35rem;border-radius:4px;white-space:nowrap">Đã báo KH</span>`;
+          }
+        } else if (isUrgent) {
+          deadlineBadge = `<span style="background:#d97706;color:#fff;font-size:.7rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;white-space:nowrap">⚠ Còn ${item.days_to_deadline}n</span>`;
+        }
+
+        // Nút báo khách nếu trễ và chưa báo
+        const notifyBtn = (isDeadlineOverdue && !notifiedLate)
+          ? `<button class="btn-task danger" onclick="notifyLate(${item.ticket_id},this)" title="Ghi nhận đã gọi báo khách trễ">📞 Báo KH</button>`
+          : "";
+
+        const rowClass = item.is_overdue || isDeadlineOverdue ? "task-item overdue" : "task-item";
+
+        // Evidence thumbnail
+        const evidenceHtml = item.evidence_url
+          ? `<img class="evidence-thumb" src="http://localhost:8000${item.evidence_url}" onclick="viewImg('http://localhost:8000${item.evidence_url}')" title="Xem ảnh bằng chứng"/>`
+          : "";
+
+        // Upload button
+        const uploadHtml = cfg.showUpload
+          ? `<button class="btn-task" onclick="triggerUpload(${item.ticket_id},${item.item_id})" title="Upload ảnh bằng chứng">📷</button>
+             <input type="file" class="upload-input" id="upinput-${item.item_id}" accept="image/*" onchange="uploadEvidence(${item.ticket_id},${item.item_id},this)"/>`
+          : "";
+
+        // Print button (A3)
+        const printHtml = cfg.showPrint
+          ? `<button class="btn-task" onclick="window.open('http://localhost:8000/api/supplier-orders/print-by-item?item_id=${item.item_id}')" title="In phiếu">🖨</button>`
+          : "";
+
+        // Quick state buttons
+        let actionHtml = "";
+        if (cfg.quickStates) {
+          for (const qs of cfg.quickStates) {
+            actionHtml += `<button class="btn-task" onclick="quickState(${item.ticket_id},${item.item_id},'${qs.state}',this)">${qs.label}</button>`;
+          }
+        } else if (cfg.nextState) {
+          actionHtml = `<button class="btn-task primary" onclick="quickState(${item.ticket_id},${item.item_id},'${cfg.nextState}',this)">${cfg.nextLabel}</button>`;
+        }
+
+        html += `<div class="${rowClass}">
+          <span class="task-item-code">${item.item_code || "?"}</span>
+          <div class="task-item-info">
+            <div class="task-item-name">${item.product_name || "—"}</div>
+            <div class="task-item-sub">${item.customer_name || ""}${item.customer_phone ? " · " + item.customer_phone : ""}${item.serial_no ? " · S/N: " + item.serial_no : ""}</div>
+          </div>
+          ${deadlineBadge}
+          ${evidenceHtml}
+          <span class="task-days ${daysClass}">${daysLabel}</span>
+          <div class="task-actions">
+            ${uploadHtml}
+            ${printHtml}
+            ${notifyBtn}
+            ${actionHtml}
+            <a href="/tickets/detail.html?id=${item.ticket_id}" class="btn-task" title="Mở phiếu">🔗</a>
+          </div>
+        </div>`;
+      }
+    }
+
+    html += `</div></div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Tự động collapse các group rỗng
+  document.querySelectorAll(".task-group").forEach(g => {
+    const body = g.querySelector(".task-body");
+    const items = body.querySelectorAll(".task-item");
+    if (!items.length) {
+      body.classList.add("collapsed");
+      const chevron = g.querySelector("[id^='chevron-']");
+      if (chevron) chevron.textContent = "▸";
+    }
+  });
+}
+
+function toggleGroup(header) {
+  const body = header.nextElementSibling.nextElementSibling; // skip guide div
+  body.classList.toggle("collapsed");
+  const chevron = header.querySelector("[id^='chevron-']");
+  if (chevron) chevron.textContent = body.classList.contains("collapsed") ? "▸" : "▾";
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+async function quickState(ticketId, itemId, toState, btn) {
+  btn.disabled = true;
+  btn.textContent = "...";
+  try {
+    await api.patch(`/api/tickets/${ticketId}/items/${itemId}/quick-state`, { to_state: toState });
+    toast(`Đã chuyển → ${toState}`);
+    await loadTasks();
+  } catch(e) {
+    toast(e.message, "error");
+    btn.disabled = false;
+  }
+}
+
+function triggerUpload(ticketId, itemId) {
+  document.getElementById(`upinput-${itemId}`)?.click();
+}
+
+async function uploadEvidence(ticketId, itemId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append("file", file);
+  try {
+    const res = await fetch(`http://localhost:8000/api/tickets/${ticketId}/items/${itemId}/evidence`, {
+      method: "POST", body: fd,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    toast("Đã upload ảnh bằng chứng");
+    await loadTasks();
+  } catch(e) {
+    toast("Lỗi upload: " + e.message, "error");
+  }
+}
+
+function viewImg(url) {
+  document.getElementById("imgModalSrc").src = url;
+  openModal("imgModal");
+}
+
+async function notifyLate(ticketId, btn) {
+  btn.disabled = true;
+  const note = prompt("Ghi chú nội dung đã báo khách (bỏ trống nếu không có):");
+  if (note === null) { btn.disabled = false; return; } // cancelled
+  try {
+    await api.post(`/api/tickets/${ticketId}/notify-late`, {
+      note: note || "Đã gọi báo khách hàng về việc trễ hạn",
+      actor: null,
+    });
+    toast("Đã ghi nhận báo khách");
+    await loadTasks();
+  } catch(e) {
+    toast(e.message, "error");
+    btn.disabled = false;
+  }
+}
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+async function loadTasks() {
+  const data = await api.get("/api/tasks/pending");
+  renderTaskGroups(data);
+}
+
+async function loadDashboard() {
+  const [report, tickets] = await Promise.all([
+    api.get("/api/transactions/report"),
+    api.get("/api/tickets?limit=8"),
+  ]);
+
+  const s = report.stats;
+  document.getElementById("metrics").innerHTML = `
+    <div class="metric accent">
+      <div class="m-label">Tổng mã hàng</div>
+      <div class="m-value">${s.total_items}</div>
+      <div class="m-sub">trong hệ thống</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Đang xử lý</div>
+      <div class="m-value">${s.open_items}</div>
+      <div class="m-sub">chưa hoàn thành</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Hoàn thành</div>
+      <div class="m-value">${s.done_items}</div>
+      <div class="m-sub">đã trả khách</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Tổng thu</div>
+      <div class="m-value" style="font-size:1.2rem">${fmtMoney(report.total_thu)}</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Tổng chi</div>
+      <div class="m-value" style="font-size:1.2rem">${fmtMoney(report.total_chi)}</div>
+    </div>
+    <div class="metric">
+      <div class="m-label">Lợi nhuận</div>
+      <div class="m-value" style="font-size:1.2rem;color:var(--accent)">${fmtMoney(report.profit)}</div>
+    </div>
+  `;
+
+  const stateOrder = ["A1","A2","A3","B1","B2","C1","C2","C3","C4","C5","C6"];
+  const stateLabels = {
+    A1:"Tiếp nhận", A2:"Liên hệ KH", A3:"Chuyển NCC",
+    B1:"NCC xử lý", B2:"Dài hạn",
+    C1:"KT trả về", C2:"PASS", C3:"NO PASS",
+    C4:"Thu tiền", C5:"Đóng gói", C6:"Hoàn thành",
+  };
+  const counts = s.by_state || {};
+  document.getElementById("pipeline").innerHTML = stateOrder.map(code => {
+    const n = counts[code] || 0;
+    const pct = s.total_items ? Math.round(n / s.total_items * 100) : 0;
+    return `
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem">
+        <span class="badge state-${code}" style="min-width:60px;justify-content:center">${code}</span>
+        <div style="flex:1;background:var(--border);border-radius:100px;height:8px;overflow:hidden">
+          <div style="width:${pct}%;background:var(--accent);height:100%;border-radius:100px"></div>
+        </div>
+        <span style="font-size:.8rem;font-weight:700;min-width:28px;text-align:right">${n}</span>
+        <span style="font-size:.75rem;color:var(--ink-3);min-width:90px">${stateLabels[code]||code}</span>
+      </div>`;
+  }).join("");
+
+  const tbody = document.getElementById("recent-tickets");
+  tbody.innerHTML = tickets.items.map(t => `
+    <tr onclick="location.href='/tickets/detail.html?id=${t.id}'">
+      <td><b>${t.ticket_no}</b></td>
+      <td>${t.customer_name || "—"}</td>
+      <td><span class="badge badge-gray">${t.item_count} mã</span></td>
+      <td class="td-muted">${fmtDate(t.received_date)}</td>
+    </tr>`).join("");
+}
+
+async function loadAll() {
+  await Promise.all([loadDashboard(), loadTasks()]);
+}
+
+checkAuth().then(() => loadAll()).catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Danh sách phiếu bảo hành</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item active" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Phiếu bảo hành</span>
+      <div class="topbar-actions">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <a href="/tickets/new.html" class="btn btn-primary btn-sm">＋ Tạo phiếu mới</a>
+      </div>
+    </div>
+    <div class="page">
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="searchQ" class="form-control" placeholder="Tìm phiếu, khách hàng, mã xử lý (vd: 742-1)..." style="padding-left:2.2rem;min-width:300px"/>
+        </div>
+        <select id="stateFilter" class="form-control">
+          <option value="">Tất cả trạng thái</option>
+          <option value="A1">A1 – Tiếp nhận</option>
+          <option value="A2">A2 – Liên hệ KH</option>
+          <option value="A3">A3 – Chuyển NCC</option>
+          <option value="B1">B1 – NCC xử lý</option>
+          <option value="B2">B2 – Dài hạn</option>
+          <option value="C1">C1 – NCC trả về</option>
+          <option value="C2">C2 – PASS</option>
+          <option value="C3">C3 – NO PASS</option>
+          <option value="C4">C4 – Thu tiền</option>
+          <option value="C5">C5 – Đã phiếu</option>
+          <option value="C6">C6 – Hoàn thành</option>
+        </select>
+        <button class="btn btn-secondary" onclick="load()">Lọc</button>
+        <span id="resultCount" class="text-sm text-muted" style="align-self:center"></span>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Số phiếu</th>
+                <th>Khách hàng</th>
+                <th>Mã hàng</th>
+                <th>Ngày nhận</th>
+                <th>Trạng thái</th>
+                <th>Người tạo</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div id="loadingState" class="loading">Đang tải...</div>
+        <div id="emptyState" class="empty-state" style="display:none">
+          <div class="icon">📋</div><p>Không tìm thấy phiếu nào</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+let debounceTimer;
+document.getElementById("searchQ").addEventListener("input", () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(load, 350);
+});
+document.getElementById("stateFilter").addEventListener("change", load);
+
+async function load() {
+  const q = document.getElementById("searchQ").value.trim();
+  const state = document.getElementById("stateFilter").value;
+  let url = `/api/tickets?limit=100`;
+  if (q) url += `&q=${encodeURIComponent(q)}`;
+  if (state) url += `&state=${state}`;
+
+  document.getElementById("loadingState").style.display = "block";
+  document.getElementById("emptyState").style.display = "none";
+  document.getElementById("tbody").innerHTML = "";
+
+  const data = await api.get(url);
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("resultCount").textContent = `${data.total} phiếu`;
+
+  if (!data.items.length) {
+    document.getElementById("emptyState").style.display = "block";
+    return;
+  }
+
+  document.getElementById("tbody").innerHTML = data.items.map(t => {
+    // Get unique states from items
+    const states = [...new Set((t.items || []).map(i => i.workflow_state))];
+    const stateHtml = states.map(s => stateBadge(s)).join(" ");
+    return `
+      <tr onclick="location.href='/tickets/detail.html?id=${t.id}'">
+        <td><b>${t.ticket_no}</b></td>
+        <td>
+          ${t.customer_name || "—"}
+          ${t.customer_phone ? `<div class="td-muted">${t.customer_phone}</div>` : ""}
+        </td>
+        <td>
+          <span class="badge badge-gray">${t.item_count} mã</span>
+          ${t.open_count > 0 ? `<span class="badge badge-yellow">${t.open_count} đang xử lý</span>` : '<span class="badge badge-green">Xong</span>'}
+          <div style="margin-top:.3rem;display:flex;flex-wrap:wrap;gap:.25rem">
+            ${(t.items||[]).map(i => i.item_code ? `<span style="background:#0e7c66;color:#fff;font-size:.7rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;font-family:monospace">${i.item_code}</span>` : '').join('')}
+          </div>
+        </td>
+        <td class="td-muted">${fmtDate(t.received_date)}</td>
+        <td>${stateHtml}</td>
+        <td class="td-muted">${t.created_by || "—"}</td>
+      </tr>`;
+  }).join("");
+}
+
+checkAuth().then(() => load());
+</script>
+</body>
+</html>

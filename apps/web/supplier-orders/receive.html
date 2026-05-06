@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Nhận hàng từ NCC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <a class="nav-item active" href="/supplier-orders/receive.html"><span class="icon">📥</span>Nhận hàng NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">📥 Nhận hàng từ NCC</span>
+      <div class="topbar-actions">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+      </div>
+    </div>
+    <div class="page" style="max-width:900px">
+
+      <div class="card mb-2">
+        <div class="card-header"><h2>🚚 Chọn phiếu NCC đang chờ nhận về</h2></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Phiếu NCC (status = Đã gửi)</label>
+            <select id="orderSelect" class="form-control" onchange="onOrderChange()">
+              <option value="">— Chọn phiếu NCC —</option>
+            </select>
+          </div>
+          <div id="orderInfo" class="mt-1" style="display:none">
+            <p class="text-sm text-muted">NCC: <b id="infoSupplier"></b> &nbsp;|&nbsp; Ngày gửi: <span id="infoSentDate"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="itemsPanel" style="display:none">
+        <div class="card mb-2">
+          <div class="card-header">
+            <h2>📦 Danh sách mã hàng</h2>
+            <span class="text-sm text-muted" id="itemCount"></span>
+          </div>
+          <div class="card-body" style="padding:0" id="itemsBody"></div>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-header"><h2>📅 Thông tin nhận hàng</h2></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Ngày nhận về *</label>
+                <input id="receivedDate" type="date" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Người thực hiện</label>
+                <input id="receiveActor" class="form-control" placeholder="Tên nhân viên..."/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-1" style="justify-content:flex-end">
+          <button class="btn btn-primary" onclick="submitReceive()">✓ Xác nhận nhận hàng từ NCC</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+const RESULT_OPTIONS = [
+  { value: "dang_xu_ly", label: "Đang xử lý (chưa xong)" },
+  { value: "sua_duoc",   label: "Sửa được" },
+  { value: "doi_moi",    label: "Đổi mới" },
+  { value: "tra_xac",    label: "Trả xác" },
+];
+
+let orders = [];
+let activeOrder = null;
+
+async function init() {
+  document.getElementById("receivedDate").value = new Date().toISOString().slice(0,10);
+  orders = await api.get("/api/supplier-orders/sent");
+  const sel = document.getElementById("orderSelect");
+  if (!orders.length) {
+    const opt = document.createElement("option");
+    opt.disabled = true;
+    opt.textContent = "— Không có phiếu nào đang chờ nhận —";
+    sel.appendChild(opt);
+    return;
+  }
+  orders.forEach(o => {
+    const opt = document.createElement("option");
+    opt.value = o.id;
+    opt.textContent = `${o.order_no} — ${o.supplier_name} (${o.items.length} mã)`;
+    sel.appendChild(opt);
+  });
+}
+
+function onOrderChange() {
+  const id = parseInt(document.getElementById("orderSelect").value);
+  if (!id) {
+    document.getElementById("itemsPanel").style.display = "none";
+    document.getElementById("orderInfo").style.display = "none";
+    return;
+  }
+  activeOrder = orders.find(o => o.id === id);
+  if (!activeOrder) return;
+
+  document.getElementById("infoSupplier").textContent = activeOrder.supplier_name || "—";
+  document.getElementById("infoSentDate").textContent = fmtDate(activeOrder.sent_date);
+  document.getElementById("orderInfo").style.display = "block";
+
+  renderItems();
+  document.getElementById("itemsPanel").style.display = "block";
+}
+
+function renderItems() {
+  document.getElementById("itemCount").textContent = `${activeOrder.items.length} mã hàng`;
+  document.getElementById("itemsBody").innerHTML = activeOrder.items.map((oi, idx) => {
+    const opts = RESULT_OPTIONS.map(r =>
+      `<option value="${r.value}" ${r.value === 'dang_xu_ly' ? 'selected' : ''}>${r.label}</option>`
+    ).join("");
+    return `
+    <div style="border-bottom:1px solid var(--border);padding:1rem 1.25rem">
+      <div style="display:flex;gap:.75rem;align-items:flex-start">
+        <div class="item-num">${idx+1}</div>
+        <div style="flex:1">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.4rem">
+            <b>${oi.product_name || "—"}</b>
+            ${oi.serial_no ? `<span class="badge badge-gray">S/N: ${oi.serial_no}</span>` : ""}
+          </div>
+          <p class="text-sm text-muted mb-1">Phiếu BH: ${oi.ticket_no||"—"} ${oi.customer_complaint ? `· ${oi.customer_complaint}` : ''}</p>
+          <div class="form-grid" style="grid-template-columns:1fr 2fr">
+            <div class="form-group">
+              <label class="form-label">Kết quả NCC</label>
+              <select id="res-${oi.ticket_item_id}" class="form-control">${opts}</select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ghi chú kết quả</label>
+              <input id="resnote-${oi.ticket_item_id}" class="form-control" placeholder="Chi tiết..."/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function submitReceive() {
+  if (!activeOrder) return toast("Chọn phiếu NCC trước", "error");
+  const receivedDate = document.getElementById("receivedDate").value;
+  if (!receivedDate) return toast("Nhập ngày nhận hàng", "error");
+
+  const actor = document.getElementById("receiveActor").value.trim() ||
+                (currentUser ? currentUser.display_name : null);
+
+  const items = activeOrder.items.map(oi => ({
+    ticket_item_id: oi.ticket_item_id,
+    result: document.getElementById(`res-${oi.ticket_item_id}`)?.value,
+    result_note: document.getElementById(`resnote-${oi.ticket_item_id}`)?.value || null,
+  }));
+
+  try {
+    const res = await api.post(`/api/supplier-orders/${activeOrder.id}/receive-back`, {
+      received_date: receivedDate,
+      items,
+      actor,
+    });
+    const msg = res.all_received
+      ? "Đã nhận hàng toàn bộ — các mã chuyển sang C1"
+      : "Đã ghi nhận nhận một phần hàng về";
+    toast(msg);
+    setTimeout(() => location.href = "/supplier-orders/list.html", 1000);
+  } catch(e) {
+    toast(e.message || "Lỗi xác nhận", "error");
+  }
+}
+
+checkAuth().then(() => init()).catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

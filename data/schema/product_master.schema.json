@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "product_master.schema.json",
+  "title": "Product Master (KiotViet)",
+  "type": "object",
+  "required": [
+    "product_key",
+    "name",
+    "master_source"
+  ],
+  "properties": {
+    "product_key": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "master_source": {
+      "type": "string",
+      "enum": [
+        "kiotviet"
+      ]
+    },
+    "kiotviet_item_id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "legacy_detected_from": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

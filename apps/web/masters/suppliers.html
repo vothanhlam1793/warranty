@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Nhà cung cấp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
+    <nav>
+      <div class="nav-group-label">Vận hành</div>
+      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
+      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
+      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
+      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
+      <div class="nav-group-label">Danh mục</div>
+      <a class="nav-item active" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
+      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
+      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
+      <div class="nav-group-label">Tài chính</div>
+      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Nhà cung cấp (NCC)</span>
+      <button class="btn btn-primary btn-sm" onclick="openForm(null)">＋ Thêm NCC</button>
+    </div>
+    <div class="page">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tên NCC</th><th>Người liên hệ</th><th>SĐT</th><th>Email</th><th>Địa chỉ</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div id="loading" class="loading">Đang tải...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="formModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="formTitle">Thêm NCC mới</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('formModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId"/>
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Tên NCC *</label><input id="fName" class="form-control"/></div>
+        <div class="form-group"><label class="form-label">Người liên hệ</label><input id="fContact" class="form-control"/></div>
+        <div class="form-group"><label class="form-label">SĐT</label><input id="fPhone" class="form-control"/></div>
+        <div class="form-group"><label class="form-label">Email</label><input id="fEmail" class="form-control"/></div>
+        <div class="form-group full"><label class="form-label">Địa chỉ</label><input id="fAddr" class="form-control"/></div>
+        <div class="form-group full"><label class="form-label">Ghi chú</label><textarea id="fNote" class="form-control"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('formModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitForm()">✓ Lưu</button>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script>
+let suppliers = [];
+
+async function load() {
+  suppliers = await api.get("/api/suppliers");
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("tbody").innerHTML = suppliers.map(s => `
+    <tr>
+      <td><b>${s.name}</b>${s.note ? `<div class="td-muted">${s.note}</div>` : ""}</td>
+      <td>${s.contact_name||"—"}</td>
+      <td>${s.phone||"—"}</td>
+      <td>${s.email||"—"}</td>
+      <td>${s.address||"—"}</td>
+      <td>${s.is_active ? '<span class="badge badge-green">Hoạt động</span>' : '<span class="badge badge-gray">Ngưng</span>'}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm" onclick="openForm(${JSON.stringify(s).replace(/"/g,'&quot;')})">✏ Sửa</button>
+      </td>
+    </tr>`).join("");
+}
+
+function openForm(s) {
+  document.getElementById("editId").value = s?.id || "";
+  document.getElementById("fName").value = s?.name || "";
+  document.getElementById("fContact").value = s?.contact_name || "";
+  document.getElementById("fPhone").value = s?.phone || "";
+  document.getElementById("fEmail").value = s?.email || "";
+  document.getElementById("fAddr").value = s?.address || "";
+  document.getElementById("fNote").value = s?.note || "";
+  document.getElementById("formTitle").textContent = s ? "Sửa NCC" : "Thêm NCC mới";
+  openModal("formModal");
+}
+
+async function submitForm() {
+  const id = document.getElementById("editId").value;
+  const payload = {
+    name: document.getElementById("fName").value.trim(),
+    contact_name: document.getElementById("fContact").value || null,
+    phone: document.getElementById("fPhone").value || null,
+    email: document.getElementById("fEmail").value || null,
+    address: document.getElementById("fAddr").value || null,
+    note: document.getElementById("fNote").value || null,
+    is_active: true,
+  };
+  if (!payload.name) return toast("Nhập tên NCC", "error");
+  if (id) await api.put(`/api/suppliers/${id}`, payload);
+  else await api.post("/api/suppliers", payload);
+  closeModal("formModal");
+  toast("Đã lưu");
+  load();
+}
+
+load().catch(e => toast(e.message, "error"));
+</script>
+</body>
+</html>

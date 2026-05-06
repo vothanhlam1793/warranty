@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Đăng nhập — Warranty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/app.css"/>
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; background:var(--surface-2); }
+    .login-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:2.5rem 2rem; width:100%; max-width:380px; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+    .login-logo { font-size:1.5rem; font-weight:800; color:var(--accent); margin-bottom:.25rem; }
+    .login-sub  { color:var(--ink-3); font-size:.85rem; margin-bottom:2rem; }
+  </style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-logo">⚙ WARRANTY</div>
+  <div class="login-sub">Quản lý bảo hành nội bộ</div>
+  <div class="form-group mb-2">
+    <label class="form-label">Tên đăng nhập</label>
+    <input id="username" class="form-control" placeholder="username" autocomplete="username" autofocus/>
+  </div>
+  <div class="form-group mb-3">
+    <label class="form-label">Mật khẩu</label>
+    <input id="password" type="password" class="form-control" placeholder="••••••••" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter') doLogin()"/>
+  </div>
+  <button class="btn btn-primary" style="width:100%" onclick="doLogin()" id="loginBtn">Đăng nhập</button>
+  <div id="errMsg" style="color:var(--danger);font-size:.85rem;margin-top:.75rem;display:none"></div>
+</div>
+<div id="toast-container"></div>
+<script src="/assets/api.js"></script>
+<script>
+// Nếu đã đăng nhập thì redirect luôn
+(async () => {
+  try {
+    const data = await api.get("/api/auth/me");
+    if (data.user) location.href = "/index.html";
+  } catch(_) {}
+})();
+
+async function doLogin() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+  const errEl = document.getElementById("errMsg");
+  const btn = document.getElementById("loginBtn");
+  errEl.style.display = "none";
+
+  if (!username || !password) {
+    errEl.textContent = "Vui lòng nhập đầy đủ thông tin";
+    errEl.style.display = "block";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Đang đăng nhập...";
+
+  try {
+    await api.post("/api/auth/login", { username, password });
+    const returnTo = new URLSearchParams(location.search).get("next") || "/index.html";
+    location.href = returnTo;
+  } catch(e) {
+    errEl.textContent = e.message || "Đăng nhập thất bại";
+    errEl.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "Đăng nhập";
+  }
+}
+</script>
+</body>
+</html>
