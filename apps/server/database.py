@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime, time
 from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy import text
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, joinedload, sessionmaker
 
 # Load .env từ root project (2 cấp trên apps/server/)
 _ROOT = Path(__file__).resolve().parents[2]
@@ -59,9 +60,29 @@ def init_db():
             conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_template_locked BOOLEAN DEFAULT 0"))
         if "c1_template_locked" not in cols:
             conn.execute(text("ALTER TABLE ticket_items ADD COLUMN c1_template_locked BOOLEAN DEFAULT 0"))
-    from .models import ChecklistTemplate, ChecklistTemplateItem, ChecklistStage
+        if "delivery_confirm_note" not in cols:
+            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN delivery_confirm_note TEXT"))
+        if "shipping_note" not in cols:
+            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN shipping_note TEXT"))
+        slip_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(return_slips)"))]
+        if slip_cols and "return_method" not in slip_cols:
+            conn.execute(text("ALTER TABLE return_slips ADD COLUMN return_method TEXT"))
+    from .models import (
+        ChecklistStage,
+        ChecklistTemplate,
+        ChecklistTemplateItem,
+        ReturnSlip,
+        ReturnSlipItem,
+        TicketItem,
+        WorkflowState,
+    )
     db = SessionLocal()
     try:
+        def next_slip_no() -> str:
+            last = db.query(ReturnSlip).order_by(ReturnSlip.id.desc()).first()
+            num = (last.id + 1) if last else 1
+            return f"TK-{datetime.today().strftime('%Y%m')}-{num:04d}"
+
         def ensure_template(name: str, stage: ChecklistStage, description: str):
             t = db.query(ChecklistTemplate).filter(ChecklistTemplate.name == name).first()
             if not t:
@@ -115,6 +136,40 @@ def init_db():
             "Lỗi cũ đã được xử lý",
             "Serial khớp với phiếu",
         ])
+
+        legacy_items = (
+            db.query(TicketItem)
+            .options(joinedload(TicketItem.ticket), joinedload(TicketItem.return_slip_items))
+            .filter(TicketItem.workflow_state.in_([WorkflowState.C4, WorkflowState.C5, WorkflowState.C6]))
+            .all()
+        )
+        for item in legacy_items:
+            if item.return_slip_items:
+                continue
+            if not item.ticket:
+                continue
+
+            delivered_at = None
+            if item.workflow_state == WorkflowState.C6 and item.returned_date:
+                delivered_at = datetime.combine(item.returned_date, time.min)
+
+            slip = ReturnSlip(
+                slip_no=next_slip_no(),
+                customer_id=item.ticket.customer_id,
+                status=item.workflow_state,
+                note=item.diagnosis_note or f"Backfill legacy return slip cho {item.item_code or item.id}",
+                shipping_note=item.shipping_note,
+                pack_image_url=item.evidence_url if item.workflow_state in (WorkflowState.C4, WorkflowState.C5) else None,
+                delivery_note=item.delivery_confirm_note,
+                delivered_image_url=item.evidence_url if item.workflow_state == WorkflowState.C6 else None,
+                created_by="system-backfill",
+                created_at=item.created_at,
+                packed_at=item.created_at if item.workflow_state in (WorkflowState.C5, WorkflowState.C6) else None,
+                delivered_at=delivered_at,
+            )
+            db.add(slip)
+            db.flush()
+            db.add(ReturnSlipItem(return_slip_id=slip.id, ticket_item_id=item.id))
 
         db.commit()
     finally:

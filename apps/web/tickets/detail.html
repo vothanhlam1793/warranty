@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -10,30 +10,13 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item active" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <a class="nav-item" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title" id="pageTitle">Chi tiết phiếu</span>
       <div class="topbar-actions">
         <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
-        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8000/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
+        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8001/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
         <a href="/tickets/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
       </div>
     </div>
@@ -246,6 +229,7 @@
   </div>
 </div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const ticketId = parseInt(params.get("id"));
@@ -373,8 +357,8 @@ function renderItems() {
             ${item.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${item.result_note}</p>` : ""}
             ${item.evidence_url ? `
               <div style="margin-top:.4rem">
-                <a href="http://localhost:8000${item.evidence_url}" target="_blank">
-                  <img src="http://localhost:8000${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
+                <a href="http://localhost:8001${item.evidence_url}" target="_blank">
+                  <img src="http://localhost:8001${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
                 </a>
               </div>` : ""}
             <div style="display:flex;gap:.75rem;margin-top:.35rem;flex-wrap:wrap">
@@ -413,14 +397,15 @@ function renderItemActions(item) {
   } else if (s === 'C1') {
     btns += `<span class="badge badge-gray">Dùng checklist C1 để kết luận PASS/FAIL</span>`;
   } else if (s === 'C2') {
-    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C2')">📦 Đóng gói xong</button>`;
+    btns += `<button class="btn btn-primary btn-sm" onclick="openReturnSlipPage()">🧾 Lập phiếu trả khách</button>`;
   } else if (s === 'C3') {
-    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C3')">💰 Cần thu tiền</button>`;
+    btns += `<button class="btn btn-primary btn-sm" onclick="openReturnSlipPage()">🧾 Lập phiếu trả khách</button>`;
   } else if (s === 'C4') {
     btns += `<button class="btn btn-primary btn-sm" onclick="openTxnModal(${id})">💰 Ghi nhận thu tiền</button>`;
   } else if (s === 'C5') {
     btns += `<button class="btn btn-primary btn-sm" onclick="document.getElementById('upinput-${id}').click()">📷 Xác nhận trả khách</button>`;
     btns += `<input type="file" id="upinput-${id}" style="display:none" accept="image/*" onchange="uploadEvidence(${ticket.id},${id},this)"/>`;
+    btns += `<button class="btn btn-secondary btn-sm" onclick="confirmDeliveryNote(${id})">📝 Xác nhận đã gửi (ghi chú)</button>`;
   } else if (s === 'C6') {
     btns += `<span class="badge badge-green">✓ Hoàn thành</span>`;
   }
@@ -465,10 +450,6 @@ let actionTargetState = null; // state sẽ chuyển tới khi submit
 const ACTION_CONFIG = {
   A1: { title: 'Xong kiểm tra → Liên hệ KH',      notePlaceholder: 'Kết quả kiểm tra, tình trạng hàng...', toState: 'A2', showExpected: true, defaultExpected: () => ticket?.deadline_date || '' },
   A2: { title: 'Xác nhận sẵn sàng gửi NCC',        notePlaceholder: 'Ghi chú chuẩn bị gửi NCC...',         toState: 'A3', showExpected: false },
-  C1: { title: 'Kiểm tra kết quả NCC trả về',       notePlaceholder: 'Kết quả kiểm tra sau khi NCC trả...', toState: null, showPass: true      },
-  C2: { title: 'Xác nhận đóng gói – Chờ trả khách', notePlaceholder: 'Ghi chú đóng gói...',                 toState: 'C5', showExpected: false },
-  C3: { title: 'Xác nhận cần thu tiền',             notePlaceholder: 'Lý do thu tiền, số tiền dự kiến...',  toState: 'C4', showExpected: false },
-  
 };
 
 function openActionModal(itemId, actionKey) {
@@ -532,6 +513,32 @@ async function submitAction(overrideToState) {
 function openStateModal() {}
 function submitStateChange() {}
 
+function openReturnSlipPage() {
+  if (!ticket?.customer_id) return toast('Thiếu thông tin khách hàng', 'error');
+  location.href = `/return-slips/new.html?customer_id=${ticket.customer_id}&ticket_id=${ticketId}`;
+}
+
+async function confirmDeliveryNote(itemId) {
+  const actor = prompt('Tên người xác nhận giao khách:');
+  if (actor === null) return;
+  const note = prompt('Ghi chú xác nhận đã gửi khách:');
+  if (note === null) return;
+  if (!actor.trim() || !note.trim()) return toast('Cần nhập đủ người xác nhận và ghi chú', 'error');
+  try {
+    const res = await api.get('/api/return-slips/list?status=C5');
+    const slip = (res.items || []).find(x => (x.items || []).some(it => it.ticket_item_id === itemId));
+    if (!slip) throw new Error('Không tìm thấy phiếu trả C5 chứa item này');
+    await api.post(`/api/return-slips/${slip.id}/confirm-delivered`, {
+      actor: actor.trim(),
+      delivery_note: note.trim(),
+    });
+    toast(`Đã xác nhận hoàn thành ${slip.slip_no}`);
+    await loadTicket();
+  } catch (e) {
+    toast(e.message || 'Lỗi xác nhận giao khách', 'error');
+  }
+}
+
 // Logs modal
 async function openLogsModal(itemId) {
   const logs = await api.get(`/api/tickets/${ticketId}/items/${itemId}/logs`);
@@ -588,7 +595,7 @@ async function uploadEvidence(tId, itemId, input) {
   const fd = new FormData();
   fd.append("file", file);
   try {
-    const res = await fetch(`http://localhost:8000/api/tickets/${tId}/items/${itemId}/evidence`, {
+    const res = await fetch(`http://localhost:8001/api/tickets/${tId}/items/${itemId}/evidence`, {
       method: "POST", body: fd,
     });
     if (!res.ok) throw new Error(await res.text());
