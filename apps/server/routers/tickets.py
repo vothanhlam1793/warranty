@@ -150,6 +150,18 @@ def _get_quote_transactions(db: Session, item_id: int) -> list[Transaction]:
     )
 
 
+def _get_quote_transactions_by_types(db: Session, item_id: int) -> list[Transaction]:
+    return (
+        db.query(Transaction)
+        .filter(
+            Transaction.ticket_item_id == item_id,
+            Transaction.type.in_([TransactionType.chi, TransactionType.thu]),
+        )
+        .order_by(Transaction.id.asc())
+        .all()
+    )
+
+
 def _serialize_ticket(ticket: Ticket) -> dict:
     # Sort items by item_no for consistent display
     items_sorted = sorted(ticket.items, key=lambda i: i.item_no)
@@ -492,8 +504,11 @@ def finalize_quote_decision(
 
     actor = resolve_actor(request, db, payload.actor, required=True)
     drafts = _get_quote_transactions(db, item.id)
-    if len(drafts) < 2:
+    quote_transactions = _get_quote_transactions_by_types(db, item.id)
+    if payload.customer_approved and len(drafts) < 2:
         raise HTTPException(400, "Thiếu giao dịch nháp của báo giá")
+    if not payload.customer_approved and not quote_transactions:
+        raise HTTPException(400, "Không tìm thấy giao dịch báo giá để chốt với khách")
 
     if payload.customer_approved:
         item.requires_customer_payment = True
@@ -501,7 +516,7 @@ def finalize_quote_decision(
     else:
         item.requires_customer_payment = False
         decision_note = f"Khách không đồng ý báo giá. {payload.note.strip()}"
-        for txn in drafts:
+        for txn in quote_transactions:
             txn.status = TransactionStatus.cancelled
 
     item.workflow_state = WorkflowState.B2
