@@ -26,7 +26,7 @@
       <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
         <input type="file" id="up" accept="image/*"/>
         <input id="caption" class="form-control" style="max-width:320px" placeholder="Chú thích ảnh (optional)"/>
-        <button class="btn btn-secondary btn-sm" onclick="uploadEv()">Upload</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="uploadEv()">Upload</button>
       </div>
       <div id="evidenceList" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem"></div>
     </div>
@@ -77,8 +77,8 @@ async function load() {
 
   document.getElementById('evidenceList').innerHTML = (run.evidence || []).map(e => `
     <div style="position:relative">
-      <img src="http://localhost:8001${e.file_url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"/>
-      <button class="btn btn-ghost btn-sm" style="position:absolute;top:2px;right:2px;background:#fff" onclick="delEv(${e.id})">✕</button>
+      <img src="${e.file_url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"/>
+      <button type="button" class="btn btn-ghost btn-sm" style="position:absolute;top:2px;right:2px;background:#fff" onclick="delEv(${e.id})">✕</button>
     </div>`).join('');
 
   const isA2 = run.stage === 'A2_PRECHECK';
@@ -86,7 +86,11 @@ async function load() {
   finalSel.innerHTML = isA2
     ? `<option value="">-- Chọn kết luận --</option><option value="completed">Hoàn thành A2</option>`
     : `<option value="">-- Chọn kết luận --</option><option value="pass">PASS -> C2</option><option value="fail">FAIL -> C3</option>`;
-  document.getElementById('finalBtns').innerHTML = `<button class="btn btn-primary" onclick="finishCheck()">✅ Kết thúc kiểm tra</button>`;
+  const finalized = !!run.finalized_at;
+  document.getElementById('finalBtns').innerHTML = `<button type="button" class="btn btn-primary" onclick="finishCheck()" ${finalized ? 'disabled' : ''}>✅ Kết thúc kiểm tra</button>`;
+  if (finalized) {
+    document.getElementById('saveHint').textContent = 'Run đã finalize';
+  }
 }
 
 async function upd(id, checked) {
@@ -110,10 +114,11 @@ async function note(id, v) {
 async function uploadEv() {
   const f = document.getElementById('up').files[0];
   if (!f) return toast('Chọn ảnh trước', 'error');
+  if (run?.finalized_at) return toast('Run đã finalize', 'error');
   const fd = new FormData();
   fd.append('file', f);
   fd.append('caption', document.getElementById('caption').value || '');
-  const res = await fetch(`http://localhost:8001/api/checklists/runs/${runId}/evidence`, {
+  const res = await fetch(`/api/checklists/runs/${runId}/evidence`, {
     method: 'POST',
     body: fd,
     credentials: 'include',
@@ -126,6 +131,7 @@ async function uploadEv() {
 }
 
 async function delEv(evId) {
+  if (run?.finalized_at) return toast('Run đã finalize', 'error');
   await api.delete(`/api/checklists/runs/${runId}/evidence/${evId}`);
   await load();
 }
@@ -136,6 +142,7 @@ async function finalize(conclusion) {
     note: document.getElementById('runNote').value || null,
     conclusion,
   });
+  sessionStorage.setItem('warranty:ticket-detail-refresh', '1');
   toast('Đã finalize checklist');
   await load();
 }
@@ -160,6 +167,7 @@ async function finishCheck() {
   }
 
   await finalize(conclusion);
+  document.getElementById('finalConclusion').blur();
 }
 
 load().catch(e => toast(e.message, 'error'));

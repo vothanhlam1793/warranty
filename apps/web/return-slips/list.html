@@ -166,7 +166,7 @@ function renderCard(x) {
     ? (state === 'C6' ? x.delivered_image_url : x.pack_image_url)
     : x.evidence_url;
   const thumb = thumbUrl
-    ? `<img src="http://localhost:8001${thumbUrl}" class="slip-thumb" onclick="window.open('http://localhost:8001${thumbUrl}')" title="Xem ảnh"/>`
+    ? `<img src="${thumbUrl}" class="slip-thumb" onclick="window.open('${thumbUrl}')" title="Xem ảnh"/>`
     : '';
 
   const itemSummary = isSlipShape

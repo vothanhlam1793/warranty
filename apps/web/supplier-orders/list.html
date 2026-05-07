@@ -93,7 +93,7 @@ async function load() {
       <td onclick="event.stopPropagation()">
         <div style="display:flex;gap:.4rem;flex-wrap:wrap">
           <a href="/supplier-orders/detail.html?id=${o.id}" class="btn btn-secondary btn-sm">🔍 Chi tiết</a>
-          <button class="btn btn-secondary btn-sm" onclick="window.open('http://localhost:8001/api/supplier-orders/${o.id}/print')">🖨 In phiếu</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.open('/api/supplier-orders/${o.id}/print')">🖨 In phiếu</button>
           ${o.status === "sent" ? `<button class="btn btn-secondary btn-sm" onclick="openReceiveModal(${o.id})">📥 Nhận về</button>` : ""}
         </div>
       </td>

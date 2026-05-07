@@ -397,7 +397,7 @@ function renderTaskGroups(data) {
 
         // Evidence thumbnail
         const evidenceHtml = item.evidence_url
-          ? `<img class="evidence-thumb" src="http://localhost:8001${item.evidence_url}" onclick="viewImg('http://localhost:8001${item.evidence_url}')" title="Xem ảnh bằng chứng"/>`
+          ? `<img class="evidence-thumb" src="${item.evidence_url}" onclick="viewImg('${item.evidence_url}')" title="Xem ảnh bằng chứng"/>`
           : "";
 
         // Upload button
@@ -408,7 +408,7 @@ function renderTaskGroups(data) {
 
         // Print button (A3)
         const printHtml = cfg.showPrint
-          ? `<button class="btn-task" onclick="window.open('http://localhost:8001/api/supplier-orders/print-by-item?item_id=${item.item_id}')" title="In phiếu">🖨</button>`
+          ? `<button class="btn-task" onclick="window.open('/api/supplier-orders/print-by-item?item_id=${item.item_id}')" title="In phiếu">🖨</button>`
           : "";
 
         // Quick state buttons
@@ -547,8 +547,10 @@ async function uploadEvidence(ticketId, itemId, input) {
   const fd = new FormData();
   fd.append("file", file);
   try {
-    const res = await fetch(`http://localhost:8001/api/tickets/${ticketId}/items/${itemId}/evidence`, {
-      method: "POST", body: fd,
+    const res = await fetch(`/api/tickets/${ticketId}/items/${itemId}/evidence`, {
+      method: "POST",
+      body: fd,
+      credentials: "include",
     });
     if (!res.ok) throw new Error(await res.text());
     toast("Đã upload ảnh bằng chứng");

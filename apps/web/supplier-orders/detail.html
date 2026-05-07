@@ -140,7 +140,7 @@ async function loadOrder() {
   // Bằng chứng
   if (order.evidence_url) {
     document.getElementById("evidencePanel").style.display = "block";
-    const fullUrl = "http://localhost:8001" + order.evidence_url;
+    const fullUrl = order.evidence_url;
     document.getElementById("evidenceLink").href = fullUrl;
     document.getElementById("evidenceOrderImg").src = fullUrl;
   }
@@ -206,8 +206,10 @@ async function confirmSend() {
     try {
       const fd = new FormData();
       fd.append("file", fileInput.files[0]);
-      const res = await fetch(`http://localhost:8001/api/supplier-orders/${orderId}/upload-evidence`, {
-        method: "POST", body: fd,
+      const res = await fetch(`/api/supplier-orders/${orderId}/upload-evidence`, {
+        method: "POST",
+        body: fd,
+        credentials: "include",
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
@@ -232,7 +234,7 @@ async function confirmSend() {
 }
 
 function printOrder() {
-  window.open(`http://localhost:8001/api/supplier-orders/${orderId}/print`);
+  window.open(`/api/supplier-orders/${orderId}/print`);
 }
 
 checkAuth().then(() => {

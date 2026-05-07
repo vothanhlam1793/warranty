@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
 import os
 
 from .database import init_db, get_db
@@ -24,13 +22,19 @@ from .routers.return_slips import router as return_slips_router
 
 app = FastAPI(title="Warranty Management System", version="1.0.2")
 
+_extra_origins = [origin.strip() for origin in os.environ.get("CORS_ALLOW_ORIGINS", "").split(",") if origin.strip()]
+_default_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:8000",
+    "http://localhost:8001",
+    "https://warranty.camerangochoang.com",
+]
+_allow_origins = list(dict.fromkeys(_default_origins + _extra_origins))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "http://localhost:8001",
-    ],
+    allow_origins=_allow_origins,
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
@@ -73,24 +77,6 @@ app.include_router(return_slips_router)
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-
-
-# ── Static web frontend ───────────────────────────────────────────────────────
-WEB_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "web")
-
-if os.path.isdir(WEB_DIR):
-    app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
-
-    @app.get("/", include_in_schema=False)
-    def root():
-        return FileResponse(os.path.join(WEB_DIR, "index.html"))
-
-    @app.get("/{full_path:path}", include_in_schema=False)
-    def spa_fallback(full_path: str):
-        file_path = os.path.join(WEB_DIR, full_path)
-        if os.path.isfile(file_path):
-            return FileResponse(file_path)
-        return FileResponse(os.path.join(WEB_DIR, "index.html"))
 
 
 @app.on_event("startup")

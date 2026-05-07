@@ -1,5 +1,5 @@
 /* global API wrapper + helpers */
-const API = "http://localhost:8001";
+const API = "";
 
 let currentUser = null;
 

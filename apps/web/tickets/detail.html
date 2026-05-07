@@ -16,7 +16,7 @@
       <span class="topbar-title" id="pageTitle">Chi tiết phiếu</span>
       <div class="topbar-actions">
         <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
-        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8001/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
+        <button class="btn btn-secondary btn-sm" onclick="window.open(`/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
         <a href="/tickets/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
       </div>
     </div>
@@ -237,10 +237,17 @@ let ticket = null;
 let activeItemId = null;
 let activeTemplateMapping = null;
 let checklistTemplates = [];
+let loadTicketSeq = 0;
+
+function markTicketDetailDirty() {
+  sessionStorage.setItem('warranty:ticket-detail-refresh', '1');
+}
 
 async function loadTicket() {
+  const mySeq = ++loadTicketSeq;
   ticket = await api.get(`/api/tickets/${ticketId}`);
   checklistTemplates = await api.get('/api/checklists/templates').catch(() => []);
+  if (mySeq !== loadTicketSeq) return;
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("content").style.display = "block";
   document.getElementById("pageTitle").textContent = ticket.ticket_no;
@@ -358,8 +365,8 @@ function renderItems() {
             ${item.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${item.result_note}</p>` : ""}
             ${item.evidence_url ? `
               <div style="margin-top:.4rem">
-                <a href="http://localhost:8001${item.evidence_url}" target="_blank">
-                  <img src="http://localhost:8001${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
+                <a href="${item.evidence_url}" target="_blank">
+                  <img src="${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
                 </a>
               </div>` : ""}
             <div style="display:flex;gap:.75rem;margin-top:.35rem;flex-wrap:wrap">
@@ -595,8 +602,10 @@ async function uploadEvidence(tId, itemId, input) {
   const fd = new FormData();
   fd.append("file", file);
   try {
-    const res = await fetch(`http://localhost:8001/api/tickets/${tId}/items/${itemId}/evidence`, {
-      method: "POST", body: fd,
+    const res = await fetch(`/api/tickets/${tId}/items/${itemId}/evidence`, {
+      method: "POST",
+      body: fd,
+      credentials: "include",
     });
     if (!res.ok) throw new Error(await res.text());
     toast("Đã upload ảnh bằng chứng");
@@ -620,6 +629,8 @@ async function renderChecklistBox(item) {
     const c1Latest = c1Runs[0];
     const a2State = map.a2_template_locked ? '<span class="badge badge-green">đã chốt</span>' : '<span class="badge badge-gray">chưa chốt</span>';
     const c1State = map.c1_template_locked ? '<span class="badge badge-green">đã chốt</span>' : '<span class="badge badge-gray">chưa chốt</span>';
+    const hasA2Template = !!map.a2_template_id;
+    const hasC1Template = !!map.c1_template_id;
 
     box.innerHTML = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
@@ -628,7 +639,7 @@ async function renderChecklistBox(item) {
           <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${a2Latest ? (`#${a2Latest.id} - ${a2Latest.conclusion}`) : 'chưa có'}</div>
           <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.45rem">
             <button class="btn btn-secondary btn-sm" onclick="chooseTemplate(${item.id},'A2',${map.a2_template_locked})">Chọn template A2</button>
-            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'A2_PRECHECK')">Tạo run A2</button>
+            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'A2_PRECHECK')" ${hasA2Template ? '' : 'disabled title="Cần chọn template A2 trước"'}>Tạo run A2</button>
             ${a2Latest ? `<a class="btn btn-ghost btn-sm" href="/checklists/run.html?run_id=${a2Latest.id}">Mở run</a>` : ''}
           </div>
         </div>
@@ -638,7 +649,7 @@ async function renderChecklistBox(item) {
           <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${c1Latest ? (`#${c1Latest.id} - ${c1Latest.conclusion}`) : 'chưa có'}</div>
           <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.45rem">
             <button class="btn btn-secondary btn-sm" onclick="chooseTemplate(${item.id},'C1',${map.c1_template_locked})">Chọn template C1</button>
-            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'C1_RETURN')">Tạo run C1</button>
+            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'C1_RETURN')" ${hasC1Template ? '' : 'disabled title="Cần chọn template C1 trước"'}>Tạo run C1</button>
             ${c1Latest ? `<a class="btn btn-ghost btn-sm" href="/checklists/run.html?run_id=${c1Latest.id}">Mở run</a>` : ''}
           </div>
         </div>
@@ -679,10 +690,10 @@ async function submitTemplateMapping() {
     actor,
     reason,
   });
+  markTicketDetailDirty();
+  await loadTicket();
   closeModal('templateModal');
   toast('Đã cập nhật mapping');
-  const target = ticket.items.find(x => x.id === activeTemplateMapping.itemId);
-  if (target) await renderChecklistBox(target);
 }
 
 async function startRun(itemId, stage) {
@@ -697,6 +708,20 @@ async function startRun(itemId, stage) {
 checkAuth().then(user => {
   hydrateActorInputs(['actionActor', 'rollbackActor', 'mapActor', 'extActor']);
   loadTicket().catch(e => { document.getElementById("loadingState").textContent = "Lỗi: " + e.message; });
+});
+
+window.addEventListener('pageshow', () => {
+  if (sessionStorage.getItem('warranty:ticket-detail-refresh') === '1') {
+    sessionStorage.removeItem('warranty:ticket-detail-refresh');
+    loadTicket().catch(() => {});
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && sessionStorage.getItem('warranty:ticket-detail-refresh') === '1') {
+    sessionStorage.removeItem('warranty:ticket-detail-refresh');
+    loadTicket().catch(() => {});
+  }
 });
 </script>
 </body>

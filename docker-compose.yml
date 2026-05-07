@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: ./apps
+      dockerfile: server/Dockerfile
+    container_name: warranty-backend
+    env_file:
+      - .env
+    environment:
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-true}
+    volumes:
+      - ./apps/server/uploads:/app/server/uploads
+    expose:
+      - "8001"
+    restart: unless-stopped
+    networks:
+      - warranty-net
+
+  frontend:
+    build:
+      context: ./apps
+      dockerfile: nginx/Dockerfile
+    container_name: warranty-frontend
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_HOST_PORT:-3001}:80"
+    restart: unless-stopped
+    networks:
+      - warranty-net
+
+networks:
+  warranty-net:
+    driver: bridge

@@ -98,10 +98,10 @@ function render() {
     C6: 'Có hình ảnh giao trả',
   };
   const packImage = slip.pack_image_url
-    ? `<img class="thumb" src="http://localhost:8001${slip.pack_image_url}" onclick="window.open('http://localhost:8001${slip.pack_image_url}')"/>`
+    ? `<img class="thumb" src="${slip.pack_image_url}" onclick="window.open('${slip.pack_image_url}')"/>`
     : '<span class="text-muted">Chưa có ảnh đóng gói</span>';
   const deliveredImage = slip.delivered_image_url
-    ? `<img class="thumb" src="http://localhost:8001${slip.delivered_image_url}" onclick="window.open('http://localhost:8001${slip.delivered_image_url}')"/>`
+    ? `<img class="thumb" src="${slip.delivered_image_url}" onclick="window.open('${slip.delivered_image_url}')"/>`
     : '<span class="text-muted">Chưa có ảnh giao trả</span>';
 
   const c4Panel = slip.status === 'C4' ? `
@@ -233,8 +233,8 @@ async function uploadPackImage() {
   fd.append('file', file);
   try {
     const url = slip._legacyItemMode
-      ? `http://localhost:8001/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
-      : `http://localhost:8001/api/return-slips/${slip.id}/pack-image`;
+      ? `/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
+      : `/api/return-slips/${slip.id}/pack-image`;
     const res = await fetch(url, {
       method: 'POST',
       body: fd,
@@ -292,8 +292,8 @@ async function uploadDeliveredImage() {
   fd.append('file', file);
   try {
     const url = slip._legacyItemMode
-      ? `http://localhost:8001/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
-      : `http://localhost:8001/api/return-slips/${slip.id}/delivered-image`;
+      ? `/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
+      : `/api/return-slips/${slip.id}/delivered-image`;
     const res = await fetch(url, {
       method: 'POST',
       body: fd,
@@ -329,10 +329,10 @@ function printSlip() {
   if (!slip) return;
   if (slip._legacyItemMode) {
     const ticketId = slip.items?.[0]?.ticket_id || slip.id;
-    window.open(`http://localhost:8001/api/transactions/${ticketId}/print`);
+    window.open(`/api/transactions/${ticketId}/print`);
     return;
   }
-  window.open(`http://localhost:8001/api/return-slips/${slip.id}/print`);
+  window.open(`/api/return-slips/${slip.id}/print`);
 }
 
 checkAuth().then(() => {

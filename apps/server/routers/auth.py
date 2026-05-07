@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import uuid
 from datetime import datetime, timedelta
 from typing import Optional
@@ -24,6 +25,7 @@ def hash_password(plain: str) -> str:
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 SESSION_TTL_HOURS = 8
+SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "false").strip().lower() in {"1", "true", "yes", "on"}
 
 
 class LoginIn(BaseModel):
@@ -90,7 +92,7 @@ def login(payload: LoginIn, response: Response, db: Session = Depends(get_db)):
         value=session_id,
         httponly=True,
         samesite="lax",
-        secure=False,
+        secure=SESSION_COOKIE_SECURE,
         max_age=SESSION_TTL_HOURS * 3600,
         path="/",
     )
