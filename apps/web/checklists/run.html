@@ -24,9 +24,9 @@
     <div class="card-header"><h3>Ảnh minh chứng</h3></div>
     <div class="card-body">
       <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-        <input type="file" id="up" accept="image/*"/>
+        <input type="file" id="up" accept="image/*" onchange="handleEvidencePick()"/>
         <input id="caption" class="form-control" style="max-width:320px" placeholder="Chú thích ảnh (optional)"/>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="uploadEv()">Upload</button>
+        <span id="uploadHint" class="text-sm text-muted">Chọn ảnh để tự tải lên</span>
       </div>
       <div id="evidenceList" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem"></div>
     </div>
@@ -53,6 +53,7 @@
 <script>
 const runId = new URLSearchParams(location.search).get('run_id');
 let run = null;
+let evidenceUploading = false;
 
 async function load() {
   await checkAuth();
@@ -112,22 +113,41 @@ async function note(id, v) {
 }
 
 async function uploadEv() {
+  if (evidenceUploading) return;
   const f = document.getElementById('up').files[0];
   if (!f) return toast('Chọn ảnh trước', 'error');
   if (run?.finalized_at) return toast('Run đã finalize', 'error');
+  evidenceUploading = true;
+  const fileEl = document.getElementById('up');
+  const captionEl = document.getElementById('caption');
+  const hintEl = document.getElementById('uploadHint');
+  fileEl.disabled = true;
+  captionEl.disabled = true;
+  hintEl.textContent = 'Đang tải ảnh...';
   const fd = new FormData();
   fd.append('file', f);
-  fd.append('caption', document.getElementById('caption').value || '');
-  const res = await fetch(`/api/checklists/runs/${runId}/evidence`, {
-    method: 'POST',
-    body: fd,
-    credentials: 'include',
-  });
-  if (!res.ok) return toast(await res.text(), 'error');
-  toast('Đã upload ảnh');
-  document.getElementById('up').value = '';
-  document.getElementById('caption').value = '';
-  await load();
+  fd.append('caption', captionEl.value || '');
+  try {
+    const res = await fetch(`/api/checklists/runs/${runId}/evidence`, {
+      method: 'POST',
+      body: fd,
+      credentials: 'include',
+    });
+    if (!res.ok) return toast(await res.text(), 'error');
+    toast('Đã upload ảnh');
+    fileEl.value = '';
+    await load();
+  } finally {
+    evidenceUploading = false;
+    fileEl.disabled = false;
+    captionEl.disabled = false;
+    hintEl.textContent = 'Chọn ảnh để tự tải lên';
+  }
+}
+
+function handleEvidencePick() {
+  if (!document.getElementById('up').files[0]) return;
+  uploadEv().catch(e => toast(e.message || 'Lỗi upload ảnh', 'error'));
 }
 
 async function delEv(evId) {

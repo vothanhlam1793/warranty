@@ -379,6 +379,7 @@ function renderItems() {
           </div>
         </div>
         <div style="display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">
+          ${item.item_code ? `<a class="btn btn-secondary btn-sm" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code)}">🔎 Mở mã này</a>` : ''}
           ${renderItemActions(item)}
           <button class="btn btn-ghost btn-sm" onclick="openLogsModal(${item.id})">📜 Lịch sử</button>
         </div>

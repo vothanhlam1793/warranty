@@ -1,36 +1,41 @@
 # Warranty Management System
 
-He thong quan ly bao hanh noi bo cho CRETA.
+Hệ thống quản lý bảo hành nội bộ cho CRETA.
 
-Ban `1.2.0` hien da co:
+Phiên bản `1.3.0` hiện có:
 
 - backend FastAPI + SQLAlchemy
 - frontend multi-page HTML/CSS/JS
-- login theo session cookie
+- đăng nhập theo session cookie
 - workflow ticket, NCC, checklist, return slip, finance
 - runtime database PostgreSQL
-- Odoo-first master data sync cho customers/products
+- đồng bộ master data customer/product theo hướng Odoo-first
+- deploy Docker Compose với frontend/backend tách riêng
+- import dữ liệu legacy từ `data/raw/warranty_items.csv`
+- màn chi tiết riêng cho từng `ticket_item`
 
 ## Docs Map
 
-- `README.md`: setup, runbook, su dung nhanh
-- `ARCHITECTURE.md`: kien truc va module structure
+- `README.md`: setup, runbook, sử dụng nhanh
+- `ARCHITECTURE.md`: kiến trúc và module structure
 - `plan.md`: current state, backlog, roadmap
-- `docs/data-design.md`: data design va runtime data notes
+- `plan_1.md`: historical phase-2 snapshot
+- `docs/data-design.md`: data design và runtime data notes
+- `DEPLOY.md`: ghi chú deploy Docker/Reverse Proxy
 
 ## Quick Start
 
 ### Requirements
 
-- macOS hoac Windows
+- macOS hoặc Windows
 - Python 3
-- backend virtualenv da co trong `apps/server/.venv`
-- file `.env` o root project
-- neu dung PostgreSQL remote thi can ket noi mang toi DB server
+- backend virtualenv có sẵn trong `apps/server/.venv`
+- file `.env` ở root project
+- nếu dùng PostgreSQL remote thì cần kết nối mạng tới DB server
 
 ### Configure `.env`
 
-Can it nhat cac bien sau:
+Cần ít nhất các biến sau:
 
 ```env
 BACKEND_PORT=8001
@@ -45,10 +50,10 @@ ODOO_USERNAME=<odoo_user>
 ODOO_PASSWORD=<odoo_password>
 ```
 
-Luu y:
+Lưu ý:
 
-- neu khong set `DATABASE_URL`, app se fallback ve SQLite legacy/dev
-- runtime chinh hien tai la PostgreSQL, khong phai SQLite
+- nếu không set `DATABASE_URL`, app sẽ fallback về SQLite legacy/dev
+- runtime chính hiện tại là PostgreSQL, không phải SQLite
 
 ### Start the app
 
@@ -64,7 +69,7 @@ Windows:
 start_windows.bat
 ```
 
-Mac dinh:
+Mặc định:
 
 - frontend: `http://localhost:3000`
 - backend: `http://localhost:8001`
@@ -72,11 +77,11 @@ Mac dinh:
 
 ### Login
 
-Trang dang nhap:
+Trang đăng nhập:
 
 - `http://localhost:3000/login.html`
 
-Tai khoan admin mac dinh:
+Tài khoản admin mặc định:
 
 - username: `admin`
 - password: `admin123`
@@ -91,8 +96,8 @@ stop_windows.bat
 
 macOS / Linux:
 
-- neu dang chay foreground qua `./start.sh` thi dung `Ctrl+C`
-- neu can, kill process theo `BACKEND_PORT` va `FRONTEND_PORT`
+- nếu đang chạy foreground qua `./start.sh` thì dùng `Ctrl+C`
+- nếu cần, kill process theo `BACKEND_PORT` và `FRONTEND_PORT`
 
 ## Project Structure
 
@@ -108,6 +113,9 @@ Warranty/
       services/
       uploads/
       .venv/
+    nginx/
+      Dockerfile
+      nginx.conf
     web/
       admin/
       assets/
@@ -117,57 +125,71 @@ Warranty/
       return-slips/
       supplier-orders/
       supplier-receives/
+      ticket-items/
       tickets/
       index.html
       login.html
+  data/
+    raw/
+    processed/
   docs/
     data-design.md
   scripts/
     prepare_data.py
+    import_warranty_legacy.py
   ARCHITECTURE.md
+  DEPLOY.md
   README.md
   plan.md
+  plan_1.md
+  docker-compose.yml
 ```
 
 ## Main Features
 
 ### Tickets
 
-- tao phieu bao hanh
+- tạo phiếu bảo hành
 - list/search/detail ticket
 - state transition theo workflow
 - rollback
 - deadline extend
 - notify late
 
+### Ticket-item detail
+
+- mở trực tiếp theo `item_code`
+- xem trạng thái, lịch sử, ảnh minh chứng, checklist và quan hệ nghiệp vụ của từng mã
+- phù hợp cho mô hình vận hành item-first
+
 ### Supplier flow
 
-- phieu gui NCC
-- xac nhan gui NCC co evidence image
-- phieu nhan NCC tra ve
-- in phieu NCC
+- phiếu gửi NCC
+- xác nhận gửi NCC có evidence image
+- phiếu nhận NCC trả về
+- in phiếu NCC
 
 ### Checklists
 
 - checklist templates
 - mapping checklist theo stage/item
 - checklist run
-- evidence upload
+- evidence upload tự động khi chọn file
 - finalize conclusion
 
 ### Return slips
 
-- lap phieu tra khach
-- candidate items tu C2/C3
+- lập phiếu trả khách
+- candidate items từ C2/C3
 - pack image
 - delivered image
 - confirm pack / confirm delivered
-- print phieu tra khach
+- print phiếu trả khách
 
 ### Finance
 
 - thu/chi
-- bao cao tong hop
+- báo cáo tổng hợp
 
 ### Admin
 
@@ -177,7 +199,7 @@ Warranty/
 
 ## Frontend Conventions
 
-Hau het page dung shell layout sau:
+Hầu hết page dùng shell layout sau:
 
 ```html
 <div class="shell">
@@ -186,69 +208,49 @@ Hau het page dung shell layout sau:
 </div>
 ```
 
-Khong hardcode sidebar tren tung page nua.
-
-Sidebar duoc render tu:
+Sidebar được render từ:
 
 - `apps/web/assets/layout.js`
 
-API/auth helpers nam trong:
+API/auth helpers nằm trong:
 
 - `apps/web/assets/api.js`
 
-Hai page khong dung shell nay:
+Hai page không dùng shell này:
 
 - `login.html`
 - `checklists/run.html`
 
-## Master Data Notes
+## Docker Deploy
 
-He thong hien dang theo huong Odoo-first cho customer/product master data.
+Production hiện tại hỗ trợ mô hình:
 
-Luu y quan trong:
+- `svr12`: public Nginx + SSL
+- `orion`: Docker Compose chạy `frontend` và `backend`
 
-- `phone` duoc xem la customer identity trong van hanh noi bo
-- `customer_code` (`KHxxxxxx`) la ma reference nghiep vu/master
-- neu trung `phone` thi customer co the duoc merge
-- khi merge/sync, du lieu Odoo duoc uu tien
+Các file chính:
 
-Code lien quan nam o:
+- `docker-compose.yml`
+- `apps/server/Dockerfile`
+- `apps/nginx/Dockerfile`
+- `apps/nginx/nginx.conf`
+- `DEPLOY.md`
 
-- `apps/server/odoo/client.py`
-- `apps/server/services/odoo_sync.py`
-- `apps/server/routers/masters.py`
+## Legacy Import
 
-## Developer Notes
-
-### Backend environment
-
-Virtualenv hien tai:
-
-- `apps/server/.venv`
-
-Neu can cai package moi:
+Dữ liệu legacy CRETA hiện được import bằng:
 
 ```bash
-apps/server/.venv/bin/pip install <package>
+apps/server/.venv/bin/python scripts/import_warranty_legacy.py --dry-run
+apps/server/.venv/bin/python scripts/import_warranty_legacy.py --commit
 ```
 
-### Test API quickly
-
-- mo `http://localhost:8001/docs`
-- hoac goi truc tiep cac endpoint `/api/...`
-
-### Data / processed artifacts
-
-Neu can tai tao processed data:
-
-```bash
-python3 scripts/prepare_data.py
-```
+Importer này hoạt động theo kiểu snapshot state, không replay workflow cũ.
 
 ## Current Technical Priorities
 
 - Alembic migration cho PostgreSQL
-- sieu chat workflow validation o backend
-- permission chi tiet theo role
-- chuan hoa env/sample script theo runtime hien tai
-- giam debt compatibility tu schema legacy
+- siết chặt workflow validation ở backend
+- permission chi tiết theo role
+- chuẩn hóa env/sample script theo runtime hiện tại
+- giảm debt compatibility từ schema legacy

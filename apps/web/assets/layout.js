@@ -5,11 +5,34 @@
 
 async function initLayout() {
     const user = await checkAuth().catch(() => null);
+    applyGlobalBranding();
     if (!user) return;
 
     renderSidebar(user);
     renderTopbarUser(user);
     markActiveNav();
+}
+
+function applyGlobalBranding() {
+    const head = document.head;
+    if (!head) return;
+
+    const faviconHref = '/uploads/creta-logo.png';
+
+    if (!document.querySelector('link[rel="icon"]')) {
+        const icon = document.createElement('link');
+        icon.rel = 'icon';
+        icon.type = 'image/png';
+        icon.href = faviconHref;
+        head.appendChild(icon);
+    }
+
+    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+        const apple = document.createElement('link');
+        apple.rel = 'apple-touch-icon';
+        apple.href = faviconHref;
+        head.appendChild(apple);
+    }
 }
 
 function renderSidebar(user) {
@@ -86,6 +109,7 @@ function markActiveNav() {
 
 // Khởi tạo layout khi trang load
 document.addEventListener('DOMContentLoaded', () => {
+    applyGlobalBranding();
     // Chỉ chạy nếu không phải trang login
     if (!window.location.pathname.endsWith('login.html')) {
         initLayout();

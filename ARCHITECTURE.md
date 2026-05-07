@@ -2,14 +2,14 @@
 
 ## Purpose
 
-Warranty Management System la he thong quan ly bao hanh noi bo cho CRETA.
+Warranty Management System là hệ thống quản lý bảo hành nội bộ cho CRETA.
 
-Tai lieu nay mo ta:
+Tài liệu này mô tả:
 
 - cac thanh phan chinh cua he thong
 - ranh gioi giua frontend, backend, database, file storage
 - cau truc module hien tai
-- mot so quyet dinh ky thuat quan trong cua ban `1.2.0`
+- một số quyết định kỹ thuật quan trọng của bản `1.3.0`
 
 `README.md` duoc dung cho setup va runbook.
 
@@ -32,9 +32,9 @@ Browser
 
 Thu muc: `apps/web`
 
-Frontend la multi-page app dung HTML/CSS/JS thuan.
+Frontend là multi-page app dùng HTML/CSS/JS thuần.
 
-No khong su dung SPA framework. Moi trang tu tai du lieu qua API va tu quan ly state can thiet cua chinh no.
+Nó không sử dụng SPA framework. Mỗi trang tự tải dữ liệu qua API và tự quản lý state cần thiết của chính nó.
 
 Frontend phu thuoc vao 2 file shared quan trong:
 
@@ -63,6 +63,7 @@ Frontend phu thuoc vao 2 file shared quan trong:
 - `index.html`: dashboard va pending tasks
 - `login.html`: login page
 - `tickets/`: ticket list, create, detail
+- `ticket-items/`: item-first detail pages
 - `supplier-orders/`: phieu gui NCC
 - `supplier-receives/`: phieu nhan NCC tra ve
 - `return-slips/`: phieu tra khach
@@ -73,7 +74,7 @@ Frontend phu thuoc vao 2 file shared quan trong:
 
 #### Layout rule
 
-Hau het frontend pages dung shell sau:
+Hầu hết frontend pages dùng shell sau:
 
 ```html
 <div class="shell">
@@ -82,7 +83,7 @@ Hau het frontend pages dung shell sau:
 </div>
 ```
 
-Hai ngoai le hien tai:
+Hai ngoại lệ hiện tại:
 
 - `apps/web/login.html`
 - `apps/web/checklists/run.html`
@@ -91,16 +92,16 @@ Hai ngoai le hien tai:
 
 Thu muc: `apps/server`
 
-Backend dung FastAPI + SQLAlchemy.
+Backend dùng FastAPI + SQLAlchemy.
 
-No phu trach:
+Nó phụ trách:
 
 - nghiep vu warranty workflow
 - auth va session
 - CRUD va search master data
 - sync Odoo
 - upload va serve evidence files
-- in phieu HTML
+- in phiếu HTML
 
 ### Main backend files
 
@@ -123,7 +124,7 @@ No phu trach:
 
 ### Middleware/auth model
 
-He thong dung cookie-based session auth.
+Hệ thống dùng cookie-based session auth.
 
 Flow tong quan:
 
@@ -132,7 +133,7 @@ Flow tong quan:
 3. backend set cookie `session_id`
 4. request sau do duoc backend doc cookie de resolve current user khi can
 
-Luu y: middleware auth hien tai chu yeu inject context session. Viec endpoint nao bat buoc auth/actor duoc quyet dinh trong tung router.
+Lưu ý: middleware auth hiện tại chủ yếu inject context session. Việc endpoint nào bắt buộc auth/actor được quyết định trong từng router.
 
 ## Data Layer
 
@@ -212,18 +213,18 @@ Code lien quan:
 
 ### Customer identity rule
 
-Quyet dinh nghiep vu hien tai:
+Quyết định nghiệp vụ hiện tại:
 
-- `phone` duoc xem la ID goc cua customer trong van hanh noi bo
-- `customer_code` la ma reference nghiep vu/master (`KHxxxxxx`)
-- neu trung `phone` thi customer se duoc merge
-- khi sync Odoo, thong tin Odoo duoc uu tien ap len record cuoi cung
+- `phone` được xem là ID gốc của customer trong vận hành nội bộ
+- `customer_code` là mã reference nghiệp vụ/master (`KHxxxxxx`)
+- nếu trùng `phone` thì customer sẽ được merge
+- khi sync Odoo, thông tin Odoo được ưu tiên áp lên record cuối cùng
 
 ### Legacy field note
 
-Mot so field ten `kiotviet_*` van con duoc giu lai trong schema de tranh migration lon ngay lap tuc.
+Một số field tên `kiotviet_*` vẫn còn được giữ lại trong schema để tránh migration lớn ngay lập tức.
 
-Chung dang dong vai tro compatibility layer, khong con phan anh chien luoc master data chinh nua.
+Chúng đang đóng vai trò compatibility layer, không còn phản ánh chiến lược master data chính nữa.
 
 ## File Storage
 
@@ -231,7 +232,7 @@ Thu muc uploads:
 
 - `apps/server/uploads`
 
-Dung de luu:
+Dùng để lưu:
 
 - ticket item evidence
 - checklist evidence
@@ -245,13 +246,13 @@ Backend mount uploads qua route:
 
 ## Workflow Model
 
-Workflow item-level hien tai:
+Workflow item-level hiện tại:
 
 ```text
 A1 -> A2 -> A3 -> B1 -> B2 -> C1 -> C2/C3 -> C4 -> C5 -> C6
 ```
 
-He thong ho tro them:
+Hệ thống hỗ trợ thêm:
 
 - rollback workflow
 - checklist A2/C1
@@ -261,9 +262,9 @@ He thong ho tro them:
 
 ## Runtime Configuration
 
-Runtime config duoc doc tu `.env` o root project.
+Runtime config được đọc từ `.env` ở root project.
 
-Bien quan trong:
+Biến quan trọng:
 
 - `BACKEND_PORT`
 - `FRONTEND_PORT`
@@ -275,7 +276,7 @@ Bien quan trong:
 - `ODOO_USERNAME`
 - `ODOO_PASSWORD`
 
-Scripts chinh dang duoc dung:
+Scripts chính đang được dùng:
 
 - `start.sh`
 - `start_windows.bat`
@@ -283,16 +284,16 @@ Scripts chinh dang duoc dung:
 
 ## Known Constraints
 
-- chua co Alembic migrations chuan
-- `database.py` van con patch logic de ho tro schema legacy
-- permission model moi o muc co ban, chua thiet ke matrix role/action day du
-- SQLite fallback con ton tai nen mot so quyet dinh code van phai giu tinh compatibility
-- `.env.example` va mot so script cu chua theo kip hoan toan runtime hien tai
+- chưa có Alembic migrations chuẩn
+- `database.py` vẫn còn patch logic để hỗ trợ schema legacy
+- permission model mới ở mức cơ bản, chưa thiết kế matrix role/action đầy đủ
+- SQLite fallback còn tồn tại nên một số quyết định code vẫn phải giữ tính compatibility
+- `.env.example` và một số script cũ chưa theo kịp hoàn toàn runtime hiện tại
 
-## Architectural Priorities After 1.2.0
+## Architectural Priorities After 1.3.0
 
-1. Dua schema migration sang Alembic.
-2. Tach schema bootstrap/seed khoi startup runtime.
-3. Chot permission model theo role va action.
-4. Giam dan compatibility code legacy `kiotviet_*` khi schema migration san sang.
-5. Chuan hoa lai env/sample scripts theo runtime that dang dung.
+1. Đưa schema migration sang Alembic.
+2. Tách schema bootstrap/seed khỏi startup runtime.
+3. Chốt permission model theo role và action.
+4. Giảm dần compatibility code legacy `kiotviet_*` khi schema migration sẵn sàng.
+5. Chuẩn hóa lại env/sample scripts theo runtime thật đang dùng.

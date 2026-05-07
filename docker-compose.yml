@@ -6,8 +6,6 @@ services:
     container_name: warranty-backend
     env_file:
       - .env
-    environment:
-      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-true}
     volumes:
       - ./apps/server/uploads:/app/server/uploads
     expose:

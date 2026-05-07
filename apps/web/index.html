@@ -427,7 +427,7 @@ function renderTaskGroups(data) {
           actionHtml = `<a class="btn-task primary" href="/supplier-receives/new.html">📥 Lập Phiếu nhận NCC</a>
       <a class="nav-item" href="/return-slips/list.html"><span class="icon">🧾</span>Phiếu trả khách</a>`;
         } else if (cfg.actionType === "run_c1_checklist") {
-          actionHtml = `<a class="btn-task primary" href="/tickets/detail.html?id=${item.ticket_id}">🧪 Chạy checklist C1</a>`;
+            actionHtml = `<a class="btn-task primary" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}">🧪 Mở mã xử lý</a>`;
         } else if (cfg.actionType === "open_return_slip") {
           actionHtml = `<a class="btn-task primary" href="/return-slips/new.html?customer_id=${item.customer_id || ''}&ticket_id=${item.ticket_id}">🧾 Lập phiếu trả khách</a>`;
         } else if (cfg.actionType === "open_return_slip_detail") {
@@ -450,7 +450,7 @@ function renderTaskGroups(data) {
             ${printHtml}
             ${notifyBtn}
             ${actionHtml}
-            <a href="/tickets/detail.html?id=${item.ticket_id}" class="btn-task" title="Mở phiếu">🔗</a>
+            <a href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}" class="btn-task" title="Mở mã xử lý">🔗</a>
           </div>
         </div>`;
       }

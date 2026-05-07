@@ -258,47 +258,71 @@ def print_return_slip(slip_id: int, db: Session = Depends(get_db)):
         </tr>"""
 
     cust = slip.customer
+    company_block = """
+      <div class=\"brand\">
+        <img src=\"/uploads/creta-logo.png\" alt=\"CRETA\" class=\"logo\"/>
+        <div class=\"company-block\">
+          <div class=\"company-name\">CÔNG TY TNHH GIẢI PHÁP CÔNG NGHỆ CRETA</div>
+          <div class=\"company-sub\">Phòng Kỹ thuật (Bảo hành)</div>
+          <div>Điện thoại: 0909 856 315 / Zalo: 0935 107 509</div>
+          <div>Địa chỉ: 572/15A7 Âu Cơ, Phường Bảy Hiền, Hồ Chí Minh</div>
+        </div>
+      </div>
+    """
+
     html = f"""<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8"/>
   <title>Phiếu trả khách - {slip.slip_no}</title>
   <style>
-    body{{font-family:Arial,sans-serif;font-size:13px;color:#222;padding:24px}}
-    .header{{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}}
-    .company{{font-size:20px;font-weight:700;color:#0e7c66}}
-    h1{{font-size:18px;margin:0 0 8px 0}}
-    .meta{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;border:1px solid #d0d7de;border-radius:8px;padding:12px}}
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+    *{{box-sizing:border-box; margin:0; padding:0}}
+    @page{{size:A4 portrait; margin:12mm}}
+    html,body{{width:210mm; min-height:297mm}}
+    body{{font-family:'Manrope',sans-serif;font-size:13px;color:#1f2937;padding:10mm 12mm;margin:0 auto}}
+    .header{{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #0e7c66}}
+    .brand{{display:flex; align-items:flex-start; gap:14px; max-width:78%}}
+    .logo{{width:70px; height:70px; object-fit:contain; flex:0 0 auto}}
+    .company-block{{line-height:1.5}}
+    .company-name{{font-size:18px;font-weight:800;color:#0f172a;text-transform:uppercase}}
+    .company-sub{{font-weight:700;color:#0e7c66}}
+    .print-btn{{padding:8px 16px;background:#0e7c66;color:#fff;border:none;border-radius:6px;cursor:pointer}}
+    h1{{font-size:20px;margin:0 0 8px 0;letter-spacing:.04em}}
+    .subtitle{{color:#4b5563;margin-bottom:14px}}
+    .meta{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;border:1px solid #d1d5db;border-radius:10px;padding:14px 16px;background:#f8fafc}}
     table{{width:100%;border-collapse:collapse;margin-top:8px}}
-    th,td{{border:1px solid #c9d1d9;padding:8px 10px;text-align:left}}
-    th{{background:#f6f8fa}}
-    .footer{{margin-top:28px;display:flex;justify-content:space-between}}
+    th,td{{border:1px solid #cbd5e1;padding:9px 10px;text-align:left;vertical-align:top}}
+    th{{background:#eef6f3;font-weight:700}}
+    .mono{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:#0e7c66}}
+    .footer{{margin-top:30px;display:flex;justify-content:space-between}}
     .sign{{text-align:center;width:220px}}
-    @media print{{body{{padding:0}} button{{display:none}}}}
+    .sign-label{{font-size:11px;color:#6b7280;margin-bottom:52px;text-transform:uppercase}}
+    @media print{{html,body{{width:auto;min-height:auto}} body{{padding:0}} button{{display:none}}}}
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="company">CRETA WARRANTY</div>
-    <button onclick="window.print()" style="padding:8px 16px;background:#0e7c66;color:#fff;border:none;border-radius:6px;cursor:pointer">In phiếu</button>
+    {company_block}
+    <button onclick="window.print()" class="print-btn">In phiếu</button>
   </div>
-  <h1>PHIEU TRA KHACH</h1>
-  <div style="color:#666;margin-bottom:14px">So phieu: <b>{slip.slip_no}</b> | Ngay: {date.today().strftime('%d/%m/%Y')}</div>
+  <h1>PHIẾU TRẢ KHÁCH</h1>
+  <div class="subtitle">Số phiếu: <b>{slip.slip_no}</b> &nbsp;|&nbsp; Ngày in: {date.today().strftime('%d/%m/%Y')} &nbsp;|&nbsp; Trạng thái: <b>{slip.status.value if slip.status else ''}</b></div>
   <div class="meta">
-    <div>Khach hang: <b>{cust.name if cust else ''}</b></div>
-    <div>Dien thoai: {cust.phone or '' if cust else ''}</div>
-    <div>Phuong thuc tra: {slip.return_method or ''}</div>
-    <div>Trang thai: {slip.status.value if slip.status else ''}</div>
-    <div style="grid-column:1 / span 2">Ghi chu lap phieu: {slip.note or ''}</div>
-    <div style="grid-column:1 / span 2">Thong tin giao van: {slip.shipping_note or ''}</div>
+    <div><b>Khách hàng:</b> {cust.name if cust else ''}</div>
+    <div><b>Điện thoại:</b> {cust.phone or '' if cust else ''}</div>
+    <div><b>Phương thức trả:</b> {slip.return_method or ''}</div>
+    <div><b>Trạng thái:</b> {slip.status.value if slip.status else ''}</div>
+    <div style="grid-column:1 / span 2"><b>Ghi chú lập phiếu:</b> {slip.note or ''}</div>
+    <div style="grid-column:1 / span 2"><b>Thông tin giao vận:</b> {slip.shipping_note or ''}</div>
   </div>
   <table>
-    <thead><tr><th>#</th><th>Ma xu ly</th><th>San pham</th><th>Serial</th><th>Ghi chu</th></tr></thead>
+    <thead><tr><th>#</th><th>Mã xử lý</th><th>Sản phẩm</th><th>Serial</th><th>Ghi chú</th></tr></thead>
     <tbody>{rows}</tbody>
   </table>
   <div class="footer">
-    <div class="sign"><div>Nguoi dong goi</div><br><br>__________________</div>
-    <div class="sign"><div>Khach hang ky nhan</div><br><br>__________________</div>
+    <div class="sign"><div class="sign-label">Đại diện CRETA</div><div>__________________</div></div>
+    <div class="sign"><div class="sign-label">Khách hàng ký nhận</div><div>__________________</div></div>
   </div>
 </body>
 </html>"""

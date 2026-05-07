@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
+from sqlalchemy import cast, Integer
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
@@ -78,15 +79,15 @@ class NotifyLateIn(BaseModel):
 
 def _next_ticket_no(db: Session) -> str:
     """Generate next ticket number as a plain integer string, e.g. '742'."""
-    last = db.query(Ticket).order_by(Ticket.id.desc()).first()
-    if not last:
+    last_numeric = (
+        db.query(cast(Ticket.ticket_no, Integer))
+        .filter(Ticket.ticket_no.op('~')(r'^\d+$'))
+        .order_by(cast(Ticket.ticket_no, Integer).desc())
+        .first()
+    )
+    if not last_numeric or last_numeric[0] is None:
         return "1"
-    raw = last.ticket_no.lstrip("BH-").lstrip("0") or "0"
-    try:
-        num = int(raw) + 1
-    except ValueError:
-        num = last.id + 1
-    return str(num)
+    return str(int(last_numeric[0]) + 1)
 
 def _serialize_item(item: TicketItem) -> dict:
     return {

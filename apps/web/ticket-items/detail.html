@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chi tiết mã hàng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="pageTitle">Chi tiết mã hàng</span>
+      <div class="topbar-actions">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <a id="ticketLinkTop" href="/tickets/list.html" class="btn btn-secondary btn-sm">📋 Mở phiếu gốc</a>
+        <a href="/tickets/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
+      </div>
+    </div>
+    <div class="page">
+      <div id="loadingState" class="loading">Đang tải...</div>
+      <div id="content" style="display:none">
+
+        <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;margin-bottom:1rem">
+          <div class="card">
+            <div class="card-header"><h2>📦 Mã hàng</h2></div>
+            <div class="card-body">
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.5rem">
+                <span id="itemCode" style="background:#0e7c66;color:#fff;font-weight:700;font-size:.9rem;padding:.25rem .65rem;border-radius:6px;font-family:monospace"></span>
+                <span id="itemState"></span>
+                <span id="itemAction"></span>
+              </div>
+              <p class="font-bold" id="productName"></p>
+              <p class="text-muted text-sm" id="serialNo"></p>
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.65rem">
+                <span class="text-sm text-muted">📅 Nhận: <b id="receivedDate"></b></span>
+                <span class="text-sm text-muted">⏳ Dự kiến: <b id="expectedReturn"></b></span>
+                <span class="text-sm text-muted">✅ Trả: <b id="returnedDate"></b></span>
+              </div>
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.4rem">
+                <span class="text-sm text-muted">Ticket: <b id="ticketNo"></b></span>
+                <span class="text-sm text-muted">Deadline phiếu: <b id="ticketDeadline"></b></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2>👤 Khách hàng</h2></div>
+            <div class="card-body">
+              <p class="font-bold" id="customerName"></p>
+              <p class="text-muted text-sm" id="customerPhone"></p>
+              <p class="text-muted text-sm" id="itemCreatedBy"></p>
+              <p class="text-sm mt-1" id="ticketNote"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-header"><h2>📝 Nội dung xử lý</h2></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group full"><label class="form-label">Yêu cầu khách</label><div id="complaintBox" class="text-sm"></div></div>
+              <div class="form-group full"><label class="form-label">Ghi chú kỹ thuật</label><div id="diagnosisBox" class="text-sm"></div></div>
+              <div class="form-group full"><label class="form-label">Kết quả / ghi chú</label><div id="resultBox" class="text-sm"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="card">
+            <div class="card-header"><h2>📷 Ảnh minh chứng</h2></div>
+            <div class="card-body" id="evidenceBox"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h2>🔗 Liên quan</h2></div>
+            <div class="card-body" id="relationsBox"></div>
+          </div>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-header"><h2>🧪 Checklist</h2></div>
+          <div id="checklistAlert" style="display:none;padding:.85rem 1rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#fff7ed;color:#9a3412;font-weight:600"></div>
+          <div class="card-body" id="checklistBox">Đang tải...</div>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-header"><h2>⚙ Hành động</h2></div>
+          <div class="card-body" id="actionsBox"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>📜 Lịch sử xử lý</h2></div>
+          <div class="card-body" id="logsBox">Đang tải...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="imgModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h3>Bằng chứng</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('imgModal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <img id="imgModalSrc" src="" style="max-width:100%;border-radius:8px"/>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="templateModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h3 id="templateModalTitle">Chọn checklist</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('templateModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Người thực hiện</label>
+          <input id="mapActor" class="form-control"/>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Lý do</label>
+          <input id="mapReason" class="form-control" value="Điều chỉnh checklist theo thực tế"/>
+        </div>
+      </div>
+      <div id="templateList" style="margin-top:1rem;display:grid;gap:.5rem"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('templateModal')">Hủy</button>
+      <button class="btn btn-primary" onclick="submitTemplateMapping()">Lưu checklist</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const itemCode = params.get('item_code');
+let ticket = null;
+let item = null;
+let checklistTemplates = [];
+let checklistMap = null;
+let checklistRuns = [];
+let activeTemplateMapping = null;
+
+function textOrDash(value) {
+  return value ? value : '—';
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function nl2br(value) {
+  return escapeHtml(value).replace(/\n/g, '<br/>');
+}
+
+function viewImg(url) {
+  document.getElementById('imgModalSrc').src = url;
+  openModal('imgModal');
+}
+
+function renderTextBlock(id, value, tone) {
+  const el = document.getElementById(id);
+  const color = tone || 'var(--ink-2)';
+  el.innerHTML = value ? `<div style="color:${color}">${nl2br(value)}</div>` : '<span class="text-muted">—</span>';
+}
+
+async function loadPage() {
+  if (!itemCode) {
+    document.getElementById('loadingState').textContent = 'Thiếu item_code';
+    return;
+  }
+  ticket = await api.get(`/api/tickets/by-item-code/${encodeURIComponent(itemCode)}`);
+  item = (ticket.items || []).find(x => x.item_code === itemCode);
+  if (!item) throw new Error(`Không tìm thấy item ${itemCode}`);
+
+  document.getElementById('pageTitle').textContent = `Mã ${item.item_code}`;
+  document.getElementById('ticketLinkTop').href = `/tickets/detail.html?id=${ticket.id}`;
+  document.getElementById('itemCode').textContent = item.item_code || '—';
+  document.getElementById('itemState').innerHTML = stateBadge(item.workflow_state);
+  document.getElementById('itemAction').innerHTML = actionBadge(item.requested_action);
+  document.getElementById('productName').textContent = item.product_name || '—';
+  document.getElementById('serialNo').textContent = item.serial_no ? `S/N: ${item.serial_no}` : 'Không có serial';
+  document.getElementById('receivedDate').textContent = fmtDate(ticket.received_date);
+  document.getElementById('expectedReturn').textContent = fmtDate(item.expected_return_date);
+  document.getElementById('returnedDate').textContent = fmtDate(item.returned_date);
+  document.getElementById('ticketNo').innerHTML = `<a href="/tickets/detail.html?id=${ticket.id}"><b>${ticket.ticket_no}</b></a>`;
+  document.getElementById('ticketDeadline').textContent = fmtDate(ticket.deadline_date);
+  document.getElementById('customerName').textContent = ticket.customer_name || '—';
+  document.getElementById('customerPhone').textContent = ticket.customer_phone || '';
+  document.getElementById('itemCreatedBy').textContent = ticket.created_by ? `Người tạo phiếu: ${ticket.created_by}` : '';
+  document.getElementById('ticketNote').textContent = ticket.note || '';
+
+  renderTextBlock('complaintBox', item.customer_complaint, 'var(--ink-2)');
+  renderTextBlock('diagnosisBox', item.diagnosis_note, 'var(--info)');
+  renderTextBlock('resultBox', item.result_note, 'var(--accent)');
+
+  renderEvidence();
+  await Promise.all([renderRelations(), renderChecklist(), renderLogs()]);
+  renderActions();
+
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+}
+
+function renderEvidence() {
+  const el = document.getElementById('evidenceBox');
+  if (!item.evidence_url) {
+    el.innerHTML = '<div class="text-muted">Chưa có ảnh minh chứng</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:.6rem">
+      <img src="${item.evidence_url}" onclick="viewImg('${item.evidence_url}')" style="max-width:100%;max-height:240px;border-radius:10px;border:1px solid var(--border);cursor:pointer"/>
+      <div><a class="btn btn-secondary btn-sm" href="${item.evidence_url}" target="_blank">Mở ảnh gốc</a></div>
+    </div>`;
+}
+
+async function renderRelations() {
+  const [orders, slips] = await Promise.all([
+    api.get('/api/supplier-orders').catch(() => []),
+    api.get('/api/return-slips/list').catch(() => ({ items: [] })),
+  ]);
+  const order = (orders || []).find(o => (o.items || []).some(oi => oi.ticket_item_id === item.id));
+  const slip = (slips.items || []).find(s => (s.items || []).some(si => si.ticket_item_id === item.id));
+  const rows = [];
+  rows.push(`<div class="text-sm"><b>Phiếu gốc:</b> <a href="/tickets/detail.html?id=${ticket.id}">${ticket.ticket_no}</a></div>`);
+  rows.push(order
+    ? `<div class="text-sm"><b>Phiếu NCC:</b> <a href="/supplier-orders/detail.html?id=${order.id}">${order.order_no}</a> · ${order.supplier_name || '—'} · ${order.status}</div>`
+    : '<div class="text-sm text-muted">Phiếu NCC: chưa có</div>');
+  rows.push(slip
+    ? `<div class="text-sm"><b>Phiếu trả khách:</b> <a href="/return-slips/detail.html?id=${slip.id}">${slip.slip_no}</a> · ${slip.status}</div>`
+    : '<div class="text-sm text-muted">Phiếu trả khách: chưa có</div>');
+  rows.push(`<div class="text-sm text-muted">Tổng mã trong phiếu: ${ticket.item_count || (ticket.items || []).length}</div>`);
+  document.getElementById('relationsBox').innerHTML = rows.join('');
+}
+
+async function renderChecklist() {
+  const [templates, map, runs] = await Promise.all([
+    api.get('/api/checklists/templates').catch(() => []),
+    api.get(`/api/checklists/mapping/${item.id}`).catch(() => null),
+    api.get(`/api/checklists/runs?ticket_item_id=${item.id}`).catch(() => []),
+  ]);
+  checklistTemplates = templates || [];
+  checklistMap = map;
+  checklistRuns = runs || [];
+  const el = document.getElementById('checklistBox');
+  const alertEl = document.getElementById('checklistAlert');
+  if (!map) {
+    alertEl.style.display = 'none';
+    el.innerHTML = '<div class="text-muted">Chưa có cấu hình checklist</div>';
+    return;
+  }
+  const a2Name = (templates.find(x => x.id === map.a2_template_id) || {}).name || 'Chưa chọn';
+  const c1Name = (templates.find(x => x.id === map.c1_template_id) || {}).name || 'Chưa chọn';
+  const a2Run = (runs || []).find(r => r.stage === 'A2_PRECHECK');
+  const c1Run = (runs || []).find(r => r.stage === 'C1_RETURN');
+  const needC1Template = item.workflow_state === 'C1' && !map.c1_template_id;
+
+  alertEl.style.display = needC1Template ? 'block' : 'none';
+  if (needC1Template) {
+    alertEl.innerHTML = `Cảnh báo: item đang ở C1 nhưng chưa chọn checklist C1. <button class="btn btn-sm btn-primary" style="margin-left:.6rem" onclick="chooseTemplate(${item.id}, 'C1', ${map.c1_template_locked})">Chọn checklist C1 ngay</button>`;
+  }
+
+  const a2Action = !map.a2_template_id
+    ? `<button class="btn btn-primary btn-sm" onclick="chooseTemplate(${item.id}, 'A2', ${map.a2_template_locked})">Chọn checklist A2</button>`
+    : (a2Run
+        ? `<a class="btn btn-secondary btn-sm" href="/checklists/run.html?run_id=${a2Run.id}">Mở run A2</a>`
+        : `<button class="btn btn-primary btn-sm" onclick="startRun(${item.id}, 'A2_PRECHECK')">Tạo run A2</button>`);
+  const c1Action = !map.c1_template_id
+    ? `<button class="btn btn-primary btn-sm" onclick="chooseTemplate(${item.id}, 'C1', ${map.c1_template_locked})">Chọn checklist C1</button>`
+    : (c1Run
+        ? `<a class="btn btn-secondary btn-sm" href="/checklists/run.html?run_id=${c1Run.id}">Mở run C1</a>`
+        : `<button class="btn btn-primary btn-sm" onclick="startRun(${item.id}, 'C1_RETURN')">Tạo run C1</button>`);
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+      <div style="padding:.75rem;border:1px solid var(--border);border-radius:8px;background:#fff">
+        <div class="text-sm"><b>A2:</b> ${a2Name}</div>
+        <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${a2Run ? `#${a2Run.id} - ${a2Run.conclusion}` : 'chưa có'}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">${a2Action}</div>
+      </div>
+      <div style="padding:.75rem;border:1px solid var(--border);border-radius:8px;background:#fff">
+        <div class="text-sm"><b>C1:</b> ${c1Name}</div>
+        <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${c1Run ? `#${c1Run.id} - ${c1Run.conclusion}` : 'chưa có'}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">${c1Action}</div>
+      </div>
+    </div>`;
+}
+
+function renderActions() {
+  const links = [];
+  links.push(`<a class="btn btn-secondary btn-sm" href="/tickets/detail.html?id=${ticket.id}">📋 Mở phiếu gốc</a>`);
+  if (item.workflow_state === 'A3') {
+    links.push(`<a class="btn btn-primary btn-sm" href="/supplier-orders/new.html?item_id=${item.id}">📦 Tạo phiếu gửi NCC</a>`);
+  }
+  if (item.workflow_state === 'B1' || item.workflow_state === 'B2') {
+    links.push(`<a class="btn btn-primary btn-sm" href="/supplier-orders/list.html">🚚 Xử lý phiếu NCC</a>`);
+  }
+  if (item.workflow_state === 'C2' || item.workflow_state === 'C3' || item.workflow_state === 'C4' || item.workflow_state === 'C5') {
+    links.push(`<a class="btn btn-primary btn-sm" href="/return-slips/list.html">🧾 Mở phiếu trả khách</a>`);
+  }
+  if (item.workflow_state === 'C1') {
+    const c1Run = (checklistRuns || []).find(r => r.stage === 'C1_RETURN');
+    if (!checklistMap?.c1_template_id) {
+      links.push(`<button class="btn btn-primary btn-sm" onclick="chooseTemplate(${item.id}, 'C1', ${checklistMap?.c1_template_locked ? 'true' : 'false'})">🧩 Chọn checklist C1</button>`);
+    } else if (c1Run) {
+      links.push(`<a class="btn btn-primary btn-sm" href="/checklists/run.html?run_id=${c1Run.id}">🧪 Mở run C1</a>`);
+    } else {
+      links.push(`<button class="btn btn-primary btn-sm" onclick="startRun(${item.id}, 'C1_RETURN')">🧪 Tạo run C1</button>`);
+    }
+  }
+  document.getElementById('actionsBox').innerHTML = links.length
+    ? `<div style="display:flex;gap:.5rem;flex-wrap:wrap">${links.join('')}</div>`
+    : '<div class="text-muted">Không có hành động nhanh ở màn này</div>';
+}
+
+function chooseTemplate(itemId, stage, locked) {
+  if (locked === true) return toast('Checklist đã khóa', 'error');
+  const stageKey = stage === 'A2' ? 'A2_PRECHECK' : 'C1_RETURN';
+  const list = checklistTemplates.filter(x => x.stage === stageKey);
+  if (!list.length) return toast('Không có checklist phù hợp', 'error');
+  activeTemplateMapping = { itemId, stage, selectedTemplateId: null };
+  document.getElementById('templateModalTitle').textContent = `Chọn checklist ${stage}`;
+  document.getElementById('mapActor').value = getCurrentActorName();
+  document.getElementById('mapReason').value = stage === 'C1' ? 'Chọn checklist C1 trước khi kiểm tra hàng về' : 'Điều chỉnh checklist theo thực tế';
+  document.getElementById('templateList').innerHTML = list.map(t => `
+    <label style="display:flex;align-items:center;gap:.5rem;padding:.55rem .6rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:#fff">
+      <input type="radio" name="templatePick" value="${t.id}" onchange="activeTemplateMapping.selectedTemplateId=${t.id}"/>
+      <span><b>#${t.id}</b> - ${t.name}</span>
+    </label>
+  `).join('');
+  openModal('templateModal');
+}
+
+async function submitTemplateMapping() {
+  if (!activeTemplateMapping) return;
+  const template_id = activeTemplateMapping.selectedTemplateId;
+  if (!template_id) return toast('Vui lòng chọn checklist', 'error');
+  const actor = document.getElementById('mapActor').value.trim();
+  const reason = document.getElementById('mapReason').value.trim();
+  if (!reason) return toast('Vui lòng nhập lý do', 'error');
+  await api.post(`/api/checklists/mapping/${activeTemplateMapping.itemId}`, {
+    stage: activeTemplateMapping.stage,
+    template_id,
+    actor,
+    reason,
+  });
+  closeModal('templateModal');
+  toast('Đã cập nhật checklist');
+  await renderChecklist();
+  renderActions();
+}
+
+async function startRun(ticketItemId, stage) {
+  try {
+    const run = await api.post('/api/checklists/runs', { ticket_item_id: ticketItemId, stage });
+    location.href = `/checklists/run.html?run_id=${run.id}`;
+  } catch (e) {
+    toast(e.message || 'Không tạo được run', 'error');
+  }
+}
+
+async function renderLogs() {
+  const logs = await api.get(`/api/tickets/${ticket.id}/items/${item.id}/logs`);
+  const el = document.getElementById('logsBox');
+  if (!logs.length) {
+    el.innerHTML = '<p class="text-muted">Chưa có lịch sử</p>';
+    return;
+  }
+  el.innerHTML = `<div class="timeline">${logs.map(l => `
+    <div class="tl-event">
+      <div class="tl-dot"></div>
+      <div class="tl-body">
+        <div class="tl-meta">${l.created_at.replace('T',' ').slice(0,16)} ${l.actor ? `· ${escapeHtml(l.actor)}` : ''}</div>
+        <div class="tl-content">
+          ${l.from_state ? `<span class="badge state-${l.from_state}">${l.from_state}</span> → ` : ''}
+          <span class="badge state-${l.to_state}">${l.to_state}</span>
+          ${l.note ? `<p class="text-sm mt-1">${nl2br(l.note)}</p>` : ''}
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+checkAuth().then(() => loadPage()).catch(e => {
+  document.getElementById('loadingState').textContent = `Lỗi: ${e.message}`;
+});
+</script>
+</body>
+</html>
