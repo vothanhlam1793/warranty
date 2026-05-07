@@ -59,6 +59,18 @@ def get_session(request: Request, db: Session) -> Optional[UserSession]:
     return session
 
 
+def resolve_actor(request: Request, db: Session, actor: Optional[str] = None, required: bool = False) -> Optional[str]:
+    name = (actor or "").strip()
+    if name:
+        return name
+    session = get_session(request, db)
+    if session and session.user:
+        return session.user.display_name or session.user.username
+    if required:
+        raise HTTPException(401, "Không xác định được người thao tác")
+    return None
+
+
 @router.post("/login")
 def login(payload: LoginIn, response: Response, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == payload.username).first()

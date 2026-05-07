@@ -306,6 +306,7 @@ function renderDeadline(t) {
 
 // Modal gia hạn
 function openExtendModal() {
+  setInputValueIfEmpty('extActor', getCurrentActorName());
   openModal("extendModal");
 }
 
@@ -426,7 +427,7 @@ function openRollbackModal(itemId, itemCode, currentState) {
   document.getElementById('rollbackItemInfo').textContent =
     `Mã: ${itemCode || itemId} — trạng thái hiện tại: ${currentState}`;
   document.getElementById('rollbackReason').value = '';
-  document.getElementById('rollbackActor').value = '';
+  document.getElementById('rollbackActor').value = getCurrentActorName();
   openModal('rollbackModal');
 }
 
@@ -460,7 +461,7 @@ function openActionModal(itemId, actionKey) {
   actionTargetState = cfg.toState;
 
   document.getElementById('actionModalTitle').textContent = cfg.title;
-  document.getElementById('actionActor').value = '';
+  document.getElementById('actionActor').value = getCurrentActorName();
   document.getElementById('actionNote').value = '';
   document.getElementById('actionNote').placeholder = cfg.notePlaceholder || 'Nhập ghi chú...';
 
@@ -491,7 +492,6 @@ async function submitAction(overrideToState) {
   const note  = document.getElementById('actionNote').value.trim();
   const toState = overrideToState || actionTargetState;
 
-  if (!actor) return toast('Bắt buộc nhập tên người thực hiện', 'error');
   if (!note)  return toast('Bắt buộc nhập ghi chú', 'error');
   if (!toState) return toast('Không xác định được trạng thái tiếp theo', 'error');
 
@@ -519,11 +519,11 @@ function openReturnSlipPage() {
 }
 
 async function confirmDeliveryNote(itemId) {
-  const actor = prompt('Tên người xác nhận giao khách:');
-  if (actor === null) return;
+  const actor = getCurrentActorName();
+  if (!actor.trim()) return toast('Không xác định được người đang đăng nhập', 'error');
   const note = prompt('Ghi chú xác nhận đã gửi khách:');
   if (note === null) return;
-  if (!actor.trim() || !note.trim()) return toast('Cần nhập đủ người xác nhận và ghi chú', 'error');
+  if (!note.trim()) return toast('Cần nhập ghi chú xác nhận đã gửi', 'error');
   try {
     const res = await api.get('/api/return-slips/list?status=C5');
     const slip = (res.items || []).find(x => (x.items || []).some(it => it.ticket_item_id === itemId));
@@ -655,7 +655,7 @@ async function chooseTemplate(itemId, stage, locked) {
   if (!list.length) return toast('Khong co template phu hop', 'error');
   activeTemplateMapping = { itemId, stage, selectedTemplateId: null };
   document.getElementById('templateModalTitle').textContent = `Chọn template ${stage}`;
-  document.getElementById('mapActor').value = '';
+  document.getElementById('mapActor').value = getCurrentActorName();
   document.getElementById('mapReason').value = 'Điều chỉnh checklist theo thực tế';
   document.getElementById('templateList').innerHTML = list.map(t => `
     <label style="display:flex;align-items:center;gap:.5rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:8px;cursor:pointer">
@@ -672,7 +672,6 @@ async function submitTemplateMapping() {
   if (!template_id) return toast('Vui lòng chọn template', 'error');
   const actor = document.getElementById('mapActor').value.trim();
   const reason = document.getElementById('mapReason').value.trim();
-  if (!actor) return toast('Vui lòng nhập người đổi mapping', 'error');
   if (!reason) return toast('Vui lòng nhập lý do', 'error');
   await api.post(`/api/checklists/mapping/${activeTemplateMapping.itemId}`, {
     stage: activeTemplateMapping.stage,
@@ -695,7 +694,8 @@ async function startRun(itemId, stage) {
   }
 }
 
-checkAuth().then(() => {
+checkAuth().then(user => {
+  hydrateActorInputs(['actionActor', 'rollbackActor', 'mapActor', 'extActor']);
   loadTicket().catch(e => { document.getElementById("loadingState").textContent = "Lỗi: " + e.message; });
 });
 </script>

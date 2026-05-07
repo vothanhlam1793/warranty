@@ -139,6 +139,21 @@ function _renderUserTopbar() {
   }
 }
 
+function getCurrentActorName() {
+  return currentUser?.display_name || currentUser?.username || "";
+}
+
+function setInputValueIfEmpty(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!el.value) el.value = value || "";
+}
+
+function hydrateActorInputs(ids) {
+  const actor = getCurrentActorName();
+  ids.forEach(id => setInputValueIfEmpty(id, actor));
+}
+
 /* ── Mark active nav ── */
 function markActiveNav() {
   const path = location.pathname;

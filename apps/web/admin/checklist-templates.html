@@ -10,24 +10,7 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <a class="nav-item" href="/supplier-receives/list.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <a class="nav-item active" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
 
   <div class="main">
     <div class="topbar">
@@ -57,7 +40,10 @@
 
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
+let expandedId = null;
+
 async function load() {
   await checkAuth();
   const rows = await api.get('/api/checklists/templates');
@@ -66,11 +52,12 @@ async function load() {
       <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
         <b>${x.name}</b>
         <span class="badge badge-gray">${x.stage}</span>
-        <button class="btn btn-secondary btn-sm" onclick="view(${x.id})">Items</button>
+        <button class="btn btn-secondary btn-sm" onclick="toggleEdit(${x.id})">${expandedId === x.id ? 'Ẩn' : 'Sửa'}</button>
       </div>
       <div id="t-${x.id}" style="margin-top:.45rem"></div>
     </div>
   `).join('');
+  if (expandedId) await view(expandedId);
 }
 
 async function createTpl() {
@@ -87,30 +74,114 @@ async function createTpl() {
   await load();
 }
 
+async function toggleEdit(id) {
+  expandedId = expandedId === id ? null : id;
+  await load();
+}
+
 async function view(id) {
+  if (expandedId !== id) return;
   const t = await api.get(`/api/checklists/templates/${id}`);
   document.getElementById(`t-${id}`).innerHTML = `
-    <div class="text-sm" style="margin-bottom:.35rem">${t.items.map(i => `• ${i.label}`).join('<br>') || '<span class="text-muted">Chưa có item</span>'}</div>
-    <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-      <input id="item-${id}" class="form-control" style="max-width:420px" placeholder="Nội dung checklist item"/>
-      <button class="btn btn-primary btn-sm" onclick="addItem(${id})">Thêm item</button>
+    <div class="card" style="margin-top:.5rem;background:var(--surface-2)">
+      <div class="card-body">
+        <div class="form-grid" style="grid-template-columns:2fr 1fr auto">
+          <div class="form-group"><label class="form-label">Tên template</label><input id="tpl-name-${id}" class="form-control" value="${escapeHtml(t.name || '')}"/></div>
+          <div class="form-group"><label class="form-label">Stage</label>
+            <select id="tpl-stage-${id}" class="form-control">
+              <option value="A2_PRECHECK" ${t.stage === 'A2_PRECHECK' ? 'selected' : ''}>A2_PRECHECK</option>
+              <option value="C1_RETURN" ${t.stage === 'C1_RETURN' ? 'selected' : ''}>C1_RETURN</option>
+            </select>
+          </div>
+          <div class="form-group" style="align-self:end"><button class="btn btn-primary btn-sm" onclick="saveTemplate(${id})">Lưu template</button></div>
+        </div>
+
+        <div style="margin-top:.8rem">
+          <div style="font-weight:700;margin-bottom:.45rem">Checklist items</div>
+          <div id="items-${id}" style="display:flex;flex-direction:column;gap:.45rem">
+            ${(t.items || []).map(i => `
+              <div style="display:grid;grid-template-columns:1fr 110px 110px auto auto;gap:.45rem;align-items:center">
+                <input id="item-label-${id}-${i.id}" class="form-control" value="${escapeHtml(i.label || '')}"/>
+                <input id="item-sort-${id}-${i.id}" type="number" class="form-control" value="${i.sort_order ?? 0}"/>
+                <select id="item-required-${id}-${i.id}" class="form-control">
+                  <option value="true" ${i.required ? 'selected' : ''}>Required</option>
+                  <option value="false" ${!i.required ? 'selected' : ''}>Optional</option>
+                </select>
+                <button class="btn btn-secondary btn-sm" onclick="saveItem(${id}, ${i.id})">Lưu</button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--danger)" onclick="deleteItem(${id}, ${i.id})">Xóa</button>
+              </div>
+            `).join('') || '<div class="text-sm text-muted">Chưa có item</div>'}
+          </div>
+        </div>
+
+        <div style="margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--border)">
+          <div style="font-weight:700;margin-bottom:.45rem">Thêm item mới</div>
+          <div style="display:grid;grid-template-columns:1fr 110px 110px auto;gap:.45rem;align-items:center">
+            <input id="item-new-label-${id}" class="form-control" placeholder="Nội dung checklist item"/>
+            <input id="item-new-sort-${id}" type="number" class="form-control" value="0"/>
+            <select id="item-new-required-${id}" class="form-control">
+              <option value="true">Required</option>
+              <option value="false">Optional</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="addItem(${id})">Thêm item</button>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
 
+function escapeHtml(s) {
+  return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+}
+
+async function saveTemplate(id) {
+  const name = document.getElementById(`tpl-name-${id}`).value.trim();
+  const stage = document.getElementById(`tpl-stage-${id}`).value;
+  if (!name) return toast('Nhập tên template', 'error');
+  await api.put(`/api/checklists/templates/${id}`, {
+    name,
+    stage,
+    description: null,
+    is_active: true,
+  });
+  toast('Đã lưu template');
+  await load();
+}
+
 async function addItem(id) {
-  const input = document.getElementById(`item-${id}`);
+  const input = document.getElementById(`item-new-label-${id}`);
   const label = (input?.value || '').trim();
   if (!label) return toast('Nhập nội dung item', 'error');
   await api.post(`/api/checklists/templates/${id}/items`, {
     label,
-    required: true,
-    sort_order: 0,
+    required: document.getElementById(`item-new-required-${id}`).value === 'true',
+    sort_order: parseInt(document.getElementById(`item-new-sort-${id}`).value || '0', 10),
     input_type: 'boolean',
   });
   input.value = '';
   toast('Đã thêm item');
   await view(id);
+}
+
+async function saveItem(templateId, itemId) {
+  const label = document.getElementById(`item-label-${templateId}-${itemId}`).value.trim();
+  if (!label) return toast('Nội dung item không được trống', 'error');
+  await api.put(`/api/checklists/templates/${templateId}/items/${itemId}`, {
+    label,
+    required: document.getElementById(`item-required-${templateId}-${itemId}`).value === 'true',
+    sort_order: parseInt(document.getElementById(`item-sort-${templateId}-${itemId}`).value || '0', 10),
+    input_type: 'boolean',
+  });
+  toast('Đã lưu item');
+  await view(templateId);
+}
+
+async function deleteItem(templateId, itemId) {
+  if (!confirm('Xóa item này?')) return;
+  await api.delete(`/api/checklists/templates/${templateId}/items/${itemId}`);
+  toast('Đã xóa item');
+  await view(templateId);
 }
 
 load().catch(e => toast(e.message, 'error'));

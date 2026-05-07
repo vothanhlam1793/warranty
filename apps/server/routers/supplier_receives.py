@@ -3,11 +3,12 @@
 from datetime import date
 from typing import Optional, List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
+from .auth import resolve_actor
 from ..models import (
     SupplierReceive, SupplierReceiveItem, SupplierReceiveStatus,
     SupplierOrderItem, SupplierOrder, Supplier,
@@ -117,7 +118,8 @@ def list_candidates(supplier_id: int = Query(...), db: Session = Depends(get_db)
 
 
 @router.post("", status_code=201)
-def create_receive(payload: SupplierReceiveIn, db: Session = Depends(get_db)):
+def create_receive(payload: SupplierReceiveIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor)
     if not db.get(Supplier, payload.supplier_id):
         raise HTTPException(404, "Supplier not found")
     if not payload.items:
@@ -143,7 +145,7 @@ def create_receive(payload: SupplierReceiveIn, db: Session = Depends(get_db)):
         supplier_id=payload.supplier_id,
         status=SupplierReceiveStatus.posted,
         received_date=payload.received_date,
-        actor=payload.actor,
+        actor=actor,
         note=payload.note,
     )
     db.add(rec)
@@ -166,7 +168,7 @@ def create_receive(payload: SupplierReceiveIn, db: Session = Depends(get_db)):
             from_state=old,
             to_state=WorkflowState.C1,
             note=f"Nhận về từ NCC qua phiếu {rec.receive_no}. {ln.result_note or ''}".strip(),
-            actor=payload.actor,
+            actor=actor,
         ))
 
     db.commit()

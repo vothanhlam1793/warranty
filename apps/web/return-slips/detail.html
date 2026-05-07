@@ -125,15 +125,16 @@ function render() {
         <div class="form-group" style="margin-top:.8rem">
           <label class="form-label">Ảnh đóng gói / phiếu trả</label>
           <input id="packImageInput" type="file" class="form-control" accept="image/*"/>
+          <div class="text-sm text-muted" style="margin-top:.35rem">Chọn ảnh tại đây, khi bấm xác nhận hệ thống sẽ tự upload rồi chuyển sang C5.</div>
         </div>
         <div class="form-group" style="margin-top:.8rem">
           <label class="form-label">Người xác nhận</label>
-          <input id="packActor" class="form-control" placeholder="Tên nhân viên"/>
+          <input id="packActor" class="form-control" placeholder="Tự động theo tài khoản đăng nhập"/>
         </div>
         <div class="actions">
           <button class="btn btn-ghost" onclick="printSlip()">🖨 In phiếu</button>
-          <button class="btn btn-secondary" onclick="uploadPackImage()">📷 Upload ảnh đóng gói</button>
-          <button class="btn btn-primary" onclick="confirmPack()">📦 Xác nhận đóng gói → C5</button>
+          <button class="btn btn-secondary" onclick="uploadPackImage()">📷 Chỉ upload ảnh</button>
+          <button class="btn btn-primary" onclick="confirmPack()">📦 Upload ảnh và xác nhận → C5</button>
         </div>
       </div>
     </div>` : '';
@@ -150,14 +151,15 @@ function render() {
         <div class="form-group" style="margin-top:.8rem">
           <label class="form-label">Hình ảnh giao trả</label>
           <input id="deliveredImageInput" type="file" class="form-control" accept="image/*"/>
+          <div class="text-sm text-muted" style="margin-top:.35rem">Chọn ảnh tại đây, khi bấm xác nhận hệ thống sẽ tự upload rồi chuyển sang C6.</div>
         </div>
         <div class="form-group" style="margin-top:.8rem">
           <label class="form-label">Người xác nhận giao</label>
-          <input id="deliverActor" class="form-control" placeholder="Tên nhân viên"/>
+          <input id="deliverActor" class="form-control" placeholder="Tự động theo tài khoản đăng nhập"/>
         </div>
         <div class="actions">
-          <button class="btn btn-secondary" onclick="uploadDeliveredImage()">📷 Upload ảnh giao trả</button>
-          <button class="btn btn-primary" onclick="confirmDelivered()">✅ Xác nhận đã chuyển → C6</button>
+          <button class="btn btn-secondary" onclick="uploadDeliveredImage()">📷 Chỉ upload ảnh</button>
+          <button class="btn btn-primary" onclick="confirmDelivered()">✅ Upload ảnh và xác nhận → C6</button>
         </div>
       </div>
     </div>` : '';
@@ -218,6 +220,8 @@ function render() {
           </table></div>` : '<div class="text-muted">Chưa có món nào trong phiếu.</div>'}
       </div>
     </div>`;
+
+  hydrateActorInputs(['packActor', 'deliverActor']);
 }
 
 async function uploadPackImage() {
@@ -244,15 +248,22 @@ async function uploadPackImage() {
   }
 }
 
+async function ensurePackImageUploaded() {
+  if (slip?.pack_image_url) return;
+  const file = document.getElementById('packImageInput')?.files?.[0];
+  if (!file) return;
+  await uploadPackImage();
+}
+
 async function confirmPack() {
   if (!slip || slip.status !== 'C4') return;
   const actor = document.getElementById('packActor')?.value.trim();
   const return_method = document.getElementById('returnMethod')?.value.trim();
   const shipping_note = document.getElementById('shippingNote')?.value.trim();
-  if (!actor) return toast('Nhập người xác nhận đóng gói', 'error');
   if (!return_method) return toast('Chọn phương thức trả', 'error');
   if (!shipping_note) return toast('Nhập thông tin giao vận / đóng gói', 'error');
   try {
+    await ensurePackImageUploaded();
     if (slip._legacyItemMode) {
       await api.post(`/api/return-slips/items/${slip.id}/confirm-pack`, { actor, note: `${return_method}: ${shipping_note}` });
     } else {
@@ -263,6 +274,13 @@ async function confirmPack() {
   } catch (e) {
     toast(e.message || 'Không chuyển được sang C5', 'error');
   }
+}
+
+async function ensureDeliveredImageUploaded() {
+  if (slip?.delivered_image_url) return;
+  const file = document.getElementById('deliveredImageInput')?.files?.[0];
+  if (!file) return;
+  await uploadDeliveredImage();
 }
 
 async function uploadDeliveredImage() {
@@ -293,8 +311,8 @@ async function confirmDelivered() {
   if (!slip || slip.status !== 'C5') return;
   const actor = document.getElementById('deliverActor')?.value.trim();
   const delivery_note = document.getElementById('deliveryNote')?.value.trim();
-  if (!actor) return toast('Nhập người xác nhận giao trả', 'error');
   try {
+    await ensureDeliveredImageUploaded();
     if (slip._legacyItemMode) {
       await api.post(`/api/return-slips/items/${slip.id}/delivery-confirm`, { actor, note: delivery_note || 'Đã giao trả', to_state: 'C6' });
     } else {
@@ -317,8 +335,10 @@ function printSlip() {
   window.open(`http://localhost:8001/api/return-slips/${slip.id}/print`);
 }
 
-init().catch(e => {
-  document.getElementById('pageRoot').innerHTML = `<div class="card"><div class="card-body" style="color:var(--danger)">Lỗi: ${e.message}</div></div>`;
+checkAuth().then(() => {
+  init().catch(e => {
+    document.getElementById('pageRoot').innerHTML = `<div class="card"><div class="card-body" style="color:var(--danger)">Lỗi: ${e.message}</div></div>`;
+  });
 });
 </script>
 </body>

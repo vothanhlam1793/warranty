@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý người dùng - Creta Warranty</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Quản lý người dùng</span>
+      <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+    </div>
+
+    <div class="page">
+        <div class="card p-0">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+                <h2>Danh sách nhân viên</h2>
+                <button class="btn btn-primary btn-sm" onclick="openCreateModal()">＋ Thêm người dùng</button>
+            </div>
+
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Tên hiển thị</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable">
+                        <tr><td colspan="6" class="text-center">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Thêm/Sửa User -->
+<div id="userModal" class="modal-overlay hidden">
+    <div class="modal" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3 id="modalTitle">Thêm người dùng</h3>
+            <button class="btn btn-ghost btn-icon" onclick="closeModal('userModal')">✕</button>
+        </div>
+        <form id="userForm">
+            <div class="modal-body">
+                <input type="hidden" id="userId">
+                <div class="form-group mb-2">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-control" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" id="password" class="form-control" placeholder="Mật khẩu mới">
+                    <small id="pwHelp" class="text-muted" style="font-size:.75rem"></small>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="form-label">Tên hiển thị</label>
+                    <input type="text" id="displayName" class="form-control" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label class="form-label">Vai trò</label>
+                    <select id="role" class="form-control">
+                        <option value="technician">Kỹ thuật</option>
+                        <option value="reception">Tiếp tân</option>
+                        <option value="accountant">Kế toán</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+                        <input type="checkbox" id="isActive" checked> Tài khoản đang hoạt động
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('userModal')">Hủy</button>
+                <button type="submit" class="btn btn-primary">✓ Lưu thông tin</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+    async function loadUsers() {
+        try {
+            const users = await api.get("/api/admin/users");
+            const tbody = document.getElementById("userTable");
+            tbody.innerHTML = users.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td><b>${u.username}</b></td>
+                    <td>${u.display_name}</td>
+                    <td><span class="badge badge-gray">${u.role}</span></td>
+                    <td><span class="badge ${u.is_active ? 'badge-teal' : 'badge-red'}">${u.is_active ? 'Hoạt động' : 'Đã khóa'}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="editUser(${JSON.stringify(u).replace(/"/g, '&quot;')})">Sửa</button>
+                        <button class="btn btn-ghost btn-sm text-danger" onclick="deleteUser(${u.id}, '${u.username}')">Xóa</button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            toast(err.message, "error");
+        }
+    }
+
+    function openCreateModal() {
+        document.getElementById("modalTitle").textContent = "Thêm người dùng";
+        document.getElementById("userId").value = "";
+        document.getElementById("username").value = "";
+        document.getElementById("username").disabled = false;
+        document.getElementById("displayName").value = "";
+        document.getElementById("role").value = "technician";
+        document.getElementById("isActive").checked = true;
+        document.getElementById("password").value = "";
+        document.getElementById("pwHelp").textContent = "Mặc định: 123456 nếu để trống";
+        openModal('userModal');
+    }
+
+    function editUser(u) {
+        document.getElementById("modalTitle").textContent = "Sửa người dùng: " + u.username;
+        document.getElementById("userId").value = u.id;
+        document.getElementById("username").value = u.username;
+        document.getElementById("username").disabled = true;
+        document.getElementById("displayName").value = u.display_name;
+        document.getElementById("role").value = u.role;
+        document.getElementById("isActive").checked = u.is_active;
+        document.getElementById("password").value = "";
+        document.getElementById("pwHelp").textContent = "Để trống nếu không muốn đổi mật khẩu";
+        openModal('userModal');
+    }
+
+    async function deleteUser(id, name) {
+        if (!confirm(`Bạn có chắc muốn xóa người dùng "${name}"?`)) return;
+        try {
+            await api.delete("/api/admin/users/" + id);
+            toast("Đã xóa người dùng");
+            loadUsers();
+        } catch (err) {
+            toast(err.message, "error");
+        }
+    }
+
+    document.getElementById("userForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("userId").value;
+        const data = {
+            display_name: document.getElementById("displayName").value,
+            role: document.getElementById("role").value,
+            is_active: document.getElementById("isActive").checked,
+        };
+        const pw = document.getElementById("password").value;
+        if (pw) data.password = pw;
+
+        try {
+            if (id) {
+                await api.patch("/api/admin/users/" + id, data);
+                toast("Cập nhật thành công");
+            } else {
+                data.username = document.getElementById("username").value;
+                if (!pw) data.password = "123456";
+                await api.post("/api/admin/users", data);
+                toast("Thêm người dùng thành công");
+            }
+            closeModal('userModal');
+            loadUsers();
+        } catch (err) {
+            toast(err.message, "error");
+        }
+    });
+
+    // Initialize
+    checkAuth().then(user => {
+        if (user.role !== 'admin') {
+            alert("Bạn không có quyền truy cập trang này");
+            location.href = "/index.html";
+        }
+        loadUsers();
+    });
+</script>
+</body>
+</html>

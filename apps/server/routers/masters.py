@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import Customer, Product, Supplier, SyncState
-from ..kiotviet.client import search_customers, search_products
-from ..services.kiotviet_sync import sync_all
+from ..odoo.client import search_customers, search_products
+from ..services.odoo_sync import merge_customers_by_phone, normalize_phone, sync_all
 
 # ── Customers ─────────────────────────────────────────────────────────────────
 customers_router = APIRouter(prefix="/api/customers", tags=["customers"])
@@ -18,6 +18,7 @@ customers_router = APIRouter(prefix="/api/customers", tags=["customers"])
 
 class CustomerIn(BaseModel):
     name: str
+    customer_code: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
     address: Optional[str] = None
@@ -29,6 +30,7 @@ def _serialize_customer(c: Customer) -> dict:
     return {
         "id": c.id,
         "name": c.name,
+        "customer_code": c.customer_code,
         "phone": c.phone,
         "email": c.email,
         "address": c.address,
@@ -39,17 +41,37 @@ def _serialize_customer(c: Customer) -> dict:
 
 
 @customers_router.get("")
-def list_customers(q: Optional[str] = Query(None), limit: int = 50, db: Session = Depends(get_db)):
+def list_customers(
+    q: Optional[str] = Query(None),
+    limit: int = Query(50, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
     query = db.query(Customer).order_by(Customer.name)
     if q:
-        query = query.filter(Customer.name.ilike(f"%{q}%") | Customer.phone.ilike(f"%{q}%"))
-    return [_serialize_customer(c) for c in query.limit(limit).all()]
+        query = query.filter(
+            Customer.name.ilike(f"%{q}%") |
+            Customer.phone.ilike(f"%{q}%") |
+            Customer.customer_code.ilike(f"%{q}%")
+        )
+    total = query.count()
+    items = query.offset(offset).limit(limit).all()
+    return {
+        "items": [_serialize_customer(c) for c in items],
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @customers_router.post("", status_code=201)
 def create_customer(payload: CustomerIn, db: Session = Depends(get_db)):
-    c = Customer(**payload.model_dump())
+    data = payload.model_dump()
+    data["phone"] = normalize_phone(data.get("phone"))
+    c = Customer(**data)
     db.add(c)
+    db.flush()
+    c = merge_customers_by_phone(db, c.phone, preferred=c) or c
     db.commit()
     db.refresh(c)
     return _serialize_customer(c)
@@ -60,15 +82,24 @@ def update_customer(customer_id: int, payload: CustomerIn, db: Session = Depends
     c = db.get(Customer, customer_id)
     if not c:
         raise HTTPException(404, "Customer not found")
-    for k, v in payload.model_dump().items():
+    data = payload.model_dump()
+    data["phone"] = normalize_phone(data.get("phone"))
+    for k, v in data.items():
         setattr(c, k, v)
+    db.flush()
+    c = merge_customers_by_phone(db, c.phone, preferred=c) or c
     db.commit()
     db.refresh(c)
     return _serialize_customer(c)
 
 
+@customers_router.get("/odoo/search")
+def odoo_search_customers(q: str = Query(""), limit: int = 10):
+    return search_customers(q, limit)
+
+
 @customers_router.get("/kiotviet/search")
-def kiotviet_search_customers(q: str = Query(""), limit: int = 10):
+def legacy_search_customers(q: str = Query(""), limit: int = 10):
     return search_customers(q, limit)
 
 
@@ -97,11 +128,23 @@ def _serialize_product(p: Product) -> dict:
 
 
 @products_router.get("")
-def list_products(q: Optional[str] = Query(None), limit: int = 100, db: Session = Depends(get_db)):
+def list_products(
+    q: Optional[str] = Query(None),
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
     query = db.query(Product).order_by(Product.name)
     if q:
         query = query.filter(Product.name.ilike(f"%{q}%") | Product.sku.ilike(f"%{q}%"))
-    return [_serialize_product(p) for p in query.limit(limit).all()]
+    total = query.count()
+    items = query.offset(offset).limit(limit).all()
+    return {
+        "items": [_serialize_product(p) for p in items],
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @products_router.post("", status_code=201)
@@ -125,8 +168,13 @@ def update_product(product_id: int, payload: ProductIn, db: Session = Depends(ge
     return _serialize_product(p)
 
 
+@products_router.get("/odoo/search")
+def odoo_search_products(q: str = Query(""), limit: int = 10):
+    return search_products(q, limit)
+
+
 @products_router.get("/kiotviet/search")
-def kiotviet_search_products(q: str = Query(""), limit: int = 10):
+def legacy_search_products(q: str = Query(""), limit: int = 10):
     return search_products(q, limit)
 
 

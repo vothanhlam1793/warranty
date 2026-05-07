@@ -3,11 +3,22 @@ setlocal EnableExtensions EnableDelayedExpansion
 
 cd /d "%~dp0"
 set "ROOT=%CD%"
-set "BACKEND_PORT=8001"
-set "FRONTEND_PORT=3000"
+
+:: Load .env variables
+if exist .env (
+    for /f "usebackq tokens=1,2 delims==" %%i in (".env") do (
+        set "%%i=%%j"
+    )
+)
+
+:: Set defaults if not in .env
+if "%BACKEND_PORT%"=="" set "BACKEND_PORT=8001"
+if "%FRONTEND_PORT%"=="" set "FRONTEND_PORT=3000"
 set "PYTHON_EXE=%LocalAppData%\Programs\Python\Python311\python.exe"
 
 echo === Warranty Management System (Windows) ===
+echo Backend Port: %BACKEND_PORT%
+echo Frontend Port: %FRONTEND_PORT%
 echo.
 
 call :kill_port %BACKEND_PORT%

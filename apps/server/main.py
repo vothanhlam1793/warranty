@@ -17,6 +17,7 @@ from .routers.supplier_orders import router as supplier_orders_router
 from .routers.transactions import router as transactions_router
 from .routers.tasks import router as tasks_router
 from .routers.auth import router as auth_router
+from .routers.admin import router as admin_router
 from .routers.supplier_receives import router as supplier_receives_router
 from .routers.checklists import router as checklists_router
 from .routers.return_slips import router as return_slips_router
@@ -55,6 +56,7 @@ async def auth_middleware(request: Request, call_next):
 
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth_router)
+app.include_router(admin_router)
 app.include_router(tickets_router)
 app.include_router(customers_router)
 app.include_router(products_router)

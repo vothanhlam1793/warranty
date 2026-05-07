@@ -514,7 +514,7 @@ async function openReturnSlipDetail(itemId, status, btn) {
 function openContactModal(ticketId, itemId, itemCode, customerName) {
   activeContact = { ticketId, itemId };
   document.getElementById("contactItemInfo").textContent = `${itemCode || "Mã hàng"} · ${customerName || "Khách"}`;
-  document.getElementById("contactActor").value = "";
+  document.getElementById("contactActor").value = getCurrentActorName();
   document.getElementById("contactNote").value = "";
   document.getElementById("contactNextState").value = "A3";
   openModal("contactModal");

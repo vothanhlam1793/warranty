@@ -10,23 +10,7 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item active" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <a class="nav-item" href="/admin/checklist-templates.html"><span class="icon">🧪</span>Mẫu checklist</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title">Sản phẩm</span>
@@ -39,37 +23,64 @@
       <div class="card">
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Tên sản phẩm</th><th>SKU</th><th>KiotViet ID</th><th>Nguồn</th></tr></thead>
+            <thead><tr><th>Tên sản phẩm</th><th>SKU</th><th>Odoo ID</th><th>Nguồn</th></tr></thead>
             <tbody id="tbody"></tbody>
           </table>
         </div>
         <div id="loading" class="loading">Đang tải...</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;border-top:1px solid var(--border)">
+          <div id="pageInfo" class="text-sm text-muted">—</div>
+          <div style="display:flex;gap:.5rem">
+            <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="goPage(-1)">← Trước</button>
+            <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="goPage(1)">Sau →</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 let debounce;
+let page = 1;
+const pageSize = 100;
 document.getElementById("searchQ").addEventListener("input", () => {
-  clearTimeout(debounce); debounce = setTimeout(load, 300);
+  clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    page = 1;
+    load();
+  }, 300);
 });
 
 async function load() {
   const q = document.getElementById("searchQ").value;
-  const products = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=200`);
+  const offset = (page - 1) * pageSize;
+  const res = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=${pageSize}&offset=${offset}`);
+  const products = Array.isArray(res) ? res : (res.items || []);
+  const total = Array.isArray(res) ? products.length : (res.total || 0);
   document.getElementById("loading").style.display = "none";
-  document.getElementById("count").textContent = `${products.length} sản phẩm`;
+  document.getElementById("count").textContent = `${total} sản phẩm`;
   document.getElementById("tbody").innerHTML = products.map(p => `
     <tr>
       <td><b>${p.name}</b></td>
       <td class="td-muted">${p.sku||"—"}</td>
       <td>${p.kiotviet_item_id ? `<span class="badge badge-teal">${p.kiotviet_item_id}</span>` : "—"}</td>
       <td>${p.kiotviet_synced
-        ? '<span class="badge badge-teal">KiotViet</span>'
+        ? '<span class="badge badge-teal">Odoo</span>'
         : '<span class="badge badge-gray">Nội bộ</span>'}</td>
     </tr>`).join("");
+  const from = total ? offset + 1 : 0;
+  const to = Math.min(offset + products.length, total);
+  document.getElementById("pageInfo").textContent = `Hiển thị ${from}-${to} / ${total}`;
+  document.getElementById("prevBtn").disabled = page <= 1;
+  document.getElementById("nextBtn").disabled = offset + products.length >= total;
+}
+
+function goPage(delta) {
+  page = Math.max(1, page + delta);
+  load();
 }
 load().catch(e => toast(e.message,"error"));
 </script>

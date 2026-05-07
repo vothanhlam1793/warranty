@@ -1,4 +1,4 @@
-"""Database setup - SQLite via SQLAlchemy."""
+"""Database setup - Supporting SQLite and PostgreSQL."""
 
 from __future__ import annotations
 
@@ -19,12 +19,19 @@ if _env_file.exists():
             _k, _v = _line.split("=", 1)
             os.environ.setdefault(_k.strip(), _v.strip())
 
-DB_PATH = os.environ.get("WARRANTY_DB", str(_ROOT / "apps" / "server" / "warranty.db"))
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    DB_PATH = os.environ.get("WARRANTY_DB", str(_ROOT / "apps" / "server" / "warranty.db"))
+    DATABASE_URL = f"sqlite:///{DB_PATH}"
+
+# Connection arguments
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args=connect_args,
     echo=False,
 )
 
@@ -44,29 +51,47 @@ def get_db():
 
 
 def init_db():
-    """Create all tables."""
+    """Create all tables and seed data."""
     import importlib
     importlib.import_module(".models", package="server")
     Base.metadata.create_all(bind=engine)
-    with engine.begin() as conn:
-        cols = [r[1] for r in conn.execute(text("PRAGMA table_info(ticket_items)"))]
-        if "a2_required" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_required BOOLEAN DEFAULT 0"))
-        if "a2_template_id" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_template_id INTEGER"))
-        if "c1_template_id" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN c1_template_id INTEGER"))
-        if "a2_template_locked" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_template_locked BOOLEAN DEFAULT 0"))
-        if "c1_template_locked" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN c1_template_locked BOOLEAN DEFAULT 0"))
-        if "delivery_confirm_note" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN delivery_confirm_note TEXT"))
-        if "shipping_note" not in cols:
-            conn.execute(text("ALTER TABLE ticket_items ADD COLUMN shipping_note TEXT"))
-        slip_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(return_slips)"))]
-        if slip_cols and "return_method" not in slip_cols:
-            conn.execute(text("ALTER TABLE return_slips ADD COLUMN return_method TEXT"))
+    
+    # Manual compatibility patches for legacy databases.
+    if DATABASE_URL.startswith("sqlite"):
+        with engine.begin() as conn:
+            cols = [r[1] for r in conn.execute(text("PRAGMA table_info(ticket_items)"))]
+            if "a2_required" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_required BOOLEAN DEFAULT 0"))
+            if "a2_template_id" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_template_id INTEGER"))
+            if "c1_template_id" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN c1_template_id INTEGER"))
+            if "a2_template_locked" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN a2_template_locked BOOLEAN DEFAULT 0"))
+            if "c1_template_locked" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN c1_template_locked BOOLEAN DEFAULT 0"))
+            if "delivery_confirm_note" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN delivery_confirm_note TEXT"))
+            if "shipping_note" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN shipping_note TEXT"))
+            
+            slip_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(return_slips)"))]
+            if slip_cols and "return_method" not in slip_cols:
+                conn.execute(text("ALTER TABLE return_slips ADD COLUMN return_method TEXT"))
+            customer_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(customers)"))]
+            if "customer_code" not in customer_cols:
+                conn.execute(text("ALTER TABLE customers ADD COLUMN customer_code TEXT"))
+    else:
+        with engine.begin() as conn:
+            customer_col = conn.execute(text("""
+                SELECT 1
+                FROM information_schema.columns
+                WHERE table_name = 'customers' AND column_name = 'customer_code'
+                LIMIT 1
+            """)).first()
+            if not customer_col:
+                conn.execute(text("ALTER TABLE customers ADD COLUMN customer_code VARCHAR(50)"))
+
     from .models import (
         ChecklistStage,
         ChecklistTemplate,
@@ -137,6 +162,7 @@ def init_db():
             "Serial khớp với phiếu",
         ])
 
+        # Backfill logic (optional, for existing items without return slips)
         legacy_items = (
             db.query(TicketItem)
             .options(joinedload(TicketItem.ticket), joinedload(TicketItem.return_slip_items))

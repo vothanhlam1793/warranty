@@ -122,6 +122,7 @@ let activeSlipId = null;
 
 async function init() {
   await checkAuth();
+   hydrateActorInputs(['packActor', 'deliverActor']);
   await reload();
 }
 

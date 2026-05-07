@@ -5,11 +5,12 @@ import shutil
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from ..database import get_db
+from .auth import resolve_actor
 from ..models import (
     ChecklistConclusion,
     ChecklistEvidence,
@@ -46,7 +47,7 @@ class TemplateItemIn(BaseModel):
 class MappingIn(BaseModel):
     stage: str
     template_id: Optional[int] = None
-    actor: str
+    actor: Optional[str] = None
     reason: str
 
 
@@ -117,6 +118,22 @@ def add_template_item(template_id: int, payload: TemplateItemIn, db: Session = D
     return {"id": it.id}
 
 
+@router.put("/templates/{template_id}/items/{item_id}")
+def update_template_item(template_id: int, item_id: int, payload: TemplateItemIn, db: Session = Depends(get_db)):
+    it = db.query(ChecklistTemplateItem).filter(
+        ChecklistTemplateItem.id == item_id,
+        ChecklistTemplateItem.template_id == template_id,
+    ).first()
+    if not it:
+        raise HTTPException(404, "Template item not found")
+    it.label = payload.label
+    it.required = payload.required
+    it.sort_order = payload.sort_order
+    it.input_type = payload.input_type
+    db.commit()
+    return {"ok": True}
+
+
 @router.delete("/templates/{template_id}/items/{item_id}")
 def delete_template_item(template_id: int, item_id: int, db: Session = Depends(get_db)):
     it = db.query(ChecklistTemplateItem).filter(ChecklistTemplateItem.id == item_id, ChecklistTemplateItem.template_id == template_id).first()
@@ -144,12 +161,13 @@ def get_mapping(ticket_item_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/mapping/{ticket_item_id}")
-def set_mapping(ticket_item_id: int, payload: MappingIn, db: Session = Depends(get_db)):
+def set_mapping(ticket_item_id: int, payload: MappingIn, request: Request, db: Session = Depends(get_db)):
     item = db.get(TicketItem, ticket_item_id)
     if not item:
         raise HTTPException(404, "Ticket item not found")
-    if not payload.actor.strip() or not payload.reason.strip():
-        raise HTTPException(400, "actor và reason là bắt buộc")
+    actor = resolve_actor(request, db, payload.actor, required=True)
+    if not payload.reason.strip():
+        raise HTTPException(400, "reason là bắt buộc")
     is_a2 = payload.stage == "A2"
     locked = item.a2_template_locked if is_a2 else item.c1_template_locked
     if locked:
@@ -161,7 +179,7 @@ def set_mapping(ticket_item_id: int, payload: MappingIn, db: Session = Depends(g
         item.a2_template_id = payload.template_id
     else:
         item.c1_template_id = payload.template_id
-    db.add(ChecklistTemplateChange(ticket_item_id=ticket_item_id, stage=payload.stage, from_template_id=old, to_template_id=payload.template_id, changed_by=payload.actor, reason=payload.reason))
+    db.add(ChecklistTemplateChange(ticket_item_id=ticket_item_id, stage=payload.stage, from_template_id=old, to_template_id=payload.template_id, changed_by=actor, reason=payload.reason))
     db.commit()
     return {"ok": True}
 

@@ -6,11 +6,12 @@ import uuid
 from datetime import date, datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, Request
 from sqlalchemy.orm import Session, joinedload
 from pydantic import BaseModel
 
 from ..database import get_db
+from .auth import resolve_actor
 from ..models import Customer, ReturnSlip, ReturnSlipItem, Ticket, TicketItem, WorkflowLog, WorkflowState
 
 router = APIRouter(prefix="/api/return-slips", tags=["return-slips"])
@@ -22,18 +23,18 @@ DEBUG_VERSION = "return-slips-source-2026-05-06-a"
 class ReturnSlipCreateIn(BaseModel):
     customer_id: int
     item_ids: list[int]
-    actor: str
+    actor: Optional[str] = None
     note: str
 
 
 class ConfirmPackIn(BaseModel):
-    actor: str
+    actor: Optional[str] = None
     return_method: str
     shipping_note: str
 
 
 class ConfirmDeliveryIn(BaseModel):
-    actor: str
+    actor: Optional[str] = None
     delivery_note: Optional[str] = None
 
 
@@ -113,9 +114,8 @@ def debug_return_slips_source():
 
 
 @router.post("", status_code=201)
-def create_return_slip(payload: ReturnSlipCreateIn, db: Session = Depends(get_db)):
-    if not payload.actor.strip():
-        raise HTTPException(400, "actor là bắt buộc")
+def create_return_slip(payload: ReturnSlipCreateIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor, required=True)
     if not payload.note.strip():
         raise HTTPException(400, "note là bắt buộc")
     if not payload.item_ids:
@@ -162,7 +162,7 @@ def create_return_slip(payload: ReturnSlipCreateIn, db: Session = Depends(get_db
         customer_id=payload.customer_id,
         status=WorkflowState.C4,
         note=payload.note.strip(),
-        created_by=payload.actor.strip(),
+        created_by=actor,
     )
     db.add(slip)
     db.flush()
@@ -177,7 +177,7 @@ def create_return_slip(payload: ReturnSlipCreateIn, db: Session = Depends(get_db
             from_state=old,
             to_state=WorkflowState.C4,
             note=f"Lập phiếu trả khách {slip.slip_no} ngày {today}: {payload.note.strip()}",
-            actor=payload.actor.strip(),
+            actor=actor,
         ))
 
     db.commit()
@@ -336,14 +336,13 @@ async def upload_delivered_image(slip_id: int, file: UploadFile = File(...), db:
 
 
 @router.post("/{slip_id}/confirm-pack")
-def confirm_pack(slip_id: int, payload: ConfirmPackIn, db: Session = Depends(get_db)):
+def confirm_pack(slip_id: int, payload: ConfirmPackIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor, required=True)
     slip = db.get(ReturnSlip, slip_id)
     if not slip:
         raise HTTPException(404, "Return slip not found")
     if slip.status != WorkflowState.C4:
         raise HTTPException(400, "Chỉ xác nhận đóng gói khi phiếu đang ở C4")
-    if not payload.actor.strip():
-        raise HTTPException(400, "actor là bắt buộc")
     if not payload.return_method.strip():
         raise HTTPException(400, "return_method là bắt buộc")
     if not payload.shipping_note.strip():
@@ -361,20 +360,19 @@ def confirm_pack(slip_id: int, payload: ConfirmPackIn, db: Session = Depends(get
             old = ti.workflow_state
             ti.workflow_state = WorkflowState.C5
             ti.shipping_note = slip.shipping_note
-            db.add(WorkflowLog(ticket_item_id=ti.id, from_state=old, to_state=WorkflowState.C5, note=f"Phiếu trả {slip.slip_no} xác nhận đóng gói", actor=payload.actor.strip()))
+            db.add(WorkflowLog(ticket_item_id=ti.id, from_state=old, to_state=WorkflowState.C5, note=f"Phiếu trả {slip.slip_no} xác nhận đóng gói", actor=actor))
     db.commit()
     return {"ok": True, "slip_id": slip.id, "new_state": slip.status}
 
 
 @router.post("/{slip_id}/confirm-delivered")
-def confirm_delivered(slip_id: int, payload: ConfirmDeliveryIn, db: Session = Depends(get_db)):
+def confirm_delivered(slip_id: int, payload: ConfirmDeliveryIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor, required=True)
     slip = db.get(ReturnSlip, slip_id)
     if not slip:
         raise HTTPException(404, "Return slip not found")
     if slip.status != WorkflowState.C5:
         raise HTTPException(400, "Chỉ xác nhận giao trả khi phiếu đang ở C5")
-    if not payload.actor.strip():
-        raise HTTPException(400, "actor là bắt buộc")
     if not slip.delivered_image_url:
         raise HTTPException(400, "Cần có hình ảnh giao trả trước khi chuyển C6")
 
@@ -388,6 +386,6 @@ def confirm_delivered(slip_id: int, payload: ConfirmDeliveryIn, db: Session = De
             ti.workflow_state = WorkflowState.C6
             ti.delivery_confirm_note = slip.delivery_note
             ti.returned_date = date.today()
-            db.add(WorkflowLog(ticket_item_id=ti.id, from_state=old, to_state=WorkflowState.C6, note=f"Phiếu trả {slip.slip_no} xác nhận đã giao khách", actor=payload.actor.strip()))
+            db.add(WorkflowLog(ticket_item_id=ti.id, from_state=old, to_state=WorkflowState.C6, note=f"Phiếu trả {slip.slip_no} xác nhận đã giao khách", actor=actor))
     db.commit()
     return {"ok": True, "slip_id": slip.id, "new_state": slip.status}
