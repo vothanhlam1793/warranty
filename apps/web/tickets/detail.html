@@ -354,15 +354,46 @@ function renderItems() {
           <div class="item-num">${idx+1}</div>
           <div style="flex:1">
             <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.35rem">
-              ${item.item_code ? `<span style="background:#0e7c66;color:#fff;font-weight:700;font-size:.85rem;padding:.2rem .6rem;border-radius:6px;letter-spacing:.04em;font-family:monospace">${item.item_code}</span>` : ""}
+              ${item.item_code ? `<a href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code)}" style="background:#0e7c66;color:#fff;font-weight:700;font-size:.85rem;padding:.2rem .6rem;border-radius:6px;letter-spacing:.04em;font-family:monospace;text-decoration:none">${item.item_code}</a>` : ""}
               <b>${item.product_name || "—"}</b>
               ${item.serial_no ? `<span class="badge badge-gray">S/N: ${item.serial_no}</span>` : ""}
               ${stateBadge(item.workflow_state)}
               ${actionBadge(item.requested_action)}
             </div>
-            ${item.customer_complaint ? `<p class="text-sm text-muted">📝 ${item.customer_complaint}</p>` : ""}
-            ${item.diagnosis_note ? `<p class="text-sm" style="color:var(--info)">🔧 ${item.diagnosis_note}</p>` : ""}
-            ${item.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${item.result_note}</p>` : ""}
+            <div style="margin-top:.55rem;padding:.75rem;border:1px solid var(--border);border-radius:10px;background:var(--surface-2)">
+              <div style="display:flex;justify-content:space-between;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:.55rem">
+                <b style="font-size:.92rem">📝 Nội dung xử lý</b>
+                <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+                  <button class="btn btn-ghost btn-sm" id="editNotesBtn-${item.id}" onclick="toggleItemNotesEditor(${item.id}, true)">✏ Sửa</button>
+                  <a class="btn btn-ghost btn-sm" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}">🔎 Mở mã xử lý</a>
+                </div>
+              </div>
+              <div id="notesView-${item.id}">
+                <div class="text-sm" style="margin-bottom:.35rem"><span class="text-muted">Yêu cầu khách:</span> ${item.customer_complaint ? escapeHtml(item.customer_complaint) : '<span class="text-muted">—</span>'}</div>
+                <div class="text-sm" style="margin-bottom:.35rem"><span class="text-muted">Ghi chú kỹ thuật:</span> ${item.diagnosis_note ? `<span style="color:var(--info)">${escapeHtml(item.diagnosis_note)}</span>` : '<span class="text-muted">—</span>'}</div>
+                <div class="text-sm"><span class="text-muted">Kết quả / ghi chú:</span> ${item.result_note ? `<span style="color:var(--accent)">${escapeHtml(item.result_note)}</span>` : '<span class="text-muted">—</span>'}</div>
+              </div>
+              <div id="notesEdit-${item.id}" style="display:none;margin-top:.75rem">
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label class="form-label">Yêu cầu khách</label>
+                    <textarea id="complaintInput-${item.id}" class="form-control" rows="2">${escapeHtml(item.customer_complaint || '')}</textarea>
+                  </div>
+                  <div class="form-group full">
+                    <label class="form-label">Ghi chú kỹ thuật</label>
+                    <textarea id="diagnosisInput-${item.id}" class="form-control" rows="3">${escapeHtml(item.diagnosis_note || '')}</textarea>
+                  </div>
+                  <div class="form-group full">
+                    <label class="form-label">Kết quả / ghi chú</label>
+                    <textarea id="resultInput-${item.id}" class="form-control" rows="3">${escapeHtml(item.result_note || '')}</textarea>
+                  </div>
+                </div>
+                <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem">
+                  <button class="btn btn-secondary btn-sm" onclick="toggleItemNotesEditor(${item.id}, false)">Hủy</button>
+                  <button class="btn btn-primary btn-sm" onclick="saveItemNotes(${item.id})">Lưu nội dung</button>
+                </div>
+              </div>
+            </div>
             ${item.evidence_url ? `
               <div style="margin-top:.4rem">
                 <a href="${item.evidence_url}" target="_blank">
@@ -386,6 +417,44 @@ function renderItems() {
       </div>
     </div>`).join("");
   ticket.items.forEach((item) => renderChecklistBox(item));
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function toggleItemNotesEditor(itemId, editing) {
+  const view = document.getElementById(`notesView-${itemId}`);
+  const edit = document.getElementById(`notesEdit-${itemId}`);
+  const btn = document.getElementById(`editNotesBtn-${itemId}`);
+  if (view) view.style.display = editing ? 'none' : 'block';
+  if (edit) edit.style.display = editing ? 'block' : 'none';
+  if (btn) btn.style.display = editing ? 'none' : 'inline-flex';
+}
+
+async function saveItemNotes(itemId) {
+  const item = (ticket?.items || []).find(x => x.id === itemId);
+  if (!item) return toast('Không tìm thấy mã hàng', 'error');
+  const customer_complaint = document.getElementById(`complaintInput-${itemId}`)?.value || '';
+  const diagnosis_note = document.getElementById(`diagnosisInput-${itemId}`)?.value || '';
+  const result_note = document.getElementById(`resultInput-${itemId}`)?.value || '';
+  try {
+    await api.patch(`/api/tickets/${ticketId}/items/${itemId}/notes`, {
+      customer_complaint,
+      diagnosis_note,
+      result_note,
+    });
+    toast('Đã lưu nội dung xử lý');
+    markTicketDetailDirty();
+    await loadTicket();
+  } catch (e) {
+    toast(e.message || 'Không lưu được nội dung xử lý', 'error');
+  }
 }
 
 function renderItemActions(item) {
