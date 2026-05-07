@@ -1,203 +1,143 @@
-# Plan — Warranty Management System
+# Plan
 
-## Tong quan du an
+## Role of This File
 
-Phan mem quan ly bao hanh noi bo cho CRETA.
+File nay khong lap lai setup guide hay architecture reference.
 
-- Backend: Python FastAPI + SQLAlchemy
-- Frontend: HTML/CSS/JS thuan, multi-page app (`apps/web/`)
-- Auth: Cookie session, luu trong PostgreSQL/SQLite qua bang `user_sessions`
-- Database hien tai: PostgreSQL remote la chinh, SQLite la fallback legacy/dev
-- In phieu: HTML -> `window.print()` hoac endpoint HTML print
-- Master data: khach hang + san pham theo huong Odoo-first
+No duoc dung de ghi:
 
----
+- current state sau release `1.2.0`
+- cac quyet dinh nghiep vu/ky thuat da chot
+- backlog uu tien tiep theo
 
-## Kien truc hien tai
+## Current State
 
-### Backend
+### Release baseline
 
-- `apps/server/main.py`: FastAPI app, CORS, auth middleware, mount uploads/static
-- `apps/server/database.py`: load `.env`, tao engine theo `DATABASE_URL`, ho tro PostgreSQL va SQLite
-- `apps/server/models.py`: ORM models cho warranty workflow, user/session, checklist, return slip
-- `apps/server/routers/`:
-  - `auth.py`: login, logout, me, seed/create user co ban
-  - `admin.py`: CRUD user danh cho admin
-  - `tickets.py`: CRUD phiếu, chuyển trạng thái, rollback, deadline, notify-late
-  - `masters.py`: customers/products/suppliers CRUD + search
-  - `supplier_orders.py`: phiếu gửi NCC
-  - `supplier_receives.py`: phiếu nhận NCC
-  - `checklists.py`: template, mapping, run, evidence, finalize
-  - `return_slips.py`: phiếu trả khách, pack/delivered flow
-  - `transactions.py`: thu/chi, báo cáo, in phiếu
-  - `tasks.py`: dashboard việc cần làm, nhóm trạng thái, quick actions
+- current release line: `1.2.0`
+- default working branch sau release: `main`
+- backend runtime: FastAPI + SQLAlchemy
+- frontend runtime: static multi-page HTML/CSS/JS
+- primary DB: PostgreSQL
+- legacy fallback DB: SQLite
+- master data direction: Odoo-first
 
-### Frontend
+### What is working now
 
-- `apps/web/assets/api.js`: API wrapper, auth helper, toast, formatter
-- `apps/web/assets/layout.js`: sidebar component dung chung
-- `apps/web/index.html`: dashboard + viec can lam
-- `apps/web/login.html`: login page
-- `apps/web/admin/users.html`: quan ly user
-- `apps/web/admin/checklist-templates.html`: quan ly checklist template
-- `apps/web/tickets/*`: danh sach, tao moi, chi tiet phieu
-- `apps/web/supplier-orders/*`: gui NCC
-- `apps/web/supplier-receives/*`: nhan hang NCC tra ve
-- `apps/web/return-slips/*`: danh sach + chi tiet phieu tra khach
-- `apps/web/finance/report.html`: bao cao thu/chi
+#### Auth and admin
 
-### Runtime configuration
+- login/logout/me theo session cookie
+- admin user management
+- role-based menu rendering
 
-Tat ca cong va env chinh duoc tap trung qua file `.env`:
+#### Ticket workflow
 
-- `BACKEND_PORT`
-- `FRONTEND_PORT`
-- `BACKEND_URL`
-- `FRONTEND_URL`
-- `DATABASE_URL`
+- tao ticket
+- list/search/detail
+- state transition
+- rollback
+- deadline extension
+- notify late
 
-Script da doc `.env`:
+#### Supplier workflow
 
-- `start.sh`
-- `start_windows.bat`
-- `stop_windows.bat`
+- phieu gui NCC
+- xac nhan gui NCC co evidence image
+- phieu nhan NCC tra ve
+- in phieu NCC
 
----
+#### Checklist workflow
 
-## Database hien tai
+- checklist templates
+- template mapping theo stage/item
+- checklist run
+- evidence upload
+- finalize conclusion
 
-### He quan tri CSDL
+#### Return workflow
 
-- Production/runtime chinh: PostgreSQL remote tren `svr3.camerangochoang.com`
-- Fallback/dev cu: SQLite
+- tao phieu tra khach
+- candidate items tu C2/C3
+- confirm pack C4 -> C5
+- confirm delivered C5 -> C6
+- image evidence cho pack/delivered
+- print return slip
 
-### Bang chinh
+#### Master data
 
-| Bang | Mo ta |
-|---|---|
-| `users` | Tai khoan nguoi dung |
-| `user_sessions` | Session dang nhap |
-| `suppliers` | Nha cung cap |
-| `customers` | Khach hang |
-| `products` | San pham |
-| `tickets` | Phieu bao hanh |
-| `ticket_items` | Tung ma hang trong phieu |
-| `workflow_logs` | Nhat ky chuyen trang thai |
-| `supplier_orders` | Phieu gui NCC |
-| `supplier_order_items` | Items trong phieu gui NCC |
-| `supplier_receives` | Phieu nhan hang NCC |
-| `supplier_receive_items` | Items trong phieu nhan NCC |
-| `checklist_templates` | Mau checklist |
-| `checklist_template_items` | Item cua template |
-| `checklist_template_changes` | Lich su doi mapping checklist |
-| `checklist_runs` | Lan chay checklist |
-| `checklist_run_items` | Ket qua tung item checklist |
-| `checklist_evidences` | Anh minh chung checklist |
-| `return_slips` | Phieu tra khach |
-| `return_slip_items` | Items trong phieu tra |
-| `transactions` | Thu/chi |
-| `sync_states` | Trang thai dong bo |
+- customer/product/supplier pages
+- customer/product sync theo Odoo
+- customer merge theo phone
+- customer_code support (`KHxxxxxx`)
 
----
+#### Frontend structure
 
-## Workflow nghiep vu hien tai
+- shared sidebar qua `layout.js`
+- shared API/auth helpers qua `api.js`
+- da loai bo phan lon sidebar hardcode cu
 
-```text
-A1  Tiep nhan / Test hang
-A2  Lien he khach chot xu ly
-A3  Chuan bi chuyen NCC
-B1  Da gui / dang chuyen NCC
-B2  NCC dang xu ly
-C1  NCC tra ve - kiem tra lai
-C2  PASS - cho tra khach
-C3  NO PASS - xu ly tiep
-C4  Can thu tien / lap phieu tra
-C5  Dong goi / giao tra khach
-C6  Hoan thanh
-```
+## Confirmed Business Rules
 
----
+### Customer identity
 
-## Tinh trang hien tai
+- `phone` la ID goc cua customer trong van hanh noi bo
+- `customer_code` la external/master reference
+- trung `phone` thi co the merge customer
+- khi merge/sync, uu tien du lieu Odoo
 
-### Da hoan thanh
+### Evidence-driven transitions
 
-- [x] Chuyen runtime config sang `.env`
-- [x] Dong bo script start/stop cho macOS va Windows
-- [x] Chuyen backend runtime tu port 8000 sang 8001 theo cau hinh
-- [x] Chuyen he thong sang PostgreSQL remote
-- [x] Refactor `database.py` de ho tro PostgreSQL va SQLite
-- [x] Bo sung model `ReturnSlip`, `ReturnSlipItem` va cac field lien quan
-- [x] Hoan thanh auth co session cookie
-- [x] Tao tai khoan admin mac dinh
-- [x] Tao trang quan ly user cho admin
-- [x] Hoan thanh checklist template, mapping, run, finalize
-- [x] Hoan thanh flow phieu tra khach C4 -> C5 -> C6
-- [x] Hoan thanh phieu gui NCC va phieu nhan NCC
-- [x] Dashboard viec can lam theo workflow
-- [x] Sidebar frontend da duoc chuan hoa bang component `layout.js`
+- gui NCC phai co anh bang chung
+- return slip C4/C5 da theo UX `chon anh -> bam xac nhan -> he thong upload va chuyen buoc`
 
-### Da cap nhat moi nhat
+### Actor handling
 
-- [x] Loai bo sidebar hardcode tren cac trang frontend
-- [x] Tap trung menu dieu huong vao `apps/web/assets/layout.js`
-- [x] Them menu admin co dieu kien theo role
-- [x] Dong bo docs voi runtime PostgreSQL va auth/user management
+- backend co the resolve actor tu session
+- frontend nen uu tien auto-fill actor theo user dang nhap
+- khong bat user nhap ten thu cong o cac step thong thuong neu khong can thiet
 
-### Con ton / backlog gan
+## Active Technical Debt
 
-- [ ] Sieu chat validation workflow o backend theo quy dinh nghiep vu
-- [ ] Tach migration schema chuyen nghiep (Alembic) thay cho create_all + patch logic
-- [ ] Chot chinh sach role chi tiet hon tren tung endpoint
-- [ ] Chot Odoo credential production va mapping field/model chinh xac
-- [ ] Import/migrate du lieu cu tu SQLite neu can
+### High priority
 
----
+- chua co Alembic migrations chuan
+- `database.py` van con schema patch logic cho compatibility
+- permission model chua du chi tiet theo endpoint/action
+- `.env.example` chua khop hoan toan runtime that
+- con mot so script/tooling cu chua theo runtime hien tai
 
-## Cach khoi dong
+### Medium priority
 
-```bash
-./start.sh
-```
+- con kha nhieu naming legacy `kiotviet_*`
+- docs phu can tiep tuc don dep them (`plan_1.md`, mot so note cu)
+- can review lai toan bo UI de bat cac cho con sot sau khi migrate sang `layout.js`
 
-Mac dinh:
+## Next Priorities
 
-- Backend: `http://localhost:8001`
-- Frontend: `http://localhost:3000`
-- API docs: `http://localhost:8001/docs`
+### P1
 
----
+1. Dua schema migration sang Alembic.
+2. Chot permission matrix theo role va action.
+3. Sieu chat workflow validation o backend.
+4. Chuan hoa `.env.example` va startup/proxy scripts cho dung runtime hien tai.
 
-## API chinh dang co
+### P2
 
-| Method | Endpoint | Mo ta |
-|---|---|---|
-| POST | `/api/auth/login` | Dang nhap |
-| POST | `/api/auth/logout` | Dang xuat |
-| GET | `/api/auth/me` | User hien tai |
-| GET | `/api/admin/users` | Danh sach user |
-| POST | `/api/admin/users` | Tao user |
-| PATCH | `/api/admin/users/{id}` | Sua user |
-| DELETE | `/api/admin/users/{id}` | Xoa user |
-| POST | `/api/tickets` | Tao phieu moi |
-| GET | `/api/tickets` | List/search phieu |
-| GET | `/api/tickets/{id}` | Chi tiet phieu |
-| POST | `/api/tickets/{id}/extend-deadline` | Gia han deadline |
-| POST | `/api/tickets/{id}/notify-late` | Ghi nhan da bao khach |
-| GET | `/api/tasks/pending` | Viec can lam |
-| GET | `/api/checklists/templates` | Danh sach template |
-| POST | `/api/checklists/runs` | Tao run checklist |
-| GET | `/api/checklists/runs/{id}` | Chi tiet run |
-| POST | `/api/return-slips` | Tao phieu tra |
-| GET | `/api/return-slips/list` | Danh sach phieu tra |
-| POST | `/api/return-slips/{id}/confirm-pack` | Xac nhan dong goi |
-| POST | `/api/return-slips/{id}/confirm-delivered` | Xac nhan giao khach |
+1. Giam debt compatibility schema legacy.
+2. Chuan hoa naming field external/master data.
+3. Review va polish UX cac flow co upload evidence.
+4. Hoan thien docs con lai de theo dung role tung file.
 
----
+### P3
 
-## Ghi chu quan trong
+1. Chot migration strategy tu SQLite neu can giu du lieu cu.
+2. Xem lai integration boundary giua Odoo data va local runtime data.
+3. Can nhac tach reusable frontend patterns cho modal/form-heavy pages.
 
-- `apps/web/checklists/run.html` la trang full-page rieng, khong dung sidebar component
-- `login.html` khong dung sidebar component
-- Sidebar app da duoc tap trung 100% vao `apps/web/assets/layout.js`
-- Master data search/sync backend da duoc doi sang Odoo-first, nhung van giu field legacy de tranh migration lon ngay lap tuc
+## Working Notes
+
+Khi co release moi, file nay nen duoc cap nhat theo huong:
+
+- bo sung current state moi
+- bo nhung backlog da xong
+- khong chen lai setup guide hay architecture detail

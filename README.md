@@ -2,38 +2,55 @@
 
 He thong quan ly bao hanh noi bo cho CRETA.
 
-Du an hien tai da hoan thien backend FastAPI, frontend multi-page HTML/CSS/JS, auth theo session, workflow NCC, checklist, phieu tra khach, va database runtime PostgreSQL.
+Ban `1.2.0` hien da co:
+
+- backend FastAPI + SQLAlchemy
+- frontend multi-page HTML/CSS/JS
+- login theo session cookie
+- workflow ticket, NCC, checklist, return slip, finance
+- runtime database PostgreSQL
+- Odoo-first master data sync cho customers/products
+
+## Docs Map
+
+- `README.md`: setup, runbook, su dung nhanh
+- `ARCHITECTURE.md`: kien truc va module structure
+- `plan.md`: current state, backlog, roadmap
+- `docs/data-design.md`: data design va runtime data notes
 
 ## Quick Start
 
-### 1. Yeu cau moi truong
+### Requirements
 
 - macOS hoac Windows
 - Python 3
-- Virtual environment cho backend da duoc tao trong `apps/server/.venv`
-- Co file `.env` o root project
+- backend virtualenv da co trong `apps/server/.venv`
+- file `.env` o root project
+- neu dung PostgreSQL remote thi can ket noi mang toi DB server
 
-Neu chay voi PostgreSQL remote, can co ket noi mang toi database server.
+### Configure `.env`
 
-### 2. Cau hinh `.env`
-
-Vi du:
+Can it nhat cac bien sau:
 
 ```env
 BACKEND_PORT=8001
 FRONTEND_PORT=3000
 BACKEND_URL=http://localhost:8001
 FRONTEND_URL=http://localhost:3000
-DATABASE_URL=postgresql://warranty_user:***@svr3.camerangochoang.com:5432/warranty
+DATABASE_URL=postgresql://<user>:<password>@<host>:5432/<db>
+
 ODOO_BASE_URL=https://odoo.creta.vn
-ODOO_DB=<ten_database_odoo>
-ODOO_USERNAME=<tai_khoan_odoo>
-ODOO_PASSWORD=<mat_khau_odoo>
+ODOO_DB=<odoo_db>
+ODOO_USERNAME=<odoo_user>
+ODOO_PASSWORD=<odoo_password>
 ```
 
-Neu khong set `DATABASE_URL`, he thong se fallback ve SQLite legacy/dev.
+Luu y:
 
-### 3. Chay he thong
+- neu khong set `DATABASE_URL`, app se fallback ve SQLite legacy/dev
+- runtime chinh hien tai la PostgreSQL, khong phai SQLite
+
+### Start the app
 
 macOS / Linux:
 
@@ -49,24 +66,35 @@ start_windows.bat
 
 Mac dinh:
 
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:8001`
+- frontend: `http://localhost:3000`
+- backend: `http://localhost:8001`
 - API docs: `http://localhost:8001/docs`
 
-### 4. Dang nhap
-
-Tai khoan admin hien tai:
-
-- Username: `admin`
-- Password: `admin123`
+### Login
 
 Trang dang nhap:
 
 - `http://localhost:3000/login.html`
 
-## Developer Onboarding
+Tai khoan admin mac dinh:
 
-## Cau truc thu muc
+- username: `admin`
+- password: `admin123`
+
+## Stop the app
+
+Windows:
+
+```bat
+stop_windows.bat
+```
+
+macOS / Linux:
+
+- neu dang chay foreground qua `./start.sh` thi dung `Ctrl+C`
+- neu can, kill process theo `BACKEND_PORT` va `FRONTEND_PORT`
+
+## Project Structure
 
 ```text
 Warranty/
@@ -75,15 +103,14 @@ Warranty/
       main.py
       database.py
       models.py
+      odoo/
       routers/
+      services/
       uploads/
       .venv/
     web/
-      assets/
-        api.js
-        app.css
-        layout.js
       admin/
+      assets/
       checklists/
       finance/
       masters/
@@ -97,123 +124,60 @@ Warranty/
     data-design.md
   scripts/
     prepare_data.py
-  .env
   ARCHITECTURE.md
+  README.md
   plan.md
-  plan_1.md
 ```
 
-## Kien truc ngan gon
-
-- Frontend static files trong `apps/web`
-- Backend FastAPI trong `apps/server`
-- Shared sidebar frontend trong `apps/web/assets/layout.js`
-- Shared API/auth helpers trong `apps/web/assets/api.js`
-- Primary DB la PostgreSQL, fallback la SQLite
-
-Tai lieu kien truc chi tiet hon:
-
-- `ARCHITECTURE.md`
-
-## Database
-
-### Runtime hien tai
-
-- Primary: PostgreSQL remote
-- Fallback: SQLite
-
-### Luu y
-
-- `apps/server/database.py` se uu tien `DATABASE_URL`
-- Neu khong co `DATABASE_URL`, no se fallback sang file DB local
-- Mot so logic patch schema legacy van con trong `database.py` de ho tro SQLite cu
-
-## Runbook cho dev
-
-### Khoi dong app
-
-```bash
-./start.sh
-```
-
-### Dung app
-
-Windows:
-
-```bat
-stop_windows.bat
-```
-
-macOS/Linux:
-
-- Dung process bang `Ctrl+C` neu chay foreground
-- Hoac kill port theo `BACKEND_PORT` / `FRONTEND_PORT`
-
-### Backend dependency
-
-Virtual environment hien tai:
-
-- `apps/server/.venv`
-
-Neu can cai them package:
-
-```bash
-apps/server/.venv/bin/pip install <package>
-```
-
-### Test API nhanh
-
-Mo docs:
-
-- `http://localhost:8001/docs`
-
-## Cac module nghiep vu da co
+## Main Features
 
 ### Tickets
 
-- Tao phieu bao hanh
-- Search/list/detail ticket
-- Workflow state transition
-- Rollback
-- Deadline extend
-- Notify late
+- tao phieu bao hanh
+- list/search/detail ticket
+- state transition theo workflow
+- rollback
+- deadline extend
+- notify late
 
-### Supplier
+### Supplier flow
 
-- Phieu gui NCC
-- Phieu nhan NCC tra ve
-- In phieu NCC
+- phieu gui NCC
+- xac nhan gui NCC co evidence image
+- phieu nhan NCC tra ve
+- in phieu NCC
 
-### Checklist
+### Checklists
 
-- Checklist templates
-- Mapping template theo item/stage
-- Checklist runs
-- Evidence upload
-- Finalize conclusion
+- checklist templates
+- mapping checklist theo stage/item
+- checklist run
+- evidence upload
+- finalize conclusion
 
 ### Return slips
 
-- Tao phieu tra khach
-- Candidate items tu C2/C3
-- Pack image
-- Delivered image
-- Confirm pack / confirm delivered
-- Print phieu tra
+- lap phieu tra khach
+- candidate items tu C2/C3
+- pack image
+- delivered image
+- confirm pack / confirm delivered
+- print phieu tra khach
 
 ### Finance
 
-- Thu/chi
-- Bao cao tong hop
+- thu/chi
+- bao cao tong hop
 
 ### Admin
 
-- Quan ly user
-- Role-based menu
+- user management
+- checklist template management
+- role-based navigation
 
-## Frontend conventions
+## Frontend Conventions
 
-- Cac page thong thuong dung shell layout:
+Hau het page dung shell layout sau:
 
 ```html
 <div class="shell">
@@ -222,30 +186,69 @@ Mo docs:
 </div>
 ```
 
-- Sidebar duoc render tu `layout.js`, khong hardcode lai tren tung page
-- Hai ngoai le hien tai:
-  - `login.html`
-  - `checklists/run.html`
+Khong hardcode sidebar tren tung page nua.
 
-## Odoo master data
+Sidebar duoc render tu:
 
-- Master data khach hang va san pham dang duoc chuyen sang huong Odoo-first
-- Backend se uu tien lay du lieu tu `odoo.creta.vn` neu da cau hinh `ODOO_*` trong `.env`
-- Ma khach hang nghiep vu quan trong nhat tai CRETA la `KHxxxxxx`, hien duoc lay tu field Odoo `res.partner.x_kiotviet_1`
-- Neu chua co credential hop le, backend se fallback sang mock/local de khong lam vo luong nghiep vu hien tai
-- Cac field va ten bien legacy co tu `kiotviet_*` van duoc giu tam de tranh migration lon ngay lap tuc
+- `apps/web/assets/layout.js`
 
-## Tai lieu quan trong
+API/auth helpers nam trong:
 
-- `ARCHITECTURE.md`: kien truc he thong
-- `plan.md`: tong quan tinh trang hien tai va backlog
-- `plan_1.md`: cap nhat phase 2
-- `docs/data-design.md`: thiet ke du lieu va runtime data layout
+- `apps/web/assets/api.js`
 
-## Backlog ky thuat uu tien cao
+Hai page khong dung shell nay:
+
+- `login.html`
+- `checklists/run.html`
+
+## Master Data Notes
+
+He thong hien dang theo huong Odoo-first cho customer/product master data.
+
+Luu y quan trong:
+
+- `phone` duoc xem la customer identity trong van hanh noi bo
+- `customer_code` (`KHxxxxxx`) la ma reference nghiep vu/master
+- neu trung `phone` thi customer co the duoc merge
+- khi merge/sync, du lieu Odoo duoc uu tien
+
+Code lien quan nam o:
+
+- `apps/server/odoo/client.py`
+- `apps/server/services/odoo_sync.py`
+- `apps/server/routers/masters.py`
+
+## Developer Notes
+
+### Backend environment
+
+Virtualenv hien tai:
+
+- `apps/server/.venv`
+
+Neu can cai package moi:
+
+```bash
+apps/server/.venv/bin/pip install <package>
+```
+
+### Test API quickly
+
+- mo `http://localhost:8001/docs`
+- hoac goi truc tiep cac endpoint `/api/...`
+
+### Data / processed artifacts
+
+Neu can tai tao processed data:
+
+```bash
+python3 scripts/prepare_data.py
+```
+
+## Current Technical Priorities
 
 - Alembic migration cho PostgreSQL
-- Sieu chat workflow validation
-- Permission chi tiet theo role
-- Migrate du lieu legacy neu can
-- Dong bo Odoo production that va chot mapping model/field
+- sieu chat workflow validation o backend
+- permission chi tiet theo role
+- chuan hoa env/sample script theo runtime hien tai
+- giam debt compatibility tu schema legacy

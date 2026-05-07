@@ -1,123 +1,179 @@
 # Architecture
 
-## Overview
+## Purpose
 
 Warranty Management System la he thong quan ly bao hanh noi bo cho CRETA.
 
-He thong hien tai duoc to chuc theo mo hinh:
+Tai lieu nay mo ta:
 
-- Frontend static multi-page app
-- Backend FastAPI
-- Database quan he
-- Uploaded evidence files luu tren filesystem
+- cac thanh phan chinh cua he thong
+- ranh gioi giua frontend, backend, database, file storage
+- cau truc module hien tai
+- mot so quyet dinh ky thuat quan trong cua ban `1.2.0`
+
+`README.md` duoc dung cho setup va runbook.
+
+`plan.md` duoc dung cho current state va roadmap.
+
+## System Shape
 
 ```text
 Browser
-  -> Frontend static pages (`apps/web`)
+  -> Static frontend pages (`apps/web`)
   -> FastAPI backend (`apps/server`)
   -> PostgreSQL (primary runtime database)
-  -> uploads/ (evidence images)
+  -> Local uploads directory (`apps/server/uploads`)
+  -> Odoo (`odoo.creta.vn`) cho customer/product master data
 ```
 
-## Main Components
+## Runtime Components
 
 ### Frontend
 
 Thu muc: `apps/web`
 
-Cong nghe:
+Frontend la multi-page app dung HTML/CSS/JS thuan.
 
-- HTML/CSS/JS thuan
-- Khong dung framework SPA
-- Dung `api.js` lam API wrapper
-- Dung `layout.js` lam shared sidebar component
+No khong su dung SPA framework. Moi trang tu tai du lieu qua API va tu quan ly state can thiet cua chinh no.
 
-Modules chinh:
+Frontend phu thuoc vao 2 file shared quan trong:
 
-- `index.html`: dashboard + viec can lam
-- `login.html`: dang nhap
-- `tickets/`: tao, xem, cap nhat phieu bao hanh
+- `apps/web/assets/api.js`
+- `apps/web/assets/layout.js`
+
+#### Shared frontend utilities
+
+`api.js` phu trach:
+
+- API wrapper
+- cookie-based auth check
+- toast
+- date/money/state formatter
+- actor auto-fill helpers
+
+`layout.js` phu trach:
+
+- render sidebar chung
+- render topbar user neu trang co `#topbarUser`
+- menu theo role
+- active nav theo current path
+
+#### Frontend module groups
+
+- `index.html`: dashboard va pending tasks
+- `login.html`: login page
+- `tickets/`: ticket list, create, detail
 - `supplier-orders/`: phieu gui NCC
-- `supplier-receives/`: phieu nhan hang NCC tra ve
+- `supplier-receives/`: phieu nhan NCC tra ve
 - `return-slips/`: phieu tra khach
-- `admin/`: user management, checklist templates
-- `finance/`: thu/chi va bao cao
-- `masters/`: danh muc khach hang, san pham, nha cung cap
+- `checklists/`: checklist run page
+- `masters/`: suppliers, customers, products
+- `finance/`: transaction report
+- `admin/`: user management, checklist template management
 
-### Backend
+#### Layout rule
+
+Hau het frontend pages dung shell sau:
+
+```html
+<div class="shell">
+  <aside class="sidebar"></aside>
+  <div class="main">...</div>
+</div>
+```
+
+Hai ngoai le hien tai:
+
+- `apps/web/login.html`
+- `apps/web/checklists/run.html`
+
+## Backend
 
 Thu muc: `apps/server`
 
-Cong nghe:
+Backend dung FastAPI + SQLAlchemy.
 
-- FastAPI
-- SQLAlchemy ORM
-- Cookie-based session auth
+No phu trach:
 
-Files chinh:
+- nghiep vu warranty workflow
+- auth va session
+- CRUD va search master data
+- sync Odoo
+- upload va serve evidence files
+- in phieu HTML
 
-- `main.py`: app entrypoint, middleware, routers, static/uploads mount
-- `database.py`: env loading, SQLAlchemy engine/session, db bootstrap
-- `models.py`: toan bo ORM models
+### Main backend files
 
-Routers:
+- `main.py`: app entry, middleware, router registration, uploads mount
+- `database.py`: env loading, engine/session setup, bootstrap DB logic
+- `models.py`: ORM models
 
-- `auth.py`: login/logout/me
-- `admin.py`: CRUD user danh cho admin
-- `tickets.py`: ticket workflow
+### Router modules
+
+- `auth.py`: login, logout, me, actor resolution
+- `admin.py`: CRUD users cho admin
+- `tickets.py`: ticket workflow, rollback, deadline, notify-late
 - `tasks.py`: dashboard pending tasks
-- `masters.py`: master data CRUD/search
+- `masters.py`: customers/products/suppliers CRUD, list, search, sync trigger
 - `supplier_orders.py`: phieu gui NCC
 - `supplier_receives.py`: phieu nhan NCC
-- `checklists.py`: checklist template/mapping/run
+- `checklists.py`: template, mapping, run, evidence, finalize
 - `return_slips.py`: phieu tra khach
 - `transactions.py`: thu/chi va report
 
-## Database Architecture
+### Middleware/auth model
+
+He thong dung cookie-based session auth.
+
+Flow tong quan:
+
+1. frontend goi `/api/auth/login`
+2. backend tao record trong `user_sessions`
+3. backend set cookie `session_id`
+4. request sau do duoc backend doc cookie de resolve current user khi can
+
+Luu y: middleware auth hien tai chu yeu inject context session. Viec endpoint nao bat buoc auth/actor duoc quyet dinh trong tung router.
+
+## Data Layer
 
 ### Primary runtime database
 
 - PostgreSQL
-- Cau hinh qua `DATABASE_URL` trong `.env`
+- cau hinh qua `DATABASE_URL`
 
 ### Fallback database
 
 - SQLite
-- Chi de giu kha nang dev/legacy fallback
+- giu lai de phuc vu legacy/dev fallback
 
 ### Main entity groups
 
-Auth:
+#### Auth
 
 - `users`
 - `user_sessions`
 
-Master data:
+#### Master data
 
 - `customers`
 - `products`
 - `suppliers`
 - `sync_states`
 
-Luu y:
-
-- `customers.customer_code` duoc dung de luu ma nghiep vu `KHxxxxxx`
-- Nguon uu tien cua ma nay la field Odoo `res.partner.x_kiotviet_1`
-
-Warranty workflow:
+#### Warranty workflow
 
 - `tickets`
 - `ticket_items`
 - `workflow_logs`
 
-Supplier workflow:
+#### Supplier workflow
 
 - `supplier_orders`
 - `supplier_order_items`
 - `supplier_receives`
 - `supplier_receive_items`
 
-Checklist workflow:
+#### Checklist workflow
 
 - `checklist_templates`
 - `checklist_template_items`
@@ -126,18 +182,86 @@ Checklist workflow:
 - `checklist_run_items`
 - `checklist_evidences`
 
-Return workflow:
+#### Return workflow
 
 - `return_slips`
 - `return_slip_items`
 
-Finance:
+#### Finance
 
 - `transactions`
 
+## Master Data Strategy
+
+### Odoo-first
+
+Customer va product master data hien theo huong Odoo-first.
+
+Nguon chinh:
+
+- `ODOO_BASE_URL`
+- `ODOO_DB`
+- `ODOO_USERNAME`
+- `ODOO_PASSWORD`
+
+Code lien quan:
+
+- `apps/server/odoo/client.py`
+- `apps/server/services/odoo_sync.py`
+- `apps/server/routers/masters.py`
+
+### Customer identity rule
+
+Quyet dinh nghiep vu hien tai:
+
+- `phone` duoc xem la ID goc cua customer trong van hanh noi bo
+- `customer_code` la ma reference nghiep vu/master (`KHxxxxxx`)
+- neu trung `phone` thi customer se duoc merge
+- khi sync Odoo, thong tin Odoo duoc uu tien ap len record cuoi cung
+
+### Legacy field note
+
+Mot so field ten `kiotviet_*` van con duoc giu lai trong schema de tranh migration lon ngay lap tuc.
+
+Chung dang dong vai tro compatibility layer, khong con phan anh chien luoc master data chinh nua.
+
+## File Storage
+
+Thu muc uploads:
+
+- `apps/server/uploads`
+
+Dung de luu:
+
+- ticket item evidence
+- checklist evidence
+- supplier order evidence
+- return slip pack image
+- return slip delivered image
+
+Backend mount uploads qua route:
+
+- `/uploads/...`
+
+## Workflow Model
+
+Workflow item-level hien tai:
+
+```text
+A1 -> A2 -> A3 -> B1 -> B2 -> C1 -> C2/C3 -> C4 -> C5 -> C6
+```
+
+He thong ho tro them:
+
+- rollback workflow
+- checklist A2/C1
+- supplier send/receive flow
+- return slip flow
+- transaction ghi thu/chi
+
 ## Runtime Configuration
 
-Tat ca runtime config chinh duoc tap trung trong `.env`.
+Runtime config duoc doc tu `.env` o root project.
 
 Bien quan trong:
 
@@ -146,79 +270,29 @@ Bien quan trong:
 - `BACKEND_URL`
 - `FRONTEND_URL`
 - `DATABASE_URL`
+- `ODOO_BASE_URL`
+- `ODOO_DB`
+- `ODOO_USERNAME`
+- `ODOO_PASSWORD`
 
-Scripts doc `.env`:
+Scripts chinh dang duoc dung:
 
 - `start.sh`
 - `start_windows.bat`
 - `stop_windows.bat`
 
-## Authentication Model
+## Known Constraints
 
-- User dang nhap qua `/api/auth/login`
-- Backend tao session va set cookie `session_id`
-- Cookie duoc gui kem moi request API
-- Backend resolve session qua bang `user_sessions`
-- Admin role co them quyen quan ly user va mot so menu he thong
+- chua co Alembic migrations chuan
+- `database.py` van con patch logic de ho tro schema legacy
+- permission model moi o muc co ban, chua thiet ke matrix role/action day du
+- SQLite fallback con ton tai nen mot so quyet dinh code van phai giu tinh compatibility
+- `.env.example` va mot so script cu chua theo kip hoan toan runtime hien tai
 
-## Navigation / Layout Strategy
-
-- Shared sidebar duoc render tu `apps/web/assets/layout.js`
-- Cac page shell chi can:
-
-```html
-<aside class="sidebar"></aside>
-```
-
-- `layout.js` se:
-  - check auth
-  - render sidebar
-  - render topbar user neu co `#topbarUser`
-  - active menu theo current path
-
-Ngoai le:
-
-- `apps/web/login.html` khong co sidebar
-- `apps/web/checklists/run.html` la full-page task page, khong dung shell sidebar
-
-## File Storage
-
-Thu muc: `apps/server/uploads`
-
-Dung de luu:
-
-- evidence ticket item
-- checklist evidence
-- return slip pack image
-- return slip delivered image
-
-Frontend truy cap file qua route `/uploads/...`
-
-## Workflow Summary
-
-```text
-A1 -> A2 -> A3 -> B1 -> B2 -> C1 -> C2/C3 -> C4 -> C5 -> C6
-```
-
-Bo sung workflow support:
-
-- rollback
-- checklist A2/C1
-- supplier send/receive
-- return slip creation + pack + delivered confirmation
-- finance transaction recording
-
-## Known Technical Debt
-
-- Chua co Alembic migration chuan cho PostgreSQL
-- Van con logic patch schema trong `database.py` de ho tro SQLite legacy
-- Permission hien moi o muc co ban, can siet chat them theo action/endpoint
-- Chua dong bo KiotViet production
-
-## Recommended Next Steps
+## Architectural Priorities After 1.2.0
 
 1. Dua schema migration sang Alembic.
-2. Tach seed/bootstrap data khoi startup flow.
-3. Chot ma tran permission theo role.
-4. Hoan thien quy trinh migrate du lieu cu tu SQLite.
-5. Chot mapping Odoo production va bo ten field legacy `kiotviet_*` khi san sang migrate schema.
+2. Tach schema bootstrap/seed khoi startup runtime.
+3. Chot permission model theo role va action.
+4. Giam dan compatibility code legacy `kiotviet_*` khi schema migration san sang.
+5. Chuan hoa lai env/sample scripts theo runtime that dang dung.
