@@ -250,7 +250,9 @@ async function loadTicket() {
   if (mySeq !== loadTicketSeq) return;
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("content").style.display = "block";
-  document.getElementById("pageTitle").textContent = ticket.ticket_no;
+  const ticketHeader = `Phiếu bảo hành ${ticket.ticket_no}${ticket.customer_name ? ` - ${ticket.customer_name}` : ''}`;
+  document.title = ticketHeader;
+  document.getElementById("pageTitle").textContent = ticketHeader;
   document.getElementById("ticketNo").textContent = ticket.ticket_no;
   document.getElementById("cusName").textContent = ticket.customer_name || "—";
   document.getElementById("cusPhone").textContent = ticket.customer_phone || "";

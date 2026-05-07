@@ -2,7 +2,7 @@
 
 Hệ thống quản lý bảo hành nội bộ cho CRETA.
 
-Phiên bản `1.3.2` hiện có:
+Phiên bản `1.3.4` hiện có:
 
 - backend FastAPI + SQLAlchemy
 - frontend multi-page HTML/CSS/JS

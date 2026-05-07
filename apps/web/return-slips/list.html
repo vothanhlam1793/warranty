@@ -208,18 +208,24 @@ function renderCard(x) {
   const detailHref = isSlipShape
     ? `/return-slips/detail.html?id=${x.id}`
     : `/return-slips/detail.html?item_id=${x.id}`;
+  const printHref = isSlipShape
+    ? `/api/return-slips/${x.id}/print`
+    : detailHref;
 
   let actionBtns = '';
   if (state === 'C4') {
     actionBtns = `
+      <a class="btn btn-secondary btn-sm" href="${printHref}" target="_blank" rel="noopener">🖨 In phiếu</a>
       <a class="btn btn-primary btn-sm" href="${detailHref}">📦 Mở chi tiết C4</a>
       <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
   } else if (state === 'C5') {
     actionBtns = `
+      <a class="btn btn-secondary btn-sm" href="${printHref}" target="_blank" rel="noopener">🖨 In phiếu</a>
       <a class="btn btn-primary btn-sm" href="${detailHref}">🚚 Mở chi tiết C5</a>
       <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
   } else if (state === 'C6') {
     actionBtns = `
+      <a class="btn btn-secondary btn-sm" href="${printHref}" target="_blank" rel="noopener">🖨 In phiếu</a>
       <span class="badge badge-green">✓ Hoàn thành ${x.delivered_at ? fmtDate(x.delivered_at.slice(0,10)) : (x.returned_date ? fmtDate(x.returned_date) : '')}</span>
       <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
   }

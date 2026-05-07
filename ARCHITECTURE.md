@@ -9,7 +9,7 @@ Tài liệu này mô tả:
 - cac thanh phan chinh cua he thong
 - ranh gioi giua frontend, backend, database, file storage
 - cau truc module hien tai
-- một số quyết định kỹ thuật quan trọng của bản `1.3.2`
+- một số quyết định kỹ thuật quan trọng của bản `1.3.4`
 
 `README.md` duoc dung cho setup va runbook.
 

@@ -287,13 +287,16 @@ def print_return_slip(slip_id: int, db: Session = Depends(get_db)):
     rows = ""
     for idx, rs_item in enumerate(slip.items, 1):
         ti = rs_item.ticket_item
+        item_note = ""
+        if ti:
+            item_note = ti.result_note or ti.diagnosis_note or ""
         rows += f"""
         <tr>
           <td>{idx}</td>
           <td><b>{ti.item_code if ti else ''}</b></td>
           <td>{ti.product.name if ti and ti.product else ''}</td>
           <td>{ti.serial_no or '' if ti else ''}</td>
-          <td>{ti.diagnosis_note or '' if ti else ''}</td>
+          <td>{item_note}</td>
         </tr>"""
 
     cust = slip.customer

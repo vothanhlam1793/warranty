@@ -207,7 +207,9 @@ async function loadPage() {
   item = (ticket.items || []).find(x => x.item_code === itemCode);
   if (!item) throw new Error(`Không tìm thấy item ${itemCode}`);
 
-  document.getElementById('pageTitle').textContent = `Mã ${item.item_code}`;
+  const itemHeader = `Chi tiết mã bảo hành ${item.item_code}${item.product_name ? ` - ${item.product_name}` : ''}`;
+  document.title = itemHeader;
+  document.getElementById('pageTitle').textContent = itemHeader;
   document.getElementById('ticketLinkTop').href = `/tickets/detail.html?id=${ticket.id}`;
   document.getElementById('itemCode').textContent = item.item_code || '—';
   document.getElementById('itemState').innerHTML = stateBadge(item.workflow_state);
