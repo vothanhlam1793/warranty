@@ -260,6 +260,18 @@ const TASK_CONFIG = [
     overdueAfter: 7,
   },
   {
+    states: ["B4"],
+    icon: "💬",
+    title: "B4 — Chờ khách chốt báo giá",
+    guide: "Mở chi tiết mã hàng để chốt khách đồng ý / không đồng ý báo giá và xử lý giao dịch nháp.",
+    guideType: "warn",
+    nextState: null,
+    nextLabel: null,
+    actionType: "open_item_detail",
+    showUpload: false,
+    overdueAfter: null,
+  },
+  {
     states: ["C1"],
     icon: "🔍",
     title: "C1 — NCC trả về, kiểm tra lại",
@@ -426,6 +438,8 @@ function renderTaskGroups(data) {
         } else if (cfg.actionType === "create_supplier_receive") {
           actionHtml = `<a class="btn-task primary" href="/supplier-receives/new.html">📥 Lập Phiếu nhận NCC</a>
       <a class="nav-item" href="/return-slips/list.html"><span class="icon">🧾</span>Phiếu trả khách</a>`;
+        } else if (cfg.actionType === "open_item_detail") {
+          actionHtml = `<a class="btn-task primary" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}">💬 Mở mã xử lý</a>`;
         } else if (cfg.actionType === "run_c1_checklist") {
             actionHtml = `<a class="btn-task primary" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}">🧪 Mở mã xử lý</a>`;
         } else if (cfg.actionType === "open_return_slip") {
@@ -625,10 +639,10 @@ async function loadDashboard() {
     </div>
   `;
 
-  const stateOrder = ["A1","A2","A3","B1","B2","C1","C2","C3","C4","C5","C6"];
+  const stateOrder = ["A1","A2","A3","B1","B2","B4","C1","C2","C3","C4","C5","C6"];
   const stateLabels = {
     A1:"Tiếp nhận", A2:"Liên hệ KH", A3:"Chuyển NCC",
-    B1:"NCC xử lý", B2:"Dài hạn",
+    B1:"NCC xử lý", B2:"Dài hạn", B4:"Chờ chốt giá",
     C1:"KT trả về", C2:"PASS", C3:"NO PASS",
     C4:"Thu tiền", C5:"Đóng gói", C6:"Hoàn thành",
   };
