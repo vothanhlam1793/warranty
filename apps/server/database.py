@@ -96,6 +96,11 @@ def init_db():
                 conn.execute(text("ALTER TABLE customers ADD COLUMN customer_code TEXT"))
     else:
         with engine.begin() as conn:
+            conn.execute(text("ALTER TYPE workflowstate ADD VALUE IF NOT EXISTS 'B4'"))
+            conn.execute(text("ALTER TYPE transactionstatus ADD VALUE IF NOT EXISTS 'draft'"))
+            conn.execute(text("ALTER TYPE transactionstatus ADD VALUE IF NOT EXISTS 'posted'"))
+            conn.execute(text("ALTER TYPE transactionstatus ADD VALUE IF NOT EXISTS 'cancelled'"))
+
             customer_col = conn.execute(text("""
                 SELECT 1
                 FROM information_schema.columns
