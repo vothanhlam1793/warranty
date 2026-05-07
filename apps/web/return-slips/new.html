@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Lập phiếu trả khách</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Lập phiếu trả khách</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <a href="/return-slips/list.html" class="btn btn-secondary btn-sm">← Danh sách phiếu trả</a>
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+      </div>
+    </div>
+
+    <div class="page" style="max-width:980px">
+      <div class="card mb-2">
+        <div class="card-header"><h2>Khách hàng</h2></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Tìm khách hàng</label>
+              <div style="position:relative">
+                <input id="customerSearch" class="form-control" placeholder="Nhập mã KH, tên hoặc SĐT..."/>
+                <div id="customerList" class="autocomplete-list" style="display:none"></div>
+              </div>
+            </div>
+            <div class="form-group full" id="selectedCustomerBox" style="display:none">
+              <div class="card" style="padding:.75rem 1rem;background:var(--accent-soft);border-color:var(--accent)">
+                <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap">
+                  <div>
+                    <b id="selectedCustomerName"></b>
+                    <span id="selectedCustomerPhone" class="text-muted text-sm"></span>
+                  </div>
+                  <button class="btn btn-ghost btn-sm" onclick="clearCustomer()">Xoá chọn</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Ghi chú phiếu trả <span style="color:var(--danger)">*</span></label>
+              <textarea id="slipNote" class="form-control" rows="3" placeholder="Ví dụ: Trả hàng đã sửa xong, hẹn khách nhận chiều nay..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-header"><h2>Các món đủ điều kiện trả khách</h2></div>
+        <div class="card-body">
+          <div id="candidateHint" class="text-sm text-muted">Chọn khách hàng để tải danh sách item ở trạng thái C2/C3.</div>
+          <div id="candidateList"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:.5rem">
+        <a href="/return-slips/list.html" class="btn btn-secondary">Huỷ</a>
+        <button class="btn btn-primary" onclick="submitReturnSlip()">✓ Lập phiếu trả khách</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+let selectedCustomer = null;
+let candidates = [];
+
+function qs(key) {
+  return new URLSearchParams(location.search).get(key);
+}
+
+async function init() {
+  await checkAuth();
+  setupCustomerAutocomplete();
+
+  const customerId = parseInt(qs('customer_id'), 10);
+  if (customerId) {
+    const res = await api.get(`/api/customers?limit=1&offset=0&q=${customerId}`);
+    const exact = (res.items || []).find(x => x.id === customerId);
+    if (exact) {
+      selectCustomer(exact);
+      return;
+    }
+  }
+}
+
+function setupCustomerAutocomplete() {
+  setupAutocomplete({
+    input: document.getElementById('customerSearch'),
+    listEl: document.getElementById('customerList'),
+    fetchFn: async (q) => {
+      const res = await api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=10`);
+      return res.items || [];
+    },
+    onSelect: {
+      renderItem: item => `${item.customer_code ? `<b>${item.customer_code}</b> · ` : ''}${item.name}<div class="sub">${item.phone || ''}</div>`,
+      pick: item => selectCustomer(item),
+    },
+  });
+}
+
+async function selectCustomer(customer) {
+  selectedCustomer = customer;
+  document.getElementById('selectedCustomerBox').style.display = 'block';
+  document.getElementById('selectedCustomerName').textContent = customer.customer_code ? `${customer.customer_code} - ${customer.name}` : customer.name;
+  document.getElementById('selectedCustomerPhone').textContent = customer.phone ? ` · ${customer.phone}` : '';
+  document.getElementById('customerSearch').value = '';
+  await loadCandidates();
+}
+
+function clearCustomer() {
+  selectedCustomer = null;
+  candidates = [];
+  document.getElementById('selectedCustomerBox').style.display = 'none';
+  document.getElementById('customerSearch').value = '';
+  document.getElementById('candidateHint').textContent = 'Chọn khách hàng để tải danh sách item ở trạng thái C2/C3.';
+  document.getElementById('candidateList').innerHTML = '';
+}
+
+async function loadCandidates() {
+  if (!selectedCustomer) return;
+  const res = await api.get(`/api/return-slips/candidates?customer_id=${selectedCustomer.id}`);
+  candidates = res.items || [];
+  document.getElementById('candidateHint').textContent = candidates.length
+    ? `Có ${candidates.length} item đủ điều kiện đưa vào phiếu trả.`
+    : 'Khách này chưa có item nào ở C2/C3 để lập phiếu trả.';
+  renderCandidates();
+}
+
+function renderCandidates() {
+  const root = document.getElementById('candidateList');
+  if (!candidates.length) {
+    root.innerHTML = '';
+    return;
+  }
+  root.innerHTML = candidates.map(item => `
+    <label style="display:flex;gap:.75rem;align-items:flex-start;padding:.8rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;cursor:pointer;background:#fff">
+      <input type="checkbox" class="candidate-check" value="${item.id}" ${shouldPreselectItem(item) ? 'checked' : ''}/>
+      <div style="flex:1">
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <b>${item.item_code || ('Item #' + item.id)}</b>
+          <span class="badge badge-gray">${item.ticket_no || '—'}</span>
+          <span class="badge badge-yellow">${item.workflow_state || ''}</span>
+        </div>
+        <div style="margin-top:.25rem">${item.product_name || '—'}</div>
+        <div class="text-sm text-muted" style="margin-top:.2rem">Serial: ${item.serial_no || '—'}</div>
+      </div>
+    </label>
+  `).join('');
+}
+
+function shouldPreselectItem(item) {
+  const ticketId = parseInt(qs('ticket_id'), 10);
+  return ticketId ? item.ticket_id === ticketId : true;
+}
+
+async function submitReturnSlip() {
+  if (!selectedCustomer) return toast('Chọn khách hàng trước', 'error');
+  const note = document.getElementById('slipNote').value.trim();
+  if (!note) return toast('Nhập ghi chú phiếu trả', 'error');
+  const item_ids = Array.from(document.querySelectorAll('.candidate-check:checked')).map(el => Number(el.value));
+  if (!item_ids.length) return toast('Chọn ít nhất 1 món', 'error');
+
+  const slip = await api.post('/api/return-slips', {
+    customer_id: selectedCustomer.id,
+    item_ids,
+    note,
+  });
+  toast('Đã lập phiếu trả khách');
+  location.href = `/return-slips/detail.html?id=${slip.id}`;
+}
+
+init().catch(e => toast(e.message || 'Lỗi tải trang', 'error'));
+</script>
+</body>
+</html>

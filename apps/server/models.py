@@ -49,6 +49,10 @@ class SupplierOrderStatus(str, enum.Enum):
     received = "received"  # NCC đã trả về
 
 
+class SupplierReceiveStatus(str, enum.Enum):
+    posted = "posted"
+
+
 # ─── Master data ──────────────────────────────────────────────────────────────
 
 class Supplier(Base):
@@ -72,6 +76,7 @@ class Customer(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
+    customer_code: Mapped[Optional[str]] = mapped_column(String(50))
     phone: Mapped[Optional[str]] = mapped_column(String(50))
     email: Mapped[Optional[str]] = mapped_column(String(200))
     address: Mapped[Optional[str]] = mapped_column(Text)
@@ -94,6 +99,18 @@ class Product(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     ticket_items: Mapped[List["TicketItem"]] = relationship(back_populates="product")
+
+
+class ChecklistStage(str, enum.Enum):
+    A2_PRECHECK = "A2_PRECHECK"
+    C1_RETURN = "C1_RETURN"
+
+
+class ChecklistConclusion(str, enum.Enum):
+    draft = "draft"
+    completed = "completed"
+    pass_ = "pass"
+    fail = "fail"
 
 
 # ─── Warranty tickets ─────────────────────────────────────────────────────────
@@ -138,13 +155,98 @@ class TicketItem(Base):
     expected_return_date: Mapped[Optional[date]] = mapped_column(Date)
     returned_date: Mapped[Optional[date]] = mapped_column(Date)
     evidence_url: Mapped[Optional[str]] = mapped_column(Text)        # Ảnh bằng chứng (B1/C5)
+    shipping_note: Mapped[Optional[str]] = mapped_column(Text)
+    delivery_confirm_note: Mapped[Optional[str]] = mapped_column(Text)
+    a2_required: Mapped[bool] = mapped_column(Boolean, default=False)
+    a2_template_id: Mapped[Optional[int]] = mapped_column(ForeignKey("checklist_templates.id"))
+    c1_template_id: Mapped[Optional[int]] = mapped_column(ForeignKey("checklist_templates.id"))
+    a2_template_locked: Mapped[bool] = mapped_column(Boolean, default=False)
+    c1_template_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     ticket: Mapped["Ticket"] = relationship(back_populates="items")
     product: Mapped["Product"] = relationship(back_populates="ticket_items")
     workflow_logs: Mapped[List["WorkflowLog"]] = relationship(back_populates="ticket_item", cascade="all, delete-orphan")
     supplier_order_items: Mapped[List["SupplierOrderItem"]] = relationship(back_populates="ticket_item")
+    return_slip_items: Mapped[List["ReturnSlipItem"]] = relationship(back_populates="ticket_item")
     transactions: Mapped[List["Transaction"]] = relationship(back_populates="ticket_item")
+    a2_template: Mapped[Optional["ChecklistTemplate"]] = relationship(foreign_keys=[a2_template_id])
+    c1_template: Mapped[Optional["ChecklistTemplate"]] = relationship(foreign_keys=[c1_template_id])
+
+
+class ChecklistTemplate(Base):
+    __tablename__ = "checklist_templates"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    stage: Mapped[ChecklistStage] = mapped_column(SAEnum(ChecklistStage), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    items: Mapped[List["ChecklistTemplateItem"]] = relationship(back_populates="template", cascade="all, delete-orphan")
+
+
+class ChecklistTemplateItem(Base):
+    __tablename__ = "checklist_template_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    template_id: Mapped[int] = mapped_column(ForeignKey("checklist_templates.id"), nullable=False)
+    label: Mapped[str] = mapped_column(String(500), nullable=False)
+    required: Mapped[bool] = mapped_column(Boolean, default=False)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    input_type: Mapped[str] = mapped_column(String(20), default="boolean")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    template: Mapped["ChecklistTemplate"] = relationship(back_populates="items")
+
+
+class ChecklistTemplateChange(Base):
+    __tablename__ = "checklist_template_changes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ticket_item_id: Mapped[int] = mapped_column(ForeignKey("ticket_items.id"), nullable=False)
+    stage: Mapped[str] = mapped_column(String(10), nullable=False)
+    from_template_id: Mapped[Optional[int]] = mapped_column(ForeignKey("checklist_templates.id"))
+    to_template_id: Mapped[Optional[int]] = mapped_column(ForeignKey("checklist_templates.id"))
+    changed_by: Mapped[str] = mapped_column(String(100), nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    changed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class ChecklistRun(Base):
+    __tablename__ = "checklist_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ticket_item_id: Mapped[int] = mapped_column(ForeignKey("ticket_items.id"), nullable=False)
+    template_id: Mapped[int] = mapped_column(ForeignKey("checklist_templates.id"), nullable=False)
+    stage: Mapped[ChecklistStage] = mapped_column(SAEnum(ChecklistStage), nullable=False)
+    inspector: Mapped[Optional[str]] = mapped_column(String(100))
+    note: Mapped[Optional[str]] = mapped_column(Text)
+    conclusion: Mapped[ChecklistConclusion] = mapped_column(SAEnum(ChecklistConclusion), default=ChecklistConclusion.draft)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    finalized_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+
+class ChecklistRunItem(Base):
+    __tablename__ = "checklist_run_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    run_id: Mapped[int] = mapped_column(ForeignKey("checklist_runs.id"), nullable=False)
+    template_item_id: Mapped[int] = mapped_column(ForeignKey("checklist_template_items.id"), nullable=False)
+    checked: Mapped[bool] = mapped_column(Boolean, default=False)
+    value_text: Mapped[Optional[str]] = mapped_column(Text)
+    note: Mapped[Optional[str]] = mapped_column(Text)
+
+
+class ChecklistEvidence(Base):
+    __tablename__ = "checklist_evidences"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    run_id: Mapped[int] = mapped_column(ForeignKey("checklist_runs.id"), nullable=False)
+    file_url: Mapped[str] = mapped_column(Text, nullable=False)
+    caption: Mapped[Optional[str]] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
 # ─── Workflow audit ───────────────────────────────────────────────────────────
@@ -198,6 +300,70 @@ class SupplierOrderItem(Base):
     ticket_item: Mapped["TicketItem"] = relationship(back_populates="supplier_order_items")
 
 
+class SupplierReceive(Base):
+    __tablename__ = "supplier_receives"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    receive_no: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    supplier_id: Mapped[int] = mapped_column(ForeignKey("suppliers.id"), nullable=False)
+    status: Mapped[SupplierReceiveStatus] = mapped_column(SAEnum(SupplierReceiveStatus), default=SupplierReceiveStatus.posted)
+    received_date: Mapped[date] = mapped_column(Date, nullable=False)
+    actor: Mapped[Optional[str]] = mapped_column(String(100))
+    note: Mapped[Optional[str]] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    supplier: Mapped["Supplier"] = relationship()
+    items: Mapped[List["SupplierReceiveItem"]] = relationship(back_populates="receive", cascade="all, delete-orphan")
+
+
+class SupplierReceiveItem(Base):
+    __tablename__ = "supplier_receive_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    receive_id: Mapped[int] = mapped_column(ForeignKey("supplier_receives.id"), nullable=False)
+    ticket_item_id: Mapped[int] = mapped_column(ForeignKey("ticket_items.id"), nullable=False)
+    result: Mapped[Optional[str]] = mapped_column(String(100))
+    result_note: Mapped[Optional[str]] = mapped_column(Text)
+
+    receive: Mapped["SupplierReceive"] = relationship(back_populates="items")
+    ticket_item: Mapped["TicketItem"] = relationship()
+
+
+# ─── Return slips ─────────────────────────────────────────────────────────────
+
+class ReturnSlip(Base):
+    __tablename__ = "return_slips"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    slip_no: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    customer_id: Mapped[int] = mapped_column(ForeignKey("customers.id"), nullable=False)
+    status: Mapped[WorkflowState] = mapped_column(SAEnum(WorkflowState), nullable=False)
+    note: Mapped[Optional[str]] = mapped_column(Text)
+    return_method: Mapped[Optional[str]] = mapped_column(Text)
+    shipping_note: Mapped[Optional[str]] = mapped_column(Text)
+    pack_image_url: Mapped[Optional[str]] = mapped_column(Text)
+    delivery_note: Mapped[Optional[str]] = mapped_column(Text)
+    delivered_image_url: Mapped[Optional[str]] = mapped_column(Text)
+    created_by: Mapped[Optional[str]] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    packed_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    delivered_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    customer: Mapped["Customer"] = relationship()
+    items: Mapped[List["ReturnSlipItem"]] = relationship(back_populates="return_slip", cascade="all, delete-orphan")
+
+
+class ReturnSlipItem(Base):
+    __tablename__ = "return_slip_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    return_slip_id: Mapped[int] = mapped_column(ForeignKey("return_slips.id"), nullable=False)
+    ticket_item_id: Mapped[int] = mapped_column(ForeignKey("ticket_items.id"), nullable=False)
+
+    return_slip: Mapped["ReturnSlip"] = relationship(back_populates="items")
+    ticket_item: Mapped["TicketItem"] = relationship(back_populates="return_slip_items")
+
+
 # ─── Transactions ─────────────────────────────────────────────────────────────
 
 class Transaction(Base):
@@ -210,6 +376,8 @@ class Transaction(Base):
     note: Mapped[Optional[str]] = mapped_column(Text)
     created_by: Mapped[Optional[str]] = mapped_column(String(100))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    ticket_item: Mapped[Optional["TicketItem"]] = relationship(back_populates="transactions")
 
 class UserRole(str, enum.Enum):
     admin       = "admin"
@@ -243,3 +411,12 @@ class UserSession(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="sessions")
+
+
+class SyncState(Base):
+    __tablename__ = "sync_states"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    last_success_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    last_error: Mapped[Optional[str]] = mapped_column(Text)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

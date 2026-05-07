@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chi tiết phiếu nhận NCC</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="title">Phiếu nhận NCC</span>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+        <a class="btn btn-ghost btn-sm" href="/supplier-receives/list.html">← Danh sách</a>
+      </div>
+    </div>
+    <div class="page">
+
+  <div class="card mb-2"><div class="card-body" id="meta"></div></div>
+
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Mã</th><th>Phiếu</th><th>Sản phẩm</th><th>Serial</th><th>Kết quả</th><th>Ghi chú</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table></div></div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+async function load(){
+  await checkAuth();
+  const id = new URLSearchParams(location.search).get('id');
+  const r = await api.get(`/api/supplier-receives/${id}`);
+  document.getElementById('title').textContent = `📥 ${r.receive_no}`;
+  document.getElementById('meta').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+      <div><b>NCC:</b> ${r.supplier_name||''}</div>
+      <div><b>Ngày nhận:</b> ${fmtDate(r.received_date)}</div>
+      <div><b>Người nhận:</b> ${r.actor||'—'}</div>
+      <div><b>Trạng thái:</b> ${r.status}</div>
+      <div style="grid-column:1/-1"><b>Ghi chú:</b> ${r.note||'—'}</div>
+    </div>`;
+  document.getElementById('tbody').innerHTML = (r.items||[]).map((x,i)=>`<tr>
+    <td>${i+1}</td><td><b>${x.item_code||''}</b></td><td>${x.ticket_no||''}</td><td>${x.product_name||''}</td><td>${x.serial_no||''}</td><td>${x.result||'—'}</td><td>${x.result_note||'—'}</td>
+  </tr>`).join('');
+}
+load().catch(e=>toast(e.message,'error'));
+</script>
+</body>
+</html>

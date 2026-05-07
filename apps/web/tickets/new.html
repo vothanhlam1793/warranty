@@ -10,22 +10,7 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item active" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title">Tạo phiếu bảo hành mới</span>
@@ -41,7 +26,7 @@
             <div class="form-group full">
               <label class="form-label">Tìm khách hàng (KiotViet hoặc nội bộ)</label>
               <div class="search-wrap" style="position:relative">
-                <input id="customerSearch" class="form-control" placeholder="Nhập tên hoặc SĐT..."/>
+                <input id="customerSearch" class="form-control" placeholder="Nhập mã KH, tên hoặc SĐT..."/>
                 <div id="customerList" class="autocomplete-list" style="display:none"></div>
               </div>
               <div id="customerInfo" class="mt-1" style="display:none">
@@ -86,7 +71,7 @@
             </div>
             <div class="form-group">
               <label class="form-label">Người tạo</label>
-              <input id="createdBy" class="form-control" placeholder="Tên nhân viên"/>
+              <input id="createdBy" class="form-control" placeholder="Tự động theo tài khoản đăng nhập"/>
             </div>
             <div class="form-group full">
               <label class="form-label">Ghi chú phiếu</label>
@@ -119,6 +104,7 @@
 </div>
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let selectedCustomerId = null;
@@ -150,7 +136,9 @@ function onReceivedDateChange() {
   if (rd) document.getElementById("expectedReturnDate").value = calcExpectedReturn(rd);
 })();
 
-checkAuth();
+checkAuth().then(() => {
+  hydrateActorInputs(["createdBy"]);
+});
 
 function updateItemCodePreviews() {
   itemRows.forEach((row, idx) => {
@@ -159,24 +147,18 @@ function updateItemCodePreviews() {
   });
 }
 
-// Customer autocomplete (search both local DB and KiotViet mock)
+// Customer autocomplete (local DB only)
 setupAutocomplete({
   input: document.getElementById("customerSearch"),
   listEl: document.getElementById("customerList"),
   fetchFn: async (q) => {
-    const [local, kv] = await Promise.all([
-      api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=5`),
-      api.get(`/api/customers/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
-    ]);
-    const seen = new Set(local.map(c => c.name));
-    const kvNew = kv.filter(c => !seen.has(c.name)).map(c => ({ ...c, _from_kv: true }));
-    return [...local, ...kvNew, { _create_new: true, name: `Tạo mới: "${q}"`, _raw_q: q }];
+    const local = await api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=10`);
+    return [...(local.items || []), { _create_new: true, name: `Tạo mới: "${q}"`, _raw_q: q }];
   },
   onSelect: {
     renderItem: item => {
       if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
-      const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
-      return `${item.name} ${src}<div class="sub">${item.phone || ""}</div>`;
+        return `${item.customer_code ? `<b>${item.customer_code}</b> · ` : ''}${item.name}<div class="sub">${item.phone || ""}</div>`;
     },
     pick: async item => {
       if (item._create_new) {
@@ -185,16 +167,7 @@ setupAutocomplete({
         document.getElementById("customerSearch").value = "";
         return;
       }
-      if (item._from_kv) {
-        // Import from KiotViet into local DB
-        const created = await api.post("/api/customers", {
-          name: item.name, phone: item.phone || null,
-          address: item.address || null, kiotviet_id: item.kiotviet_id,
-        });
-        selectCustomer(created);
-      } else {
-        selectCustomer(item);
-      }
+      selectCustomer(item);
     }
   }
 });
@@ -203,7 +176,7 @@ function selectCustomer(c) {
   selectedCustomerId = c.id;
   document.getElementById("customerSearch").value = "";
   document.getElementById("customerInfo").style.display = "block";
-  document.getElementById("selCustomerName").textContent = c.name;
+  document.getElementById("selCustomerName").textContent = c.customer_code ? `${c.customer_code} - ${c.name}` : c.name;
   document.getElementById("selCustomerPhone").textContent = c.phone ? `· ${c.phone}` : "";
   document.getElementById("newCustomerForm").style.display = "none";
 }
@@ -278,35 +251,24 @@ function addItemRow() {
 
   updateItemCodePreviews();
 
-  // Product autocomplete
+  // Product autocomplete (local DB only)
   setupAutocomplete({
     input: document.getElementById(`ps-${id}`),
     listEl: document.getElementById(`pl-${id}`),
     fetchFn: async q => {
-      const [local, kv] = await Promise.all([
-        api.get(`/api/products?q=${encodeURIComponent(q)}&limit=5`),
-        api.get(`/api/products/kiotviet/search?q=${encodeURIComponent(q)}&limit=5`),
-      ]);
-      const seen = new Set(local.map(p => p.name));
-      const kvNew = kv.filter(p => !seen.has(p.name)).map(p => ({...p, _from_kv:true}));
-      return [...local, ...kvNew, {_create_new:true, name:`Tạo mới: "${q}"`, _raw_q: q}];
+      const local = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=10`);
+      return [...(local.items || []), {_create_new:true, name:`Tạo mới: "${q}"`, _raw_q: q}];
     },
     onSelect: {
       renderItem: item => {
         if (item._create_new) return `<span style="color:var(--accent);font-weight:600">${item.name}</span>`;
-        const src = item._from_kv ? '<span class="badge badge-teal" style="font-size:.65rem">KiotViet</span>' : '';
-        return `${item.name} ${src}<div class="sub">${item.sku || ""}</div>`;
+        return `${item.name}<div class="sub">${item.sku || ""}</div>`;
       },
       pick: async item => {
         let product = item;
         if (item._create_new) {
           product = await api.post("/api/products", { name: item._raw_q });
           toast(`Đã tạo sản phẩm: ${product.name}`);
-        } else if (item._from_kv) {
-          product = await api.post("/api/products", {
-            name: item.name, sku: item.sku || null,
-            kiotviet_item_id: item.kiotviet_item_id, kiotviet_synced: true,
-          });
         }
         document.getElementById(`pid-${id}`).value = product.id;
         document.getElementById(`ps-${id}`).value = product.name;

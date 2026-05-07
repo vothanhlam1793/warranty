@@ -193,11 +193,11 @@ def seed():
 
     # Summary
     db2 = SessionLocal()
-    print(f"✓ Suppliers: {db2.query(Supplier).count()}")
-    print(f"✓ Customers: {db2.query(Customer).count()}")
-    print(f"✓ Products:  {db2.query(Product).count()}")
-    print(f"✓ Tickets:   {db2.query(Ticket).count()}")
-    print(f"✓ Items:     {db2.query(TicketItem).count()}")
+    print(f"[OK] Suppliers: {db2.query(Supplier).count()}")
+    print(f"[OK] Customers: {db2.query(Customer).count()}")
+    print(f"[OK] Products:  {db2.query(Product).count()}")
+    print(f"[OK] Tickets:   {db2.query(Ticket).count()}")
+    print(f"[OK] Items:     {db2.query(TicketItem).count()}")
     db2.close()
 
 

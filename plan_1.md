@@ -1,133 +1,140 @@
-# Plan 1 — Warranty Management System: Thiết kế chi tiết phase 2
+# Plan 1 — Warranty Management System: Phase 2 Status Update
 
-> Ngày: 06/05/2026  
-> Trạng thái: Đang triển khai (Hoàn thành 70%)  
-> Dev phụ trách: Opencode (AI Agent)
-
----
-
-## Tổng quan thay đổi
-
-10 yêu cầu từ review, chia thành:
-- **Sửa lỗi ngay** (items 3, 4): ✅ Hoàn thành
-- **Tính năng nhỏ** (items 1, 2, 3): ✅ Hoàn thành
-- **Tính năng lớn** (items 2, 5, 6, 7, 8, 9, 10): 🔄 Đã xong Auth/NCC, còn Checklist & Phiếu trả khách.
+> Ngay: 06/05/2026
+> Trang thai: Da vuot qua phase 2 co ban, dang chuyen sang hoan thien va chuan hoa
+> Dev phu trach: Opencode (AI Agent)
 
 ---
 
-## 1. Dự kiến trả mặc định (✅ Xong)
-...
-## 2. Đăng nhập (Authentication) (✅ Xong)
-...
-## 3. Fix lỗi [object Object] — api.js (✅ Xong)
-...
-## 4. Fix supplier-orders/new.html (✅ Xong)
-...
-## 5. Nút Rollback trạng thái (✅ Xong)
-...
-## 6. Xác nhận gửi NCC + bằng chứng (✅ Xong)
-...
-## 7. Phiếu nhận hàng từ NCC (✅ Xong)
-...
+## Tong quan phase 2
+
+Muc tieu phase 2 ban dau la hoan thien cac khoi nghiep vu lon sau:
+
+- Authentication va session
+- Checklist A2/C1
+- Phiếu gui NCC / nhận NCC
+- Phiếu tra khach
+- Rollback va audit log
+- C5 -> C6 co xac nhan, anh minh chung
+
+Trang thai hien tai:
+
+- Auth: xong
+- NCC send/receive: xong
+- Checklist: xong
+- Return slip: xong
+- User management admin: moi them xong
+- Frontend shared sidebar: moi chuan hoa xong
+- PostgreSQL runtime: moi chuyen xong
 
 ---
 
-## 8. Checklist kiểm tra tại C1 (⏳ Chờ triển khai)
-...
-## 9. Phiếu trả khách (⏳ Chờ triển khai)
-...
-## 10. C5 → C6 (⏳ Chờ triển khai)
-...
+## Hang muc da hoan thanh
+
+### 1. Authentication (xong)
+
+- [x] Model `User`, `UserSession`
+- [x] Router `auth.py` cho login/logout/me
+- [x] Middleware auth trong `main.py`
+- [x] Trang `apps/web/login.html`
+- [x] `checkAuth()` va auth helper trong `api.js`
+
+### 2. Rollback workflow (xong)
+
+- [x] Endpoint rollback trong `tickets.py`
+- [x] UI rollback trong `tickets/detail.html`
+- [x] Ghi log workflow day du
+
+### 3. Supplier order / send / receive (xong)
+
+- [x] Tao phiếu gui NCC
+- [x] In phiếu gui NCC
+- [x] Xac nhan gui NCC
+- [x] Upload bang chung
+- [x] Phiếu nhận NCC tra ve
+- [x] Chuyen item sang C1 sau khi nhan hang ve
+
+### 4. Checklist system (xong)
+
+- [x] Model checklist templates
+- [x] Model checklist run, run items, evidences
+- [x] Router checklist
+- [x] Template admin page
+- [x] Mapping A2/C1 cho tung item
+- [x] Run checklist va finalize conclusion
+
+### 5. Return slip system (xong)
+
+- [x] Model `ReturnSlip`, `ReturnSlipItem`
+- [x] Router `return_slips.py`
+- [x] Candidate items tu C2/C3
+- [x] Tao phieu tra khach
+- [x] Pack image / delivered image
+- [x] Confirm pack: C4 -> C5
+- [x] Confirm delivered: C5 -> C6
+- [x] Print return slip
+
+### 6. Admin user management (xong)
+
+- [x] Router `admin.py`
+- [x] CRUD user chi danh cho admin
+- [x] Tao tai khoan admin mac dinh
+- [x] Trang `apps/web/admin/users.html`
+
+### 7. Frontend shared layout (xong)
+
+- [x] Tao `apps/web/assets/layout.js`
+- [x] Chuyen tat ca page shell ve sidebar component dung chung
+- [x] Xoa sidebar hardcode khoi cac page
+- [x] Role-based menu cho admin
+
+### 8. Config/runtime (xong)
+
+- [x] Dua port/config vao `.env`
+- [x] Dong bo `start.sh`, `start_windows.bat`, `stop_windows.bat`
+- [x] Chuyen backend ve port 8001 theo config
+- [x] Chuyen runtime DB sang PostgreSQL remote
 
 ---
 
-## Tổng hợp — Danh sách việc cần làm cho dev
+## Dieu da cap nhat moi so voi plan cu
 
-### Ưu tiên 1 — Sửa lỗi ngay (ĐÃ XONG)
+Nhung muc truoc day con danh dau `Pending`, hien nay da xong:
 
-| # | File | Việc | Trạng thái |
-|---|---|---|---|
-| 1a | `apps/web/assets/api.js` | Fix error handling 422 | ✅ Done |
-| 1b | `apps/web/supplier-orders/new.html` | Filter A3, actor input, try/catch | ✅ Done |
-| 1c | `apps/web/tickets/new.html` | Auto-fill expected_return_date | ✅ Done |
-| 1d | `apps/web/tickets/detail.html` | Default expected in modal A1 | ✅ Done |
-
-### Ưu tiên 2 — Tính năng nhỏ (ĐÃ XONG)
-
-| # | File | Việc | Trạng thái |
-|---|---|---|---|
-| 2a | `apps/server/routers/tickets.py` | Endpoint `/rollback` | ✅ Done |
-| 2b | `apps/web/tickets/detail.html` | Nút "Hoàn tác" + modal | ✅ Done |
-| 2c | `apps/web/supplier-orders/detail.html` | UI gửi NCC + bằng chứng | ✅ Done |
-
-### Ưu tiên 3 — Tính năng trung bình (ĐÃ XONG)
-
-| # | File | Việc | Trạng thái |
-|---|---|---|---|
-| 3a | `apps/server/models.py` | User, Session models | ✅ Done |
-| 3b | `apps/server/routers/auth.py` | Login/Logout/Me | ✅ Done |
-| 3c | `apps/server/main.py` | Auth middleware | ✅ Done |
-| 3d | `apps/web/login.html` | Trang đăng nhập | ✅ Done |
-| 3e | `apps/web/assets/api.js` | checkAuth(), currentUser | ✅ Done |
-| 3f | `apps/web/supplier-orders/receive.html` | Phiếu nhận NCC | ✅ Done |
-
-### Ưu tiên 4 — Tính năng lớn (TIẾP THEO)
-
-| # | File | Việc | Trạng thái |
-|---|---|---|---|
-| 4a | `apps/server/models.py` | Checklist, ReturnSlip models | ⏳ Pending |
-| 4b | `apps/server/routers/checklist.py` | Router Checklist | ⏳ Pending |
-| 4c | `apps/server/routers/return_slips.py` | Router Phiếu trả | ⏳ Pending |
-| 4d | `apps/web/tickets/checklist.html` | Trang kiểm tra C1 | ⏳ Pending |
-| 4e | `apps/web/return-slips/new.html` | Lập phiếu trả khách | ⏳ Pending |
-| 4f | `apps/web/tickets/detail.html` | Nút C1→Checklist, C2/C3→Phiếu trả | ⏳ Pending |
-
-
-### Ưu tiên 4 — Tính năng lớn (1-2 tuần)
-
-| # | File | Việc |
-|---|---|---|
-| 4a | `apps/server/models.py` | Thêm ChecklistTemplate, ChecklistResult, ReturnSlip, ReturnSlipItem |
-| 4b | `apps/server/routers/checklist.py` | Tạo mới |
-| 4c | `apps/server/routers/return_slips.py` | Tạo mới |
-| 4d | `apps/server/main.py` | Mount 2 router mới |
-| 4e | `apps/web/tickets/checklist.html` | Tạo mới: trang kiểm tra C1 |
-| 4f | `apps/web/return-slips/new.html` | Tạo mới: lập phiếu trả khách |
-| 4g | `apps/web/return-slips/list.html` | Tạo mới: danh sách phiếu trả |
-| 4h | `apps/web/tickets/detail.html` | Cập nhật nút C1→checklist, C2/C3→return-slip |
+- `apps/server/models.py`: checklist + return slip models
+- `apps/server/routers/checklists.py`: checklist router
+- `apps/server/routers/return_slips.py`: return slip router
+- `apps/web/return-slips/list.html`: danh sach phieu tra
+- `apps/web/return-slips/detail.html`: chi tiet phieu tra
+- `apps/web/checklists/run.html`: checklist run page
+- `apps/web/tickets/detail.html`: da gan checklist/return slip actions
 
 ---
 
-## Ghi chú kỹ thuật
+## Cong viec tiep theo de nang cap phase 3
 
-### Password hashing
-Dùng `passlib[bcrypt]`: `pip install passlib[bcrypt]`
+### Uu tien cao
 
-### Session storage
-Lưu trong SQLite (bảng `sessions`) — đủ đơn giản cho nội bộ, không cần Redis.
+- [ ] Alembic migration cho PostgreSQL
+- [ ] Chot validation workflow o backend theo rule nghiep vu that su
+- [ ] Chinh sach role/permission chi tiet theo endpoint va action
+- [ ] Seed user/role du lieu chuan cho production
 
-### Checklist template seed
-Tạo 1 template mặc định (áp dụng cho mọi sản phẩm) khi seed DB:
-```json
-[
-  {"label": "Kiểm tra ngoại quan (trầy, bể, cong vênh)", "required": true},
-  {"label": "Bật nguồn được", "required": true},
-  {"label": "Chức năng chính hoạt động bình thường", "required": true},
-  {"label": "Phụ kiện đầy đủ theo phiếu", "required": false},
-  {"label": "Serial khớp với phiếu", "required": true}
-]
-```
+### Uu tien trung binh
 
-### Return slip numbering
-Format: `TK-{year}{month}-{seq:04d}` — VD: `TK-202605-0001`
+- [ ] Quan ly cau hinh bang admin page thay vi sua `.env` tay
+- [ ] Global search theo `item_code`, serial, ticket_no
+- [ ] Export Excel/CSV
+- [ ] Logging operational/deployment ro rang hon
 
-### Migration DB
-Vì dùng SQLite không có Alembic, mỗi lần thêm bảng cần:
-```bash
-# Cách 1: Reset hoàn toàn (dev)
-rm apps/server/warranty.db && python scripts/seed_db.py
+### Uu tien sau
 
-# Cách 2: Migrate thủ công (production — giữ data)
-sqlite3 apps/server/warranty.db < scripts/migrate_phase2.sql
-```
-→ Dev cần tạo file `scripts/migrate_phase2.sql` với các lệnh `ALTER TABLE` và `CREATE TABLE`.
+- [ ] Dong bo KiotViet that
+- [ ] Import du lieu legacy tu SQLite
+- [ ] Tach frontend component dung chung them cho topbar/modal/form patterns
+
+---
+
+## Ket luan
+
+Phase 2 khong con o muc "dang trien khai 70%" nua. Theo trang thai code hien tai, nhung khoi nghiep vu lon cua phase 2 da duoc hoan thanh. Viec tiep theo la chuan hoa deployment, migration, permission, va dong bo du lieu production.

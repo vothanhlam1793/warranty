@@ -1,0 +1,345 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chi tiết phiếu trả khách</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+  <style>
+    .kv { display:grid; grid-template-columns:160px 1fr; gap:.45rem .9rem; }
+    .kv-label { color:var(--ink-3); font-size:.86rem; }
+    .kv-value { color:var(--ink); font-weight:500; }
+    .timeline { display:flex; flex-direction:column; gap:.7rem; }
+    .tl { border-left:2px solid var(--border); padding-left:.8rem; position:relative; }
+    .tl::before { content:""; width:10px; height:10px; border-radius:50%; background:var(--accent); position:absolute; left:-6px; top:.2rem; }
+    .thumb { width:160px; max-width:100%; border-radius:10px; border:1px solid var(--border); cursor:pointer; }
+    .actions { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem; }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Chi tiết phiếu trả khách</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <a href="/return-slips/list.html" class="btn btn-ghost btn-sm">← Danh sách phiếu trả</a>
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+      </div>
+    </div>
+
+    <div class="page" id="pageRoot">
+      <div class="card"><div class="card-body">Đang tải...</div></div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+let slip = null;
+let slipId = null;
+let itemId = null;
+
+function qs(key) { return new URLSearchParams(location.search).get(key); }
+
+async function init() {
+  await checkAuth();
+  slipId = parseInt(qs('id'), 10);
+  itemId = parseInt(qs('item_id'), 10);
+  if (!slipId && !itemId) throw new Error('Thiếu id hoặc item_id');
+
+  if (slipId) {
+    try {
+      slip = await api.get(`/api/return-slips/${slipId}`);
+    } catch (_) {
+      slip = null;
+    }
+  }
+
+  if (!slip) {
+    const res = await api.get('/api/return-slips/list');
+    const raw = (res.items || []).find(x => x.id === (slipId || itemId));
+    if (!raw) throw new Error('Không tìm thấy dữ liệu trả khách');
+    slip = {
+      id: raw.id,
+      slip_no: raw.item_code || ('TK-' + raw.id),
+      customer_name: raw.customer_name,
+      customer_phone: raw.customer_phone,
+      status: raw.status || raw.workflow_state,
+      note: raw.diagnosis_note || null,
+      shipping_note: raw.shipping_note || null,
+      delivery_note: raw.delivery_note || raw.delivery_confirm_note || null,
+      pack_image_url: raw.evidence_url || null,
+      delivered_image_url: (raw.workflow_state === 'C6' ? raw.evidence_url : null),
+      created_by: null,
+      created_at: null,
+      packed_at: null,
+      delivered_at: null,
+      item_count: 1,
+      items: [{
+        id: raw.id,
+        ticket_id: raw.ticket_id,
+        item_code: raw.item_code,
+        product_name: raw.product_name,
+        serial_no: raw.serial_no,
+        workflow_state: raw.workflow_state,
+      }],
+      _legacyItemMode: true,
+    };
+  }
+  render();
+}
+
+function render() {
+  const stateText = {
+    C4: 'Mới tạo',
+    C5: 'Có thông tin và hình ảnh',
+    C6: 'Có hình ảnh giao trả',
+  };
+  const packImage = slip.pack_image_url
+    ? `<img class="thumb" src="http://localhost:8001${slip.pack_image_url}" onclick="window.open('http://localhost:8001${slip.pack_image_url}')"/>`
+    : '<span class="text-muted">Chưa có ảnh đóng gói</span>';
+  const deliveredImage = slip.delivered_image_url
+    ? `<img class="thumb" src="http://localhost:8001${slip.delivered_image_url}" onclick="window.open('http://localhost:8001${slip.delivered_image_url}')"/>`
+    : '<span class="text-muted">Chưa có ảnh giao trả</span>';
+
+  const c4Panel = slip.status === 'C4' ? `
+    <div class="card mb-2">
+      <div class="card-header"><h3>Xử lý C4 - Phiếu mới tạo</h3></div>
+      <div class="card-body">
+        ${slip._legacyItemMode ? '<div class="text-sm text-muted" style="margin-bottom:.8rem">Đang hiển thị theo dữ liệu item-based cũ vì backend runtime chưa trả ReturnSlip thật.</div>' : ''}
+        <div class="form-group">
+          <label class="form-label">Phương thức trả</label>
+          <select id="returnMethod" class="form-control">
+            <option value="">-- Chọn phương thức trả --</option>
+            <option value="Khách đến lấy" ${slip.return_method === 'Khách đến lấy' ? 'selected' : ''}>Khách đến lấy</option>
+            <option value="Giao ship" ${slip.return_method === 'Giao ship' ? 'selected' : ''}>Giao ship</option>
+            <option value="Nhân viên giao" ${slip.return_method === 'Nhân viên giao' ? 'selected' : ''}>Nhân viên giao</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-top:.8rem">
+          <label class="form-label">Thông tin giao vận / đóng gói</label>
+          <textarea id="shippingNote" class="form-control" rows="4" placeholder="Ví dụ: giao GHN, bọc chống sốc, kèm phiếu trả...">${slip.shipping_note || ''}</textarea>
+        </div>
+        <div class="form-group" style="margin-top:.8rem">
+          <label class="form-label">Ảnh đóng gói / phiếu trả</label>
+          <input id="packImageInput" type="file" class="form-control" accept="image/*"/>
+          <div class="text-sm text-muted" style="margin-top:.35rem">Chọn ảnh tại đây, khi bấm xác nhận hệ thống sẽ tự upload rồi chuyển sang C5.</div>
+        </div>
+        <div class="form-group" style="margin-top:.8rem">
+          <label class="form-label">Người xác nhận</label>
+          <input id="packActor" class="form-control" placeholder="Tự động theo tài khoản đăng nhập"/>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" onclick="printSlip()">🖨 In phiếu</button>
+          <button class="btn btn-secondary" onclick="uploadPackImage()">📷 Chỉ upload ảnh</button>
+          <button class="btn btn-primary" onclick="confirmPack()">📦 Upload ảnh và xác nhận → C5</button>
+        </div>
+      </div>
+    </div>` : '';
+
+  const c5Panel = slip.status === 'C5' ? `
+    <div class="card mb-2">
+      <div class="card-header"><h3>Xử lý C5 - Chờ giao trả</h3></div>
+      <div class="card-body">
+        ${slip._legacyItemMode ? '<div class="text-sm text-muted" style="margin-bottom:.8rem">Ảnh và thao tác đang dùng flow item-based cũ vì runtime backend chưa lên slip-based.</div>' : ''}
+        <div class="form-group">
+          <label class="form-label">Ghi chú giao trả</label>
+          <textarea id="deliveryNote" class="form-control" rows="3" placeholder="Ví dụ: khách nhận lúc 16h, có ký nhận...">${slip.delivery_note || ''}</textarea>
+        </div>
+        <div class="form-group" style="margin-top:.8rem">
+          <label class="form-label">Hình ảnh giao trả</label>
+          <input id="deliveredImageInput" type="file" class="form-control" accept="image/*"/>
+          <div class="text-sm text-muted" style="margin-top:.35rem">Chọn ảnh tại đây, khi bấm xác nhận hệ thống sẽ tự upload rồi chuyển sang C6.</div>
+        </div>
+        <div class="form-group" style="margin-top:.8rem">
+          <label class="form-label">Người xác nhận giao</label>
+          <input id="deliverActor" class="form-control" placeholder="Tự động theo tài khoản đăng nhập"/>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="uploadDeliveredImage()">📷 Chỉ upload ảnh</button>
+          <button class="btn btn-primary" onclick="confirmDelivered()">✅ Upload ảnh và xác nhận → C6</button>
+        </div>
+      </div>
+    </div>` : '';
+
+  document.getElementById('pageRoot').innerHTML = `
+    <div class="card mb-2">
+      <div class="card-header"><h3>Thông tin chính</h3></div>
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:flex-start">
+          <div class="kv" style="flex:1;min-width:300px">
+            <div class="kv-label">Số phiếu trả</div><div class="kv-value">${slip.slip_no || ('TK-' + slip.id)}</div>
+            <div class="kv-label">Trạng thái</div><div class="kv-value">${stateBadge(slip.status)} ${stateText[slip.status] || ''}</div>
+            <div class="kv-label">Khách hàng</div><div class="kv-value">${slip.customer_name || '—'}${slip.customer_phone ? ' · ' + slip.customer_phone : ''}</div>
+            <div class="kv-label">Người lập</div><div class="kv-value">${slip.created_by || '—'}</div>
+            <div class="kv-label">Ngày lập</div><div class="kv-value">${slip.created_at ? slip.created_at.replace('T',' ').slice(0,16) : '—'}</div>
+            <div class="kv-label">Ngày đóng gói</div><div class="kv-value">${slip.packed_at ? slip.packed_at.replace('T',' ').slice(0,16) : '—'}</div>
+            <div class="kv-label">Ngày giao trả</div><div class="kv-value">${slip.delivered_at ? slip.delivered_at.replace('T',' ').slice(0,16) : '—'}</div>
+            <div class="kv-label">Số món</div><div class="kv-value">${slip.item_count || 0}</div>
+            <div class="kv-label">Phương thức trả</div><div class="kv-value">${slip.return_method || '—'}</div>
+          </div>
+          <div style="min-width:160px;display:flex;flex-direction:column;gap:.8rem">
+            <div><div class="text-sm text-muted" style="margin-bottom:.35rem">Ảnh đóng gói</div>${packImage}</div>
+            <div><div class="text-sm text-muted" style="margin-bottom:.35rem">Ảnh giao trả</div>${deliveredImage}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ${c4Panel}
+    ${c5Panel}
+
+    <div class="card mb-2">
+      <div class="card-header"><h3>Nội dung phiếu</h3></div>
+      <div class="card-body">
+        <div class="kv">
+          <div class="kv-label">Ghi chú lúc tạo</div><div class="kv-value">${slip.note || '—'}</div>
+          <div class="kv-label">Thông tin giao vận</div><div class="kv-value">${slip.shipping_note || '—'}</div>
+          <div class="kv-label">Ghi chú giao trả</div><div class="kv-value">${slip.delivery_note || '—'}</div>
+        </div>
+        ${slip._legacyItemMode ? '<div class="text-sm text-muted" style="margin-top:.8rem">Khi backend runtime chuyển sang slip-based, trang này sẽ tự dùng dữ liệu ReturnSlip thật.</div>' : ''}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>Các món trong phiếu</h3></div>
+      <div class="card-body">
+        ${(slip.items || []).length ? `
+          <div class="table-wrap"><table>
+            <thead><tr><th>Mã xử lý</th><th>Sản phẩm</th><th>Serial</th><th>State item</th></tr></thead>
+            <tbody>
+              ${(slip.items || []).map(it => `<tr>
+                <td><b>${it.item_code || ''}</b></td>
+                <td>${it.product_name || ''}</td>
+                <td>${it.serial_no || ''}</td>
+                <td>${stateBadge(it.workflow_state)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table></div>` : '<div class="text-muted">Chưa có món nào trong phiếu.</div>'}
+      </div>
+    </div>`;
+
+  hydrateActorInputs(['packActor', 'deliverActor']);
+}
+
+async function uploadPackImage() {
+  if (!slip || slip.status !== 'C4') return;
+  const input = document.getElementById('packImageInput');
+  const file = input?.files?.[0];
+  if (!file) return toast('Chọn ảnh trước', 'error');
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const url = slip._legacyItemMode
+      ? `http://localhost:8001/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
+      : `http://localhost:8001/api/return-slips/${slip.id}/pack-image`;
+    const res = await fetch(url, {
+      method: 'POST',
+      body: fd,
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error(await res.text());
+    toast('Đã upload ảnh');
+    await init();
+  } catch (e) {
+    toast(e.message || 'Lỗi upload ảnh', 'error');
+  }
+}
+
+async function ensurePackImageUploaded() {
+  if (slip?.pack_image_url) return;
+  const file = document.getElementById('packImageInput')?.files?.[0];
+  if (!file) return;
+  await uploadPackImage();
+}
+
+async function confirmPack() {
+  if (!slip || slip.status !== 'C4') return;
+  const actor = document.getElementById('packActor')?.value.trim();
+  const return_method = document.getElementById('returnMethod')?.value.trim();
+  const shipping_note = document.getElementById('shippingNote')?.value.trim();
+  if (!return_method) return toast('Chọn phương thức trả', 'error');
+  if (!shipping_note) return toast('Nhập thông tin giao vận / đóng gói', 'error');
+  try {
+    await ensurePackImageUploaded();
+    if (slip._legacyItemMode) {
+      await api.post(`/api/return-slips/items/${slip.id}/confirm-pack`, { actor, note: `${return_method}: ${shipping_note}` });
+    } else {
+      await api.post(`/api/return-slips/${slip.id}/confirm-pack`, { actor, return_method, shipping_note });
+    }
+    toast('Đã chuyển sang C5');
+    await init();
+  } catch (e) {
+    toast(e.message || 'Không chuyển được sang C5', 'error');
+  }
+}
+
+async function ensureDeliveredImageUploaded() {
+  if (slip?.delivered_image_url) return;
+  const file = document.getElementById('deliveredImageInput')?.files?.[0];
+  if (!file) return;
+  await uploadDeliveredImage();
+}
+
+async function uploadDeliveredImage() {
+  if (!slip || slip.status !== 'C5') return;
+  const input = document.getElementById('deliveredImageInput');
+  const file = input?.files?.[0];
+  if (!file) return toast('Chọn ảnh trước', 'error');
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const url = slip._legacyItemMode
+      ? `http://localhost:8001/api/tickets/${slip.items?.[0]?.ticket_id || slip.id}/items/${slip.items?.[0]?.id || slip.id}/evidence`
+      : `http://localhost:8001/api/return-slips/${slip.id}/delivered-image`;
+    const res = await fetch(url, {
+      method: 'POST',
+      body: fd,
+      credentials: 'include',
+    });
+    if (!res.ok) throw new Error(await res.text());
+    toast('Đã upload ảnh giao trả');
+    await init();
+  } catch (e) {
+    toast(e.message || 'Lỗi upload ảnh', 'error');
+  }
+}
+
+async function confirmDelivered() {
+  if (!slip || slip.status !== 'C5') return;
+  const actor = document.getElementById('deliverActor')?.value.trim();
+  const delivery_note = document.getElementById('deliveryNote')?.value.trim();
+  try {
+    await ensureDeliveredImageUploaded();
+    if (slip._legacyItemMode) {
+      await api.post(`/api/return-slips/items/${slip.id}/delivery-confirm`, { actor, note: delivery_note || 'Đã giao trả', to_state: 'C6' });
+    } else {
+      await api.post(`/api/return-slips/${slip.id}/confirm-delivered`, { actor, delivery_note });
+    }
+    toast('Đã chuyển sang C6');
+    await init();
+  } catch (e) {
+    toast(e.message || 'Không chuyển được sang C6', 'error');
+  }
+}
+
+function printSlip() {
+  if (!slip) return;
+  if (slip._legacyItemMode) {
+    const ticketId = slip.items?.[0]?.ticket_id || slip.id;
+    window.open(`http://localhost:8001/api/transactions/${ticketId}/print`);
+    return;
+  }
+  window.open(`http://localhost:8001/api/return-slips/${slip.id}/print`);
+}
+
+checkAuth().then(() => {
+  init().catch(e => {
+    document.getElementById('pageRoot').innerHTML = `<div class="card"><div class="card-body" style="color:var(--danger)">Lỗi: ${e.message}</div></div>`;
+  });
+});
+</script>
+</body>
+</html>

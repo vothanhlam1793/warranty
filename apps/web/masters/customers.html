@@ -10,64 +10,107 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item active" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title">Khách hàng</span>
     </div>
     <div class="page">
       <div class="filter-bar mb-2">
-        <input id="searchQ" class="form-control" placeholder="Tìm tên, SĐT..." style="max-width:320px" oninput="load()"/>
+        <input id="searchQ" class="form-control" placeholder="Tìm mã KH, tên, SĐT..." style="max-width:320px" oninput="load()"/>
+        <button id="syncBtn" class="btn btn-secondary btn-sm" onclick="triggerSync()">Dong bo Odoo</button>
+        <span id="syncStatus" class="text-sm text-muted" style="align-self:center"></span>
       </div>
       <div class="card">
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Tên khách hàng</th><th>SĐT</th><th>Địa chỉ</th><th>KiotViet ID</th><th>Ngày tạo</th></tr></thead>
+            <thead><tr><th>Mã KH</th><th>Tên khách hàng</th><th>SĐT</th><th>Địa chỉ</th><th>Odoo ID</th><th>Ngày tạo</th></tr></thead>
             <tbody id="tbody"></tbody>
           </table>
         </div>
         <div id="loading" class="loading">Đang tải...</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;border-top:1px solid var(--border)">
+          <div id="pageInfo" class="text-sm text-muted">—</div>
+          <div style="display:flex;gap:.5rem">
+            <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="goPage(-1)">← Trước</button>
+            <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="goPage(1)">Sau →</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 let debounce;
+let page = 1;
+const pageSize = 50;
 document.getElementById("searchQ").addEventListener("input", () => {
-  clearTimeout(debounce); debounce = setTimeout(load, 300);
+  clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    page = 1;
+    load();
+  }, 300);
 });
 
 async function load() {
   const q = document.getElementById("searchQ").value;
-  const customers = await api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=100`);
+  const offset = (page - 1) * pageSize;
+  const res = await api.get(`/api/customers?q=${encodeURIComponent(q)}&limit=${pageSize}&offset=${offset}`);
+  const customers = Array.isArray(res) ? res : (res.items || []);
+  const total = Array.isArray(res) ? customers.length : (res.total || 0);
   document.getElementById("loading").style.display = "none";
   document.getElementById("tbody").innerHTML = customers.map(c => `
     <tr>
+      <td>${c.customer_code ? `<span class="badge badge-gray">${c.customer_code}</span>` : '—'}</td>
       <td><b>${c.name}</b></td>
       <td>${c.phone||"—"}</td>
       <td class="td-muted">${c.address||"—"}</td>
       <td>${c.kiotviet_id ? `<span class="badge badge-teal">${c.kiotviet_id}</span>` : '<span class="badge badge-gray">Nội bộ</span>'}</td>
       <td class="td-muted">${fmtDate(c.created_at?.slice(0,10))}</td>
     </tr>`).join("");
+  const from = total ? offset + 1 : 0;
+  const to = Math.min(offset + customers.length, total);
+  document.getElementById("pageInfo").textContent = `Hiển thị ${from}-${to} / ${total}`;
+  document.getElementById("prevBtn").disabled = page <= 1;
+  document.getElementById("nextBtn").disabled = offset + customers.length >= total;
 }
-load().catch(e => toast(e.message,"error"));
+
+function goPage(delta) {
+  page = Math.max(1, page + delta);
+  load();
+}
+
+async function refreshSyncStatus() {
+  try {
+    const st = await api.get("/api/customers/sync/status");
+    const c = st.customers?.last_success_at ? fmtDate(st.customers.last_success_at.slice(0,10)) : "chua";
+    const p = st.products?.last_success_at ? fmtDate(st.products.last_success_at.slice(0,10)) : "chua";
+    document.getElementById("syncStatus").textContent = `Sync KH: ${c} | SP: ${p}`;
+  } catch {
+    document.getElementById("syncStatus").textContent = "Khong doc duoc trang thai sync";
+  }
+}
+
+async function triggerSync() {
+  const btn = document.getElementById("syncBtn");
+  btn.disabled = true;
+  btn.textContent = "Dang sync...";
+  try {
+    await api.post("/api/customers/sync", {});
+    page = 1;
+    toast("Da dong bo du lieu Odoo");
+    await Promise.all([load(), refreshSyncStatus()]);
+  } catch (e) {
+    toast(e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Dong bo Odoo";
+  }
+}
+Promise.all([load(), refreshSyncStatus()]).catch(e => toast(e.message,"error"));
 </script>
 </body>
 </html>

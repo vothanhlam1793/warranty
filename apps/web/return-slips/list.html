@@ -1,0 +1,220 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Danh sách phiếu trả khách</title>
+  <link rel="stylesheet" href="../assets/app.css"/>
+  <style>
+    .state-tabs { display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .state-tab  { padding:.4rem 1rem; border-radius:20px; border:1.5px solid var(--border);
+                  background:#fff; cursor:pointer; font-size:.85rem; font-weight:600; transition:.15s; }
+    .state-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .state-tab .count { display:inline-block; background:rgba(0,0,0,.12); border-radius:10px;
+                        padding:0 6px; font-size:.75rem; margin-left:.35rem; }
+
+    .slip-card  { background:#fff; border:1px solid var(--border); border-radius:12px;
+                  padding:1rem 1.1rem; margin-bottom:.75rem; display:flex; gap:1rem;
+                  align-items:flex-start; flex-wrap:wrap; }
+    .slip-meta  { flex:1; min-width:200px; }
+    .slip-code  { font-size:1.1rem; font-weight:700; color:var(--accent); }
+    .slip-name  { font-size:.92rem; color:var(--ink-2); margin:.2rem 0; }
+    .slip-sub   { font-size:.82rem; color:var(--ink-3); }
+    .slip-note  { font-size:.82rem; color:var(--ink-2); margin-top:.4rem;
+                  padding:.4rem .6rem; background:var(--surface-2); border-radius:6px; }
+    .slip-actions { display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; flex-shrink:0; }
+    .slip-thumb { width:64px; height:64px; object-fit:cover; border-radius:8px;
+                  border:1px solid var(--border); cursor:pointer; }
+    .empty      { text-align:center; padding:3rem; color:var(--ink-3); }
+
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center; }
+    .modal-overlay.hidden { display:none; }
+    .modal-box { background:#fff;border-radius:14px;padding:1.5rem;width:min(420px,92vw);box-shadow:0 8px 40px rgba(0,0,0,.18); }
+    .modal-title { font-weight:700;font-size:1.05rem;margin-bottom:1rem; }
+    .modal-footer { display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem; }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar"></aside>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Phiếu trả khách</span>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <a href="/return-slips/new.html" class="btn btn-primary btn-sm">＋ Lập phiếu trả mới</a>
+        <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
+      </div>
+    </div>
+
+    <div class="page">
+      <!-- Tabs trạng thái -->
+      <div class="state-tabs">
+        <button class="state-tab active" data-state="" onclick="switchTab(this,'')">
+          Tất cả <span class="count" id="cnt-all">0</span>
+        </button>
+        <button class="state-tab" data-state="C4" onclick="switchTab(this,'C4')">
+          🗒 Lập phiếu / Chờ xử lý <span class="count" id="cnt-C4">0</span>
+        </button>
+        <button class="state-tab" data-state="C5" onclick="switchTab(this,'C5')">
+          📦 Đã đóng gói / Chờ giao <span class="count" id="cnt-C5">0</span>
+        </button>
+        <button class="state-tab" data-state="C6" onclick="switchTab(this,'C6')">
+          ✓ Đã chuyển / Hoàn thành <span class="count" id="cnt-C6">0</span>
+        </button>
+      </div>
+
+      <div id="listArea"><div class="empty">Đang tải...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận đóng gói C4→C5 -->
+<div id="packModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">📦 Xác nhận đóng gói & giao vận</div>
+    <p class="text-sm text-muted" id="packItemInfo" style="margin-bottom:.75rem"></p>
+    <div class="form-group">
+      <label class="form-label">Người thực hiện</label>
+      <input id="packActor" class="form-control" placeholder="Tên nhân viên"/>
+    </div>
+    <div class="form-group" style="margin-top:.6rem">
+      <label class="form-label">Ghi chú phương án giao</label>
+      <textarea id="packNote" class="form-control" rows="3" placeholder="Ví dụ: Giao ship J&T, lấy hàng lúc 14h..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('packModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitPack()">✓ Xác nhận → C5</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận đã giao C5→C6 -->
+<div id="deliverModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">✅ Xác nhận đã giao khách</div>
+    <p class="text-sm text-muted" id="deliverItemInfo" style="margin-bottom:.75rem"></p>
+    <div class="form-group">
+      <label class="form-label">Người xác nhận</label>
+      <input id="deliverActor" class="form-control" placeholder="Tên nhân viên"/>
+    </div>
+    <div class="form-group" style="margin-top:.6rem">
+      <label class="form-label">Ghi chú xác nhận giao</label>
+      <textarea id="deliverNote" class="form-control" rows="3" placeholder="Ví dụ: Khách nhận hàng lúc 15h30, ký nhận xong..."></textarea>
+    </div>
+    <div class="form-group" style="margin-top:.6rem">
+      <label class="form-label">Ảnh bằng chứng giao hàng (tuỳ chọn)</label>
+      <input type="file" id="deliverFile" accept="image/*" class="form-control"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('deliverModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitDeliver()">✓ Hoàn thành → C6</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
+<script>
+let allSlips = [];
+let activeState = '';
+let activeSlipId = null;
+
+async function init() {
+  await checkAuth();
+   hydrateActorInputs(['packActor', 'deliverActor']);
+  await reload();
+}
+
+async function reload() {
+  const res = await api.get('/api/return-slips/list');
+  allSlips = res.items || [];
+
+  // cập nhật count badges
+  document.getElementById('cnt-all').textContent = allSlips.length;
+  ['C4','C5','C6'].forEach(s => {
+    document.getElementById(`cnt-${s}`).textContent = allSlips.filter(x => x.status === s).length;
+  });
+
+  renderList();
+}
+
+function switchTab(btn, state) {
+  document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  activeState = state;
+  renderList();
+}
+
+function renderList() {
+  const items = activeState ? allSlips.filter(x => x.status === activeState) : allSlips;
+  const area = document.getElementById('listArea');
+  if (!items.length) {
+    area.innerHTML = '<div class="empty">Không có phiếu nào trong trạng thái này.</div>';
+    return;
+  }
+  area.innerHTML = items.map(x => renderCard(x)).join('');
+}
+
+function renderCard(x) {
+  const isSlipShape = !!(x.slip_no || x.status || x.items || x.item_count !== undefined);
+  const state = x.status || x.workflow_state;
+  const stateLabel = { C4:'🗒 Lập phiếu / Chờ xử lý', C5:'📦 Đã đóng gói / Chờ giao', C6:'✓ Đã giao khách' };
+  const stateClass = { C4:'badge-yellow', C5:'badge-yellow', C6:'badge-green' };
+
+  const thumbUrl = isSlipShape
+    ? (state === 'C6' ? x.delivered_image_url : x.pack_image_url)
+    : x.evidence_url;
+  const thumb = thumbUrl
+    ? `<img src="http://localhost:8001${thumbUrl}" class="slip-thumb" onclick="window.open('http://localhost:8001${thumbUrl}')" title="Xem ảnh"/>`
+    : '';
+
+  const itemSummary = isSlipShape
+    ? (x.items || []).map(i => i.item_code).filter(Boolean).join(', ')
+    : (x.item_code || '');
+  const detailHref = isSlipShape
+    ? `/return-slips/detail.html?id=${x.id}`
+    : `/return-slips/detail.html?item_id=${x.id}`;
+
+  let actionBtns = '';
+  if (state === 'C4') {
+    actionBtns = `
+      <a class="btn btn-primary btn-sm" href="${detailHref}">📦 Mở chi tiết C4</a>
+      <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
+  } else if (state === 'C5') {
+    actionBtns = `
+      <a class="btn btn-primary btn-sm" href="${detailHref}">🚚 Mở chi tiết C5</a>
+      <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
+  } else if (state === 'C6') {
+    actionBtns = `
+      <span class="badge badge-green">✓ Hoàn thành ${x.delivered_at ? fmtDate(x.delivered_at.slice(0,10)) : (x.returned_date ? fmtDate(x.returned_date) : '')}</span>
+      <a class="btn btn-ghost btn-sm" href="${detailHref}">Chi tiết</a>`;
+  }
+
+  const noteHtml = state === 'C6'
+    ? (x.delivery_note ? `<div class="slip-note">📝 ${x.delivery_note}</div>` : '')
+    : ((x.shipping_note || x.diagnosis_note) ? `<div class="slip-note">📝 ${x.shipping_note || x.diagnosis_note}</div>` : '');
+
+  return `<div class="slip-card">
+    <div class="slip-meta">
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span class="slip-code">${x.slip_no || x.item_code || ('TK-' + x.id)}</span>
+        <span class="badge ${stateClass[state]}">${stateLabel[state]||state}</span>
+      </div>
+      <div class="slip-name">${itemSummary || 'Chưa có item'}</div>
+      <div class="slip-sub">
+        👤 ${x.customer_name||'—'}${x.customer_phone ? ' · '+x.customer_phone : ''}
+        &nbsp;·&nbsp; ${x.item_count || 1} món
+      </div>
+      ${x.note ? `<div class="slip-note" style="margin-top:.3rem">📄 ${x.note}</div>` : ''}
+      ${noteHtml}
+    </div>
+    ${thumb}
+    <div class="slip-actions">${actionBtns}</div>
+  </div>`;
+}
+
+init().catch(e => toast(e.message || 'Lỗi tải trang', 'error'));
+</script>
+</body>
+</html>

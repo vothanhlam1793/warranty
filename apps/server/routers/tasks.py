@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
-from ..models import TicketItem, WorkflowLog, WorkflowState, Ticket, Customer, Product
+from ..models import TicketItem, WorkflowLog, WorkflowState, Ticket, Customer, Product, ChecklistRun, ChecklistStage, ChecklistConclusion
 
 router = APIRouter(tags=["tasks"])
 
@@ -28,6 +28,24 @@ def _days_since(dt: Optional[datetime]) -> int:
         return 0
     delta = datetime.utcnow() - dt
     return delta.days
+
+
+def _working_days_since(dt: Optional[datetime]) -> int:
+    """Số ngày làm việc từ dt đến hôm nay, bỏ qua Chủ nhật."""
+    if not dt:
+        return 0
+    start = dt.date()
+    end = date.today()
+    if start > end:
+        return 0
+    days = 0
+    cur = start
+    from datetime import timedelta
+    while cur <= end:
+        if cur.weekday() != 6:  # Sunday
+            days += 1
+        cur += timedelta(days=1)
+    return max(days - 1, 0)
 
 
 def _last_log_date(item: TicketItem, state: str) -> Optional[datetime]:
@@ -104,11 +122,13 @@ def get_pending_tasks(db: Session = Depends(get_db)):
         else:
             log_dt = _last_log_date(item, state)
 
-        days = _days_since(log_dt)
+        days = _working_days_since(log_dt)
         task = _serialize_task_item(item, days)
 
         # Đánh dấu quá hạn
-        if state == "B2" and days > 7:
+        if state == "B1" and days > 2:
+            task["is_overdue"] = True
+        elif state == "B2" and days > 7:
             task["is_overdue"] = True
         elif state == "C5" and days > 2:
             task["is_overdue"] = True
@@ -213,6 +233,30 @@ def quick_state_change(
         new_state = WorkflowState(to_state)
     except ValueError:
         raise HTTPException(400, f"Invalid state: {to_state}")
+
+    # Chặn các bước phải đi qua nghiệp vụ cụ thể
+    if item.workflow_state == WorkflowState.A3 and new_state == WorkflowState.B1:
+        raise HTTPException(400, "A3 -> B1 phải thực hiện qua tạo phiếu gửi NCC")
+    if item.workflow_state == WorkflowState.B1 and new_state == WorkflowState.B2:
+        raise HTTPException(400, "B1 -> B2 phải thực hiện qua xác nhận gửi phiếu NCC")
+    if item.workflow_state == WorkflowState.B2 and new_state == WorkflowState.C1:
+        raise HTTPException(400, "B2 -> C1 phải thực hiện qua phiếu nhận về NCC")
+    if item.workflow_state == WorkflowState.A2 and new_state == WorkflowState.A3 and item.a2_required:
+        has_a2 = db.query(ChecklistRun).filter(
+            ChecklistRun.ticket_item_id == item.id,
+            ChecklistRun.stage == ChecklistStage.A2_PRECHECK,
+            ChecklistRun.conclusion == ChecklistConclusion.completed,
+        ).first()
+        if not has_a2:
+            raise HTTPException(400, "Item yêu cầu A2 checklist completed trước khi sang A3")
+    if item.workflow_state == WorkflowState.C1 and new_state in (WorkflowState.C2, WorkflowState.C3):
+        has_c1 = db.query(ChecklistRun).filter(
+            ChecklistRun.ticket_item_id == item.id,
+            ChecklistRun.stage == ChecklistStage.C1_RETURN,
+            ChecklistRun.finalized_at != None,
+        ).first()
+        if not has_c1:
+            raise HTTPException(400, "Cần checklist C1 finalized trước khi sang C2/C3")
 
     from ..models import WorkflowLog
     old_state = item.workflow_state

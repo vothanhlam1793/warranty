@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
+from .auth import resolve_actor
 from ..models import (
     Ticket, TicketItem, Customer, Product,
     WorkflowState, RequestedAction, WorkflowLog,
@@ -40,7 +41,7 @@ class TicketIn(BaseModel):
 class StateTransitionIn(BaseModel):
     to_state: WorkflowState
     note: str                              # bắt buộc
-    actor: str                             # bắt buộc
+    actor: Optional[str] = None
     diagnosis_note: Optional[str] = None
     expected_return_date: Optional[date] = None
 
@@ -143,10 +144,11 @@ def _serialize_ticket(ticket: Ticket) -> dict:
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @router.post("", status_code=201)
-def create_ticket(payload: TicketIn, db: Session = Depends(get_db)):
+def create_ticket(payload: TicketIn, request: Request, db: Session = Depends(get_db)):
     if not db.get(Customer, payload.customer_id):
         raise HTTPException(404, "Customer not found")
 
+    created_by = resolve_actor(request, db, payload.created_by)
     ticket_no = _next_ticket_no(db)
     deadline = payload.received_date + timedelta(days=14)
     ticket = Ticket(
@@ -157,7 +159,7 @@ def create_ticket(payload: TicketIn, db: Session = Depends(get_db)):
         extension_days=0,
         notified_late=False,
         note=payload.note,
-        created_by=payload.created_by,
+        created_by=created_by,
     )
     db.add(ticket)
     db.flush()
@@ -186,7 +188,7 @@ def create_ticket(payload: TicketIn, db: Session = Depends(get_db)):
             from_state=None,
             to_state=WorkflowState.A1,
             note="Tiếp nhận",
-            actor=payload.created_by,
+            actor=created_by,
         )
         db.add(log)
 
@@ -259,6 +261,7 @@ def transition_state(
     ticket_id: int,
     item_id: int,
     payload: StateTransitionIn,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     item = db.query(TicketItem).filter(
@@ -273,8 +276,7 @@ def transition_state(
     # ── 1. Validate note và actor bắt buộc ───────────────────────────────────
     if not payload.note or not payload.note.strip():
         raise HTTPException(400, "Bắt buộc phải có ghi chú (note)")
-    if not payload.actor or not payload.actor.strip():
-        raise HTTPException(400, "Bắt buộc phải có tên người thực hiện (actor)")
+    actor = resolve_actor(request, db, payload.actor, required=True)
 
     # ── 2. Validate không chuyển về cùng state ───────────────────────────────
     if payload.to_state == old_state:
@@ -341,7 +343,7 @@ def transition_state(
         from_state=old_state,
         to_state=payload.to_state,
         note=payload.note,
-        actor=payload.actor,
+        actor=actor,
     )
     db.add(log)
     db.commit()
@@ -401,6 +403,7 @@ def update_item_notes(
 def extend_deadline(
     ticket_id: int,
     payload: ExtendDeadlineIn,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Gia hạn deadline thêm N ngày, ghi log lý do."""
@@ -412,6 +415,7 @@ def extend_deadline(
     if payload.extra_days <= 0:
         raise HTTPException(400, "extra_days phải > 0")
 
+    actor = resolve_actor(request, db, payload.actor)
     old_deadline = ticket.deadline_date
     new_deadline = (old_deadline or date.today()) + timedelta(days=payload.extra_days)
     ticket.deadline_date = new_deadline
@@ -425,7 +429,7 @@ def extend_deadline(
                 from_state=item.workflow_state,
                 to_state=item.workflow_state,
                 note=f"Gia hạn +{payload.extra_days} ngày. Lý do: {payload.reason}. Deadline mới: {new_deadline.strftime('%d/%m/%Y')}",
-                actor=payload.actor,
+                actor=actor,
             ))
             break  # chỉ log 1 lần cho item đầu tiên còn mở
 
@@ -448,12 +452,14 @@ def rollback_state(
     ticket_id: int,
     item_id: int,
     payload: RollbackIn,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Hoàn tác bước cuối của item về trạng thái trước đó."""
     if not payload.reason or not payload.reason.strip():
         raise HTTPException(400, "Bắt buộc phải có lý do hoàn tác")
 
+    actor = resolve_actor(request, db, payload.actor)
     item = db.query(TicketItem).filter(
         TicketItem.id == item_id,
         TicketItem.ticket_id == ticket_id,
@@ -514,7 +520,7 @@ def rollback_state(
         from_state=current_state,
         to_state=prev_state,
         note=f"Hoàn tác: {payload.reason}",
-        actor=payload.actor or "system",
+        actor=actor or "system",
     ))
     db.commit()
     db.refresh(item)
@@ -524,6 +530,7 @@ def rollback_state(
 def notify_late(
     ticket_id: int,
     payload: NotifyLateIn,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Ghi nhận đã gọi báo khách trễ."""
@@ -533,6 +540,7 @@ def notify_late(
     if not ticket:
         raise HTTPException(404, "Ticket not found")
 
+    actor = resolve_actor(request, db, payload.actor)
     ticket.notified_late = True
 
     note_text = payload.note or "Đã gọi báo khách hàng về việc trễ hạn"
@@ -543,10 +551,9 @@ def notify_late(
                 from_state=item.workflow_state,
                 to_state=item.workflow_state,
                 note=f"📞 {note_text}",
-                actor=payload.actor,
+                actor=actor,
             ))
             break
 
     db.commit()
     return {"ok": True, "notified_late": True}
-

@@ -3,12 +3,13 @@
 import os, shutil, uuid
 from datetime import date
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
+from .auth import resolve_actor
 from ..models import (
     SupplierOrder, SupplierOrderItem, SupplierOrderStatus,
     TicketItem, Supplier, WorkflowLog, WorkflowState,
@@ -26,13 +27,14 @@ class SupplierOrderItemIn(BaseModel):
 class SupplierOrderIn(BaseModel):
     supplier_id: int
     note: Optional[str] = None
-    actor: str          # bắt buộc
+    actor: Optional[str] = None
     items: List[SupplierOrderItemIn]
 
 
 class SendOrderIn(BaseModel):
-    actor: str          # bắt buộc
+    actor: Optional[str] = None
     evidence_url: str   # bắt buộc — ảnh bằng chứng đã gửi NCC
+    note: Optional[str] = None
 
 
 class ReceiveBackItemIn(BaseModel):
@@ -87,7 +89,8 @@ def _serialize_order(order: SupplierOrder) -> dict:
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @router.post("", status_code=201)
-def create_order(payload: SupplierOrderIn, db: Session = Depends(get_db)):
+def create_order(payload: SupplierOrderIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor, required=True)
     if not db.get(Supplier, payload.supplier_id):
         raise HTTPException(404, "Supplier not found")
 
@@ -121,7 +124,7 @@ def create_order(payload: SupplierOrderIn, db: Session = Depends(get_db)):
             from_state=old,
             to_state=WorkflowState.B1,
             note=f"Đã đưa vào phiếu gửi NCC",
-            actor=payload.actor,
+            actor=actor,
         ))
 
     db.commit()
@@ -195,16 +198,21 @@ UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
 
 
 @router.post("/{order_id}/send")
-def mark_sent(order_id: int, payload: SendOrderIn, db: Session = Depends(get_db)):
+def mark_sent(order_id: int, payload: SendOrderIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor, required=True)
     order = db.get(SupplierOrder, order_id)
     if not order:
         raise HTTPException(404, "Order not found")
     if order.status != SupplierOrderStatus.draft:
         raise HTTPException(400, "Phiếu đã được gửi trước đó")
+    if not payload.evidence_url.strip() or not payload.evidence_url.startswith("/uploads/"):
+        raise HTTPException(400, "Cần có ảnh bằng chứng hợp lệ trước khi xác nhận gửi NCC")
 
     order.status = SupplierOrderStatus.sent
     order.sent_date = date.today()
     order.evidence_url = payload.evidence_url  # lưu ảnh bằng chứng vào phiếu
+    if payload.note and payload.note.strip():
+        order.note = payload.note.strip()
 
     # B1 → B2 tự động cho tất cả items trong phiếu
     for oi in order.items:
@@ -216,7 +224,7 @@ def mark_sent(order_id: int, payload: SendOrderIn, db: Session = Depends(get_db)
                 from_state=WorkflowState.B1,
                 to_state=WorkflowState.B2,
                 note=f"Đã gửi NCC – phiếu {order.order_no}",
-                actor=payload.actor,
+                actor=actor,
             ))
     db.commit()
     return {"status": "sent"}
@@ -239,7 +247,8 @@ async def upload_order_evidence(order_id: int, file: UploadFile = File(...), db:
 
 
 @router.post("/{order_id}/receive-back")
-def receive_back(order_id: int, payload: ReceiveBackIn, db: Session = Depends(get_db)):
+def receive_back(order_id: int, payload: ReceiveBackIn, request: Request, db: Session = Depends(get_db)):
+    actor = resolve_actor(request, db, payload.actor)
     order = db.get(SupplierOrder, order_id)
     if not order:
         raise HTTPException(404, "Order not found")
@@ -261,7 +270,7 @@ def receive_back(order_id: int, payload: ReceiveBackIn, db: Session = Depends(ge
             db.add(WorkflowLog(
                 ticket_item_id=ti.id, from_state=old, to_state=WorkflowState.C1,
                 note=f"NCC trả về: {rb.result}. {rb.result_note or ''}",
-                actor=payload.actor,
+                actor=actor,
             ))
 
     all_received = all(oi.received_back for oi in order.items)

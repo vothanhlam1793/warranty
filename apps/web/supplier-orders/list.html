@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -10,27 +10,13 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item active" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <a class="nav-item" href="/supplier-orders/receive.html"><span class="icon">📥</span>Nhận hàng NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title">Danh sách phiếu gửi NCC</span>
-      <a href="/supplier-orders/new.html" class="btn btn-primary btn-sm">＋ Tạo phiếu gửi NCC</a>
+      <a href="/supplier-orders/new.html" class="btn btn-primary btn-sm">＋ Tạo Phiếu gửi NCC</a>
+      <a class="nav-item" href="/supplier-receives/new.html"><span class="icon">📥</span>Phiếu nhận NCC</a>
+      <a class="nav-item" href="/return-slips/list.html"><span class="icon">🧾</span>Phiếu trả khách</a>
     </div>
     <div class="page">
       <div class="card">
@@ -82,6 +68,7 @@
 
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 let activeOrderId = null;
 let activeOrderItems = [];
@@ -90,6 +77,7 @@ const STATUS_LABELS = { draft:"Nháp", sent:"Đã gửi NCC", received:"Đã nh�
 const STATUS_BADGE  = { draft:"badge-gray", sent:"badge-yellow", received:"badge-green" };
 
 async function load() {
+  await checkAuth();
   const orders = await api.get("/api/supplier-orders");
   document.getElementById("loading").style.display = "none";
   if (!orders.length) { document.getElementById("empty").style.display = "block"; return; }
@@ -105,7 +93,7 @@ async function load() {
       <td onclick="event.stopPropagation()">
         <div style="display:flex;gap:.4rem;flex-wrap:wrap">
           <a href="/supplier-orders/detail.html?id=${o.id}" class="btn btn-secondary btn-sm">🔍 Chi tiết</a>
-          <button class="btn btn-secondary btn-sm" onclick="window.open('http://localhost:8000/api/supplier-orders/${o.id}/print')">🖨 In phiếu</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.open('http://localhost:8001/api/supplier-orders/${o.id}/print')">🖨 In phiếu</button>
           ${o.status === "sent" ? `<button class="btn btn-secondary btn-sm" onclick="openReceiveModal(${o.id})">📥 Nhận về</button>` : ""}
         </div>
       </td>

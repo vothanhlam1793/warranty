@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -10,28 +10,13 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item active" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title" id="pageTitle">Chi tiết phiếu</span>
       <div class="topbar-actions">
         <div id="topbarUser" style="display:flex;align-items:center;gap:.5rem"></div>
-        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8000/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
+        <button class="btn btn-secondary btn-sm" onclick="window.open(`http://localhost:8001/api/transactions/${ticketId}/print`)">🖨 In phiếu trả KH</button>
         <a href="/tickets/list.html" class="btn btn-ghost btn-sm">← Danh sách</a>
       </div>
     </div>
@@ -188,6 +173,34 @@
 
 <div id="toast-container"></div>
 
+<!-- Modal: Chọn checklist template -->
+<div class="modal-overlay hidden" id="templateModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <h3 id="templateModalTitle">Chọn template checklist</h3>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal('templateModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label class="form-label">Người đổi mapping *</label>
+        <input id="mapActor" class="form-control" placeholder="Tên nhân viên"/>
+      </div>
+      <div class="form-group mb-2">
+        <label class="form-label">Lý do *</label>
+        <input id="mapReason" class="form-control" placeholder="Điều chỉnh checklist theo thực tế"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Template khả dụng</label>
+        <div id="templateList" style="display:flex;flex-direction:column;gap:.4rem;max-height:280px;overflow:auto"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('templateModal')">Huỷ</button>
+      <button class="btn btn-primary" onclick="submitTemplateMapping()">✓ Lưu mapping</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: gia hạn deadline -->
 <div class="modal-overlay hidden" id="extendModal">
   <div class="modal">
@@ -216,14 +229,18 @@
   </div>
 </div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const ticketId = parseInt(params.get("id"));
 let ticket = null;
 let activeItemId = null;
+let activeTemplateMapping = null;
+let checklistTemplates = [];
 
 async function loadTicket() {
   ticket = await api.get(`/api/tickets/${ticketId}`);
+  checklistTemplates = await api.get('/api/checklists/templates').catch(() => []);
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("content").style.display = "block";
   document.getElementById("pageTitle").textContent = ticket.ticket_no;
@@ -289,6 +306,7 @@ function renderDeadline(t) {
 
 // Modal gia hạn
 function openExtendModal() {
+  setInputValueIfEmpty('extActor', getCurrentActorName());
   openModal("extendModal");
 }
 
@@ -340,13 +358,16 @@ function renderItems() {
             ${item.result_note ? `<p class="text-sm" style="color:var(--accent)">✓ ${item.result_note}</p>` : ""}
             ${item.evidence_url ? `
               <div style="margin-top:.4rem">
-                <a href="http://localhost:8000${item.evidence_url}" target="_blank">
-                  <img src="http://localhost:8000${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
+                <a href="http://localhost:8001${item.evidence_url}" target="_blank">
+                  <img src="http://localhost:8001${item.evidence_url}" style="height:56px;border-radius:6px;border:2px solid var(--accent);cursor:pointer" title="Bằng chứng — click để xem"/>
                 </a>
               </div>` : ""}
             <div style="display:flex;gap:.75rem;margin-top:.35rem;flex-wrap:wrap">
               ${item.expected_return_date ? `<span class="text-sm text-muted">📅 Dự kiến trả: ${fmtDate(item.expected_return_date)}</span>` : ""}
               ${item.returned_date ? `<span class="badge badge-green">✓ Đã trả ${fmtDate(item.returned_date)}</span>` : ""}
+            </div>
+            <div id="checklist-${item.id}" style="margin-top:.6rem;padding:.6rem;border:1px dashed var(--border);border-radius:8px;background:var(--surface-2)">
+              <div class="text-sm text-muted">Checklist: đang tải...</div>
             </div>
           </div>
         </div>
@@ -356,6 +377,7 @@ function renderItems() {
         </div>
       </div>
     </div>`).join("");
+  ticket.items.forEach((item) => renderChecklistBox(item));
 }
 
 function renderItemActions(item) {
@@ -374,17 +396,17 @@ function renderItemActions(item) {
   } else if (s === 'B2') {
     btns += `<span class="text-sm text-muted" style="padding:.3rem .5rem">⏳ NCC đang xử lý</span>`;
   } else if (s === 'C1') {
-    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C1')">🔎 Kiểm tra kết quả NCC</button>`;
+    btns += `<span class="badge badge-gray">Dùng checklist C1 để kết luận PASS/FAIL</span>`;
   } else if (s === 'C2') {
-    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C2')">📦 Đóng gói xong</button>`;
+    btns += `<button class="btn btn-primary btn-sm" onclick="openReturnSlipPage()">🧾 Lập phiếu trả khách</button>`;
   } else if (s === 'C3') {
-    btns += `<button class="btn btn-primary btn-sm" onclick="openActionModal(${id},'C3')">💰 Cần thu tiền</button>`;
-    btns += `<button class="btn btn-secondary btn-sm" onclick="openActionModal(${id},'C3_pass')">✓ Xử lý được (PASS)</button>`;
+    btns += `<button class="btn btn-primary btn-sm" onclick="openReturnSlipPage()">🧾 Lập phiếu trả khách</button>`;
   } else if (s === 'C4') {
     btns += `<button class="btn btn-primary btn-sm" onclick="openTxnModal(${id})">💰 Ghi nhận thu tiền</button>`;
   } else if (s === 'C5') {
     btns += `<button class="btn btn-primary btn-sm" onclick="document.getElementById('upinput-${id}').click()">📷 Xác nhận trả khách</button>`;
     btns += `<input type="file" id="upinput-${id}" style="display:none" accept="image/*" onchange="uploadEvidence(${ticket.id},${id},this)"/>`;
+    btns += `<button class="btn btn-secondary btn-sm" onclick="confirmDeliveryNote(${id})">📝 Xác nhận đã gửi (ghi chú)</button>`;
   } else if (s === 'C6') {
     btns += `<span class="badge badge-green">✓ Hoàn thành</span>`;
   }
@@ -405,7 +427,7 @@ function openRollbackModal(itemId, itemCode, currentState) {
   document.getElementById('rollbackItemInfo').textContent =
     `Mã: ${itemCode || itemId} — trạng thái hiện tại: ${currentState}`;
   document.getElementById('rollbackReason').value = '';
-  document.getElementById('rollbackActor').value = '';
+  document.getElementById('rollbackActor').value = getCurrentActorName();
   openModal('rollbackModal');
 }
 
@@ -429,10 +451,6 @@ let actionTargetState = null; // state sẽ chuyển tới khi submit
 const ACTION_CONFIG = {
   A1: { title: 'Xong kiểm tra → Liên hệ KH',      notePlaceholder: 'Kết quả kiểm tra, tình trạng hàng...', toState: 'A2', showExpected: true, defaultExpected: () => ticket?.deadline_date || '' },
   A2: { title: 'Xác nhận sẵn sàng gửi NCC',        notePlaceholder: 'Ghi chú chuẩn bị gửi NCC...',         toState: 'A3', showExpected: false },
-  C1: { title: 'Kiểm tra kết quả NCC trả về',       notePlaceholder: 'Kết quả kiểm tra sau khi NCC trả...', toState: null, showPass: true      },
-  C2: { title: 'Xác nhận đóng gói – Chờ trả khách', notePlaceholder: 'Ghi chú đóng gói...',                 toState: 'C5', showExpected: false },
-  C3: { title: 'Xác nhận cần thu tiền',             notePlaceholder: 'Lý do thu tiền, số tiền dự kiến...',  toState: 'C4', showExpected: false },
-  C3_pass: { title: 'Xử lý được – chuyển PASS',    notePlaceholder: 'Ghi chú kết quả xử lý...',            toState: 'C2', showExpected: false },
 };
 
 function openActionModal(itemId, actionKey) {
@@ -443,7 +461,7 @@ function openActionModal(itemId, actionKey) {
   actionTargetState = cfg.toState;
 
   document.getElementById('actionModalTitle').textContent = cfg.title;
-  document.getElementById('actionActor').value = '';
+  document.getElementById('actionActor').value = getCurrentActorName();
   document.getElementById('actionNote').value = '';
   document.getElementById('actionNote').placeholder = cfg.notePlaceholder || 'Nhập ghi chú...';
 
@@ -474,7 +492,6 @@ async function submitAction(overrideToState) {
   const note  = document.getElementById('actionNote').value.trim();
   const toState = overrideToState || actionTargetState;
 
-  if (!actor) return toast('Bắt buộc nhập tên người thực hiện', 'error');
   if (!note)  return toast('Bắt buộc nhập ghi chú', 'error');
   if (!toState) return toast('Không xác định được trạng thái tiếp theo', 'error');
 
@@ -495,6 +512,32 @@ async function submitAction(overrideToState) {
 // Giữ lại để không vỡ các chỗ gọi cũ (openStateModal không còn dùng nhưng tránh JS error)
 function openStateModal() {}
 function submitStateChange() {}
+
+function openReturnSlipPage() {
+  if (!ticket?.customer_id) return toast('Thiếu thông tin khách hàng', 'error');
+  location.href = `/return-slips/new.html?customer_id=${ticket.customer_id}&ticket_id=${ticketId}`;
+}
+
+async function confirmDeliveryNote(itemId) {
+  const actor = getCurrentActorName();
+  if (!actor.trim()) return toast('Không xác định được người đang đăng nhập', 'error');
+  const note = prompt('Ghi chú xác nhận đã gửi khách:');
+  if (note === null) return;
+  if (!note.trim()) return toast('Cần nhập ghi chú xác nhận đã gửi', 'error');
+  try {
+    const res = await api.get('/api/return-slips/list?status=C5');
+    const slip = (res.items || []).find(x => (x.items || []).some(it => it.ticket_item_id === itemId));
+    if (!slip) throw new Error('Không tìm thấy phiếu trả C5 chứa item này');
+    await api.post(`/api/return-slips/${slip.id}/confirm-delivered`, {
+      actor: actor.trim(),
+      delivery_note: note.trim(),
+    });
+    toast(`Đã xác nhận hoàn thành ${slip.slip_no}`);
+    await loadTicket();
+  } catch (e) {
+    toast(e.message || 'Lỗi xác nhận giao khách', 'error');
+  }
+}
 
 // Logs modal
 async function openLogsModal(itemId) {
@@ -552,7 +595,7 @@ async function uploadEvidence(tId, itemId, input) {
   const fd = new FormData();
   fd.append("file", file);
   try {
-    const res = await fetch(`http://localhost:8000/api/tickets/${tId}/items/${itemId}/evidence`, {
+    const res = await fetch(`http://localhost:8001/api/tickets/${tId}/items/${itemId}/evidence`, {
       method: "POST", body: fd,
     });
     if (!res.ok) throw new Error(await res.text());
@@ -563,7 +606,96 @@ async function uploadEvidence(tId, itemId, input) {
   }
 }
 
-checkAuth().then(() => {
+async function renderChecklistBox(item) {
+  const box = document.getElementById(`checklist-${item.id}`);
+  if (!box) return;
+  try {
+    const map = await api.get(`/api/checklists/mapping/${item.id}`);
+    const runs = await api.get(`/api/checklists/runs?ticket_item_id=${item.id}`);
+    const a2Name = (checklistTemplates.find(x => x.id === map.a2_template_id) || {}).name || 'Chua chon';
+    const c1Name = (checklistTemplates.find(x => x.id === map.c1_template_id) || {}).name || 'Chua chon';
+    const a2Runs = runs.filter(r => r.stage === 'A2_PRECHECK');
+    const c1Runs = runs.filter(r => r.stage === 'C1_RETURN');
+    const a2Latest = a2Runs[0];
+    const c1Latest = c1Runs[0];
+    const a2State = map.a2_template_locked ? '<span class="badge badge-green">đã chốt</span>' : '<span class="badge badge-gray">chưa chốt</span>';
+    const c1State = map.c1_template_locked ? '<span class="badge badge-green">đã chốt</span>' : '<span class="badge badge-gray">chưa chốt</span>';
+
+    box.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+        <div style="padding:.55rem;border:1px solid var(--border);border-radius:8px;background:#fff">
+          <div class="text-sm"><b>A2 Pre-check:</b> ${a2Name} ${a2State}</div>
+          <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${a2Latest ? (`#${a2Latest.id} - ${a2Latest.conclusion}`) : 'chưa có'}</div>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.45rem">
+            <button class="btn btn-secondary btn-sm" onclick="chooseTemplate(${item.id},'A2',${map.a2_template_locked})">Chọn template A2</button>
+            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'A2_PRECHECK')">Tạo run A2</button>
+            ${a2Latest ? `<a class="btn btn-ghost btn-sm" href="/checklists/run.html?run_id=${a2Latest.id}">Mở run</a>` : ''}
+          </div>
+        </div>
+
+        <div style="padding:.55rem;border:1px solid var(--border);border-radius:8px;background:#fff">
+          <div class="text-sm"><b>C1 Return-check:</b> ${c1Name} ${c1State}</div>
+          <div class="text-sm text-muted" style="margin-top:.25rem">Run gần nhất: ${c1Latest ? (`#${c1Latest.id} - ${c1Latest.conclusion}`) : 'chưa có'}</div>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.45rem">
+            <button class="btn btn-secondary btn-sm" onclick="chooseTemplate(${item.id},'C1',${map.c1_template_locked})">Chọn template C1</button>
+            <button class="btn btn-primary btn-sm" onclick="startRun(${item.id},'C1_RETURN')">Tạo run C1</button>
+            ${c1Latest ? `<a class="btn btn-ghost btn-sm" href="/checklists/run.html?run_id=${c1Latest.id}">Mở run</a>` : ''}
+          </div>
+        </div>
+      </div>`;
+  } catch (e) {
+    box.innerHTML = `<div class="text-sm" style="color:var(--danger)">Checklist loi: ${e.message}</div>`;
+  }
+}
+
+async function chooseTemplate(itemId, stage, locked) {
+  if (locked === true) return toast('Template da lock', 'error');
+  const stageKey = stage === 'A2' ? 'A2_PRECHECK' : 'C1_RETURN';
+  const list = checklistTemplates.filter(x => x.stage === stageKey);
+  if (!list.length) return toast('Khong co template phu hop', 'error');
+  activeTemplateMapping = { itemId, stage, selectedTemplateId: null };
+  document.getElementById('templateModalTitle').textContent = `Chọn template ${stage}`;
+  document.getElementById('mapActor').value = getCurrentActorName();
+  document.getElementById('mapReason').value = 'Điều chỉnh checklist theo thực tế';
+  document.getElementById('templateList').innerHTML = list.map(t => `
+    <label style="display:flex;align-items:center;gap:.5rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:8px;cursor:pointer">
+      <input type="radio" name="templatePick" value="${t.id}" onchange="activeTemplateMapping.selectedTemplateId=${t.id}"/>
+      <span><b>#${t.id}</b> — ${t.name}</span>
+    </label>
+  `).join('');
+  openModal('templateModal');
+}
+
+async function submitTemplateMapping() {
+  if (!activeTemplateMapping) return;
+  const template_id = activeTemplateMapping.selectedTemplateId;
+  if (!template_id) return toast('Vui lòng chọn template', 'error');
+  const actor = document.getElementById('mapActor').value.trim();
+  const reason = document.getElementById('mapReason').value.trim();
+  if (!reason) return toast('Vui lòng nhập lý do', 'error');
+  await api.post(`/api/checklists/mapping/${activeTemplateMapping.itemId}`, {
+    stage: activeTemplateMapping.stage,
+    template_id,
+    actor,
+    reason,
+  });
+  closeModal('templateModal');
+  toast('Đã cập nhật mapping');
+  const target = ticket.items.find(x => x.id === activeTemplateMapping.itemId);
+  if (target) await renderChecklistBox(target);
+}
+
+async function startRun(itemId, stage) {
+  try {
+    const r = await api.post('/api/checklists/runs', { ticket_item_id: itemId, stage });
+    location.href = `/checklists/run.html?run_id=${r.id}`;
+  } catch (e) {
+    toast(e.message || 'Khong tao duoc run', 'error');
+  }
+}
+
+checkAuth().then(user => {
+  hydrateActorInputs(['actionActor', 'rollbackActor', 'mapActor', 'extActor']);
   loadTicket().catch(e => { document.getElementById("loadingState").textContent = "Lỗi: " + e.message; });
 });
 </script>

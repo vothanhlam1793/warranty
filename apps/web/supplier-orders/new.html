@@ -10,22 +10,7 @@
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand"><div class="logo">⚙ WARRANTY</div><div class="sub">Quản lý bảo hành</div></div>
-    <nav>
-      <div class="nav-group-label">Vận hành</div>
-      <a class="nav-item" href="/index.html"><span class="icon">▦</span>Dashboard</a>
-      <a class="nav-item" href="/tickets/list.html"><span class="icon">📋</span>Phiếu bảo hành</a>
-      <a class="nav-item" href="/tickets/new.html"><span class="icon">＋</span>Tạo phiếu mới</a>
-      <a class="nav-item active" href="/supplier-orders/list.html"><span class="icon">🚚</span>Phiếu gửi NCC</a>
-      <div class="nav-group-label">Danh mục</div>
-      <a class="nav-item" href="/masters/suppliers.html"><span class="icon">🏭</span>Nhà cung cấp</a>
-      <a class="nav-item" href="/masters/customers.html"><span class="icon">👤</span>Khách hàng</a>
-      <a class="nav-item" href="/masters/products.html"><span class="icon">📦</span>Sản phẩm</a>
-      <div class="nav-group-label">Tài chính</div>
-      <a class="nav-item" href="/finance/report.html"><span class="icon">💰</span>Thu / Chi</a>
-    </nav>
-  </aside>
+  <aside class="sidebar"></aside>
   <div class="main">
     <div class="topbar">
       <span class="topbar-title">Tạo phiếu gửi NCC</span>
@@ -42,7 +27,7 @@
               <select id="supplierId" class="form-control"><option value="">— Chọn NCC —</option></select>
             </div>
             <div class="form-group">
-              <label class="form-label">Người tạo phiếu *</label>
+              <label class="form-label">Người tạo phiếu</label>
               <input id="orderActor" class="form-control" placeholder="Tên nhân viên..."/>
             </div>
             <div class="form-group full">
@@ -91,6 +76,7 @@
 </div>
 <div id="toast-container"></div>
 <script src="../assets/api.js"></script>
+<script src="../assets/layout.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const preItemIds = (params.get("items") || "").split(",").filter(Boolean).map(Number);
@@ -158,7 +144,6 @@ async function submitOrder() {
   const supplierId = parseInt(document.getElementById("supplierId").value);
   if (!supplierId) return toast("Chọn nhà cung cấp", "error");
   const actor = document.getElementById("orderActor").value.trim();
-  if (!actor) return toast("Nhập tên người tạo phiếu", "error");
   const checked = [...document.querySelectorAll(".item-check:checked")].map(c => ({ ticket_item_id: parseInt(c.value) }));
   if (!checked.length) return toast("Chọn ít nhất 1 mã hàng", "error");
 
@@ -176,7 +161,10 @@ async function submitOrder() {
   }
 }
 
-checkAuth().then(() => init()).catch(e => toast(e.message, "error"));
+checkAuth().then(() => {
+  hydrateActorInputs(["orderActor"]);
+  init();
+}).catch(e => toast(e.message, "error"));
 </script>
 </body>
 </html>
