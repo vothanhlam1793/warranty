@@ -6,6 +6,7 @@
 async function initLayout() {
     const user = await checkAuth().catch(() => null);
     applyGlobalBranding();
+    enhanceDateInputs();
     if (!user) return;
 
     renderSidebar(user);
@@ -33,6 +34,69 @@ function applyGlobalBranding() {
         apple.href = faviconHref;
         head.appendChild(apple);
     }
+}
+
+function formatDateDisplay(isoValue) {
+    if (!isoValue) return '';
+    const m = String(isoValue).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return isoValue;
+    return `${m[3]}/${m[2]}/${m[1]}`;
+}
+
+function parseDateDisplay(displayValue) {
+    const value = String(displayValue || '').trim();
+    if (!value) return '';
+    let m = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+    m = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) return value;
+    return '';
+}
+
+function enhanceDateInputs() {
+    const valueDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+    if (!valueDescriptor) return;
+    document.querySelectorAll('input[type="date"]').forEach((el) => {
+        if (el.dataset.dateEnhanced === '1') return;
+        el.dataset.dateEnhanced = '1';
+        el.type = 'text';
+        el.inputMode = 'numeric';
+        el.placeholder = 'dd/mm/yyyy';
+
+        const syncFromDisplay = () => {
+            const iso = parseDateDisplay(valueDescriptor.get.call(el));
+            el.dataset.isoValue = iso;
+        };
+
+        Object.defineProperty(el, 'value', {
+            configurable: true,
+            enumerable: true,
+            get() {
+                return el.dataset.isoValue || '';
+            },
+            set(nextValue) {
+                const iso = parseDateDisplay(nextValue) || String(nextValue || '').trim();
+                const normalized = parseDateDisplay(iso) || '';
+                el.dataset.isoValue = normalized;
+                valueDescriptor.set.call(el, formatDateDisplay(normalized));
+            },
+        });
+
+        el.addEventListener('blur', () => {
+            syncFromDisplay();
+            valueDescriptor.set.call(el, formatDateDisplay(el.dataset.isoValue || ''));
+        });
+
+        el.addEventListener('input', () => {
+            const raw = valueDescriptor.get.call(el);
+            if (!raw.trim()) el.dataset.isoValue = '';
+        });
+
+        const initialRaw = valueDescriptor.get.call(el);
+        if (initialRaw) {
+            el.value = initialRaw;
+        }
+    });
 }
 
 function renderSidebar(user) {
@@ -110,6 +174,7 @@ function markActiveNav() {
 // Khởi tạo layout khi trang load
 document.addEventListener('DOMContentLoaded', () => {
     applyGlobalBranding();
+    enhanceDateInputs();
     // Chỉ chạy nếu không phải trang login
     if (!window.location.pathname.endsWith('login.html')) {
         initLayout();

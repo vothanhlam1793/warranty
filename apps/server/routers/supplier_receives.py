@@ -12,7 +12,7 @@ from .auth import resolve_actor
 from ..models import (
     SupplierReceive, SupplierReceiveItem, SupplierReceiveStatus,
     SupplierOrderItem, SupplierOrder, Supplier,
-    TicketItem, WorkflowState, WorkflowLog,
+    TicketItem, WorkflowState, WorkflowLog, Transaction, TransactionType, TransactionStatus,
 )
 
 router = APIRouter(prefix="/api/supplier-receives", tags=["supplier-receives"])
@@ -159,6 +159,18 @@ def create_receive(payload: SupplierReceiveIn, request: Request, db: Session = D
             result=ln.result,
             result_note=ln.result_note,
         ))
+        draft_supplier_txn = (
+            db.query(Transaction)
+            .filter(
+                Transaction.ticket_item_id == ti.id,
+                Transaction.type == TransactionType.chi,
+                Transaction.status == TransactionStatus.draft,
+            )
+            .order_by(Transaction.id.desc())
+            .first()
+        )
+        if draft_supplier_txn:
+            draft_supplier_txn.status = TransactionStatus.posted
         old = ti.workflow_state
         ti.workflow_state = WorkflowState.C1
         if ln.result_note:
@@ -182,13 +194,19 @@ def create_receive(payload: SupplierReceiveIn, request: Request, db: Session = D
 
 
 @router.get("")
-def list_receives(db: Session = Depends(get_db)):
-    rows = db.query(SupplierReceive).options(
+def list_receives(
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    query = db.query(SupplierReceive).options(
         joinedload(SupplierReceive.supplier),
         joinedload(SupplierReceive.items).joinedload(SupplierReceiveItem.ticket_item).joinedload(TicketItem.product),
         joinedload(SupplierReceive.items).joinedload(SupplierReceiveItem.ticket_item).joinedload(TicketItem.ticket),
-    ).order_by(SupplierReceive.id.desc()).all()
-    return [_serialize_receive(x) for x in rows]
+    ).order_by(SupplierReceive.id.desc())
+    total = query.count()
+    rows = query.offset(offset).limit(limit).all()
+    return {"total": total, "limit": limit, "offset": offset, "items": [_serialize_receive(x) for x in rows]}
 
 
 @router.get("/{receive_id}")

@@ -7,6 +7,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, Request
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 from pydantic import BaseModel
 
@@ -105,6 +106,38 @@ def list_candidates(customer_id: int = Query(...), db: Session = Depends(get_db)
     }
 
 
+@router.get("/candidate-customers")
+def list_candidate_customers(limit: int = Query(20, ge=1, le=100), db: Session = Depends(get_db)):
+    rows = (
+        db.query(
+            Customer.id.label("customer_id"),
+            Customer.name.label("customer_name"),
+            Customer.phone.label("customer_phone"),
+            Customer.customer_code.label("customer_code"),
+            func.count(TicketItem.id).label("candidate_count"),
+            func.max(Ticket.id).label("latest_ticket_id"),
+        )
+        .join(Ticket, Ticket.customer_id == Customer.id)
+        .join(TicketItem, TicketItem.ticket_id == Ticket.id)
+        .filter(TicketItem.workflow_state.in_([WorkflowState.C2, WorkflowState.C3]))
+        .group_by(Customer.id, Customer.name, Customer.phone, Customer.customer_code)
+        .order_by(func.count(TicketItem.id).desc(), func.max(Ticket.id).desc())
+        .limit(limit)
+        .all()
+    )
+    return {
+        "total": len(rows),
+        "items": [{
+            "id": row.customer_id,
+            "name": row.customer_name,
+            "phone": row.customer_phone,
+            "customer_code": row.customer_code,
+            "candidate_count": int(row.candidate_count or 0),
+            "latest_ticket_id": row.latest_ticket_id,
+        } for row in rows],
+    }
+
+
 @router.get("/_debug")
 def debug_return_slips_source():
     return {
@@ -194,7 +227,12 @@ def create_return_slip(payload: ReturnSlipCreateIn, request: Request, db: Sessio
 
 
 @router.get("/list")
-def list_return_slips(status: Optional[str] = Query(None), db: Session = Depends(get_db)):
+def list_return_slips(
+    status: Optional[str] = Query(None),
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
     query = (
         db.query(ReturnSlip)
         .options(
@@ -209,8 +247,9 @@ def list_return_slips(status: Optional[str] = Query(None), db: Session = Depends
         except ValueError:
             raise HTTPException(400, f"status không hợp lệ: {status}")
         query = query.filter(ReturnSlip.status == state)
-    slips = query.all()
-    return {"total": len(slips), "items": [_serialize_slip(s) for s in slips]}
+    total = query.count()
+    slips = query.offset(offset).limit(limit).all()
+    return {"total": total, "limit": limit, "offset": offset, "items": [_serialize_slip(s) for s in slips]}
 
 
 @router.get("/{slip_id}")

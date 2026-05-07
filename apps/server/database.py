@@ -74,6 +74,19 @@ def init_db():
                 conn.execute(text("ALTER TABLE ticket_items ADD COLUMN delivery_confirm_note TEXT"))
             if "shipping_note" not in cols:
                 conn.execute(text("ALTER TABLE ticket_items ADD COLUMN shipping_note TEXT"))
+            if "deadline_date" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN deadline_date DATE"))
+            if "extension_days" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN extension_days INTEGER DEFAULT 0"))
+            if "notified_late" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN notified_late BOOLEAN DEFAULT 0"))
+            if "requires_customer_payment" not in cols:
+                conn.execute(text("ALTER TABLE ticket_items ADD COLUMN requires_customer_payment BOOLEAN DEFAULT 0"))
+
+            txn_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(transactions)"))]
+            if txn_cols and "status" not in txn_cols:
+                conn.execute(text("ALTER TABLE transactions ADD COLUMN status VARCHAR(20) DEFAULT 'posted'"))
+                conn.execute(text("UPDATE transactions SET status = 'posted' WHERE status IS NULL OR status = ''"))
             
             slip_cols = [r[1] for r in conn.execute(text("PRAGMA table_info(return_slips)"))]
             if slip_cols and "return_method" not in slip_cols:
@@ -91,6 +104,31 @@ def init_db():
             """)).first()
             if not customer_col:
                 conn.execute(text("ALTER TABLE customers ADD COLUMN customer_code VARCHAR(50)"))
+
+            for col_name, ddl in [
+                ("deadline_date", "ALTER TABLE ticket_items ADD COLUMN deadline_date DATE"),
+                ("extension_days", "ALTER TABLE ticket_items ADD COLUMN extension_days INTEGER DEFAULT 0"),
+                ("notified_late", "ALTER TABLE ticket_items ADD COLUMN notified_late BOOLEAN DEFAULT FALSE"),
+                ("requires_customer_payment", "ALTER TABLE ticket_items ADD COLUMN requires_customer_payment BOOLEAN DEFAULT FALSE"),
+            ]:
+                exists = conn.execute(text(f"""
+                    SELECT 1
+                    FROM information_schema.columns
+                    WHERE table_name = 'ticket_items' AND column_name = '{col_name}'
+                    LIMIT 1
+                """)).first()
+                if not exists:
+                    conn.execute(text(ddl))
+
+            txn_status_exists = conn.execute(text("""
+                SELECT 1
+                FROM information_schema.columns
+                WHERE table_name = 'transactions' AND column_name = 'status'
+                LIMIT 1
+            """)).first()
+            if not txn_status_exists:
+                conn.execute(text("ALTER TABLE transactions ADD COLUMN status VARCHAR(20) DEFAULT 'posted'"))
+                conn.execute(text("UPDATE transactions SET status = 'posted' WHERE status IS NULL"))
 
     from .models import (
         ChecklistStage,
@@ -196,6 +234,18 @@ def init_db():
             db.add(slip)
             db.flush()
             db.add(ReturnSlipItem(return_slip_id=slip.id, ticket_item_id=item.id))
+
+        all_items = db.query(TicketItem).options(joinedload(TicketItem.ticket)).all()
+        for item in all_items:
+            if item.deadline_date is None:
+                if item.expected_return_date:
+                    item.deadline_date = item.expected_return_date
+                elif item.ticket and item.ticket.received_date:
+                    item.deadline_date = item.ticket.received_date
+            if item.extension_days is None:
+                item.extension_days = 0
+            if item.notified_late is None:
+                item.notified_late = False
 
         db.commit()
     finally:

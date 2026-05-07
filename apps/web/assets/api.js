@@ -5,7 +5,7 @@ let currentUser = null;
 
 const STATE_LABELS = {
   A1:"Tiếp nhận / Test", A2:"Liên hệ khách", A3:"Chuyển NCC",
-  B1:"NCC đang xử lý", B2:"Xử lý dài hạn",
+  B1:"NCC đang xử lý", B2:"Xử lý dài hạn", B4:"Chờ khách chốt báo giá",
   C1:"NCC trả về - kiểm tra", C2:"PASS - chờ trả", C3:"NO PASS",
   C4:"Cần thu tiền", C5:"Đã xuất phiếu", C6:"Hoàn thành",
 };

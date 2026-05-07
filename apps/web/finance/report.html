@@ -40,6 +40,7 @@
               <tr>
                 <th>Thời gian</th>
                 <th>Loại</th>
+                <th>Trạng thái</th>
                 <th>Số tiền</th>
                 <th>Mã hàng</th>
                 <th>Ghi chú</th>
@@ -122,6 +123,11 @@ async function load() {
       <td>${t.type === "thu"
         ? '<span class="badge badge-green">Thu</span>'
         : '<span class="badge badge-red">Chi</span>'}</td>
+      <td>${t.status === 'posted'
+        ? '<span class="badge badge-green">Đã ghi sổ</span>'
+        : (t.status === 'draft'
+            ? '<span class="badge badge-yellow">Nháp</span>'
+            : '<span class="badge badge-gray">Đã hủy</span>')}</td>
       <td><b style="color:${t.type==="thu"?"var(--accent)":"var(--danger)"}">${fmtMoney(t.amount)}</b></td>
       <td class="td-muted">${t.ticket_item_id || "—"}</td>
       <td>${t.note || "—"}</td>

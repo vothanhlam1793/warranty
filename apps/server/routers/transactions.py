@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from datetime import date
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func
 
 from ..database import get_db
-from ..models import Transaction, TransactionType, TicketItem, WorkflowState, WorkflowLog
+from .auth import resolve_actor
+from ..models import Transaction, TransactionType, TransactionStatus, TicketItem, WorkflowState, WorkflowLog
 
 router = APIRouter(prefix="/api/transactions", tags=["transactions"])
 
@@ -19,8 +20,20 @@ class TransactionIn(BaseModel):
     ticket_item_id: Optional[int] = None
     type: TransactionType
     amount: float
+    status: TransactionStatus = TransactionStatus.posted
     note: Optional[str] = None
     created_by: Optional[str] = None
+
+
+class TransactionUpdateIn(BaseModel):
+    amount: Optional[float] = None
+    note: Optional[str] = None
+    actor: Optional[str] = None
+
+
+class TransactionStatusIn(BaseModel):
+    actor: Optional[str] = None
+    note: Optional[str] = None
 
 
 def _serialize(t: Transaction) -> dict:
@@ -28,6 +41,7 @@ def _serialize(t: Transaction) -> dict:
         "id": t.id,
         "ticket_item_id": t.ticket_item_id,
         "type": t.type,
+        "status": t.status,
         "amount": t.amount,
         "note": t.note,
         "created_by": t.created_by,
@@ -36,15 +50,18 @@ def _serialize(t: Transaction) -> dict:
 
 
 @router.post("", status_code=201)
-def create_transaction(payload: TransactionIn, db: Session = Depends(get_db)):
+def create_transaction(payload: TransactionIn, request: Request, db: Session = Depends(get_db)):
     if payload.ticket_item_id and not db.get(TicketItem, payload.ticket_item_id):
         raise HTTPException(404, "TicketItem not found")
-    t = Transaction(**payload.model_dump())
+    if payload.amount <= 0:
+        raise HTTPException(400, "Số tiền phải lớn hơn 0")
+    actor = resolve_actor(request, db, payload.created_by)
+    t = Transaction(**payload.model_dump(exclude={"created_by"}), created_by=actor)
     db.add(t)
     db.flush()
 
     # C4 → C5 tự động khi ghi transaction thu
-    if payload.ticket_item_id and payload.type == TransactionType.thu:
+    if payload.ticket_item_id and payload.type == TransactionType.thu and payload.status == TransactionStatus.posted:
         ti = db.get(TicketItem, payload.ticket_item_id)
         if ti and ti.workflow_state == WorkflowState.C4:
             ti.workflow_state = WorkflowState.C5
@@ -53,7 +70,7 @@ def create_transaction(payload: TransactionIn, db: Session = Depends(get_db)):
                 from_state=WorkflowState.C4,
                 to_state=WorkflowState.C5,
                 note=f"Đã ghi nhận thu tiền – tự động chuyển C5",
-                actor=payload.created_by,
+                actor=actor,
             ))
 
     db.commit()
@@ -65,6 +82,7 @@ def create_transaction(payload: TransactionIn, db: Session = Depends(get_db)):
 def list_transactions(
     ticket_item_id: Optional[int] = Query(None),
     type: Optional[TransactionType] = Query(None),
+    status: Optional[TransactionStatus] = Query(None),
     db: Session = Depends(get_db),
 ):
     query = db.query(Transaction).order_by(Transaction.created_at.desc())
@@ -72,7 +90,81 @@ def list_transactions(
         query = query.filter(Transaction.ticket_item_id == ticket_item_id)
     if type:
         query = query.filter(Transaction.type == type)
+    if status:
+        query = query.filter(Transaction.status == status)
     return [_serialize(t) for t in query.limit(200).all()]
+
+
+@router.patch("/{transaction_id}")
+def update_transaction(transaction_id: int, payload: TransactionUpdateIn, request: Request, db: Session = Depends(get_db)):
+    txn = db.get(Transaction, transaction_id)
+    if not txn:
+        raise HTTPException(404, "Transaction not found")
+    if txn.status != TransactionStatus.draft:
+        raise HTTPException(400, "Chỉ được sửa giao dịch nháp")
+    if payload.amount is not None:
+        if payload.amount <= 0:
+            raise HTTPException(400, "Số tiền phải lớn hơn 0")
+        txn.amount = payload.amount
+    if payload.note is not None:
+        txn.note = payload.note.strip() or None
+    actor = resolve_actor(request, db, payload.actor)
+    if actor:
+        txn.created_by = actor
+    db.commit()
+    db.refresh(txn)
+    return _serialize(txn)
+
+
+@router.post("/{transaction_id}/post")
+def post_transaction(transaction_id: int, payload: TransactionStatusIn, request: Request, db: Session = Depends(get_db)):
+    txn = db.get(Transaction, transaction_id)
+    if not txn:
+        raise HTTPException(404, "Transaction not found")
+    if txn.status != TransactionStatus.draft:
+        raise HTTPException(400, "Chỉ được ghi sổ giao dịch nháp")
+
+    actor = resolve_actor(request, db, payload.actor)
+    txn.status = TransactionStatus.posted
+    if payload.note and payload.note.strip():
+        txn.note = payload.note.strip()
+    if actor:
+        txn.created_by = actor
+
+    if txn.ticket_item_id and txn.type == TransactionType.thu:
+        ti = db.get(TicketItem, txn.ticket_item_id)
+        if ti and ti.workflow_state == WorkflowState.C4:
+            ti.workflow_state = WorkflowState.C5
+            db.add(WorkflowLog(
+                ticket_item_id=ti.id,
+                from_state=WorkflowState.C4,
+                to_state=WorkflowState.C5,
+                note="Đã ghi nhận thu tiền – tự động chuyển C5",
+                actor=actor,
+            ))
+
+    db.commit()
+    db.refresh(txn)
+    return _serialize(txn)
+
+
+@router.post("/{transaction_id}/cancel")
+def cancel_transaction(transaction_id: int, payload: TransactionStatusIn, request: Request, db: Session = Depends(get_db)):
+    txn = db.get(Transaction, transaction_id)
+    if not txn:
+        raise HTTPException(404, "Transaction not found")
+    if txn.status != TransactionStatus.draft:
+        raise HTTPException(400, "Chỉ được hủy giao dịch nháp")
+
+    actor = resolve_actor(request, db, payload.actor)
+    txn.status = TransactionStatus.cancelled
+    if payload.note and payload.note.strip():
+        txn.note = payload.note.strip()
+    if actor:
+        txn.created_by = actor
+    db.commit()
+    db.refresh(txn)
+    return _serialize(txn)
 
 
 @router.get("/report")
@@ -88,8 +180,9 @@ def report(
         query = query.filter(func.date(Transaction.created_at) <= to_date)
 
     transactions = query.all()
-    total_thu = sum(t.amount for t in transactions if t.type == TransactionType.thu)
-    total_chi = sum(t.amount for t in transactions if t.type == TransactionType.chi)
+    posted_transactions = [t for t in transactions if t.status == TransactionStatus.posted]
+    total_thu = sum(t.amount for t in posted_transactions if t.type == TransactionType.thu)
+    total_chi = sum(t.amount for t in posted_transactions if t.type == TransactionType.chi)
 
     # Dashboard stats
     total_tickets = db.query(TicketItem).count()
@@ -106,7 +199,7 @@ def report(
         "total_thu": total_thu,
         "total_chi": total_chi,
         "profit": total_thu - total_chi,
-        "transaction_count": len(transactions),
+        "transaction_count": len(posted_transactions),
         "stats": {
             "total_items": total_tickets,
             "open_items": open_tickets,
@@ -141,6 +234,7 @@ def print_return_slip(ticket_id: int, db: Session = Depends(get_db)):
         txns = db.query(Transaction).filter(
             Transaction.ticket_item_id == item.id,
             Transaction.type == TransactionType.thu,
+            Transaction.status == TransactionStatus.posted,
         ).all()
         cost = sum(t.amount for t in txns)
         total += cost

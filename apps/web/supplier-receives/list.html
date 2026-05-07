@@ -17,10 +17,28 @@
       </div>
     </div>
     <div class="page">
+      <div class="filter-bar" style="margin-bottom:1rem">
+        <div class="search-wrap"><span class="search-icon">📥</span><input class="form-control" value="Danh sách phiếu nhận NCC" readonly style="padding-left:2.2rem;min-width:300px;background:var(--surface-2)"/></div>
+        <label class="text-sm text-muted" for="pageSize" style="align-self:center">Hiển thị</label>
+        <select id="pageSize" class="form-control" style="max-width:110px" onchange="changePageSize()">
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
       <div class="card"><div class="table-wrap"><table>
         <thead><tr><th>Mã phiếu</th><th>NCC</th><th>Ngày nhận</th><th>Số item</th><th>Người nhận</th><th>Tạo lúc</th></tr></thead>
         <tbody id="tbody"></tbody>
-      </table></div></div>
+      </table></div>
+      <div id="paginationBar" style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:1rem 1.25rem;border-top:1px solid var(--border)">
+        <div id="pageInfo" class="text-sm text-muted">Đang tải...</div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="changePage(-1)">← Trước</button>
+          <span id="pageNumber" class="text-sm text-muted"></span>
+          <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="changePage(1)">Sau →</button>
+        </div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -28,13 +46,42 @@
 <script src="../assets/api.js"></script>
 <script src="../assets/layout.js"></script>
 <script>
+let currentPage = 1;
+let pageSize = 50;
+
 async function load(){
   await checkAuth();
-  const rows = await api.get('/api/supplier-receives');
+  const offset = (currentPage - 1) * pageSize;
+  const data = await api.get(`/api/supplier-receives?limit=${pageSize}&offset=${offset}`);
+  const rows = data.items || [];
+  renderPagination(data.total || 0, data.offset ?? offset, data.limit ?? pageSize);
   document.getElementById('tbody').innerHTML = rows.map(r => `<tr onclick="location.href='/supplier-receives/detail.html?id=${r.id}'" style="cursor:pointer">
     <td><b>${r.receive_no}</b></td><td>${r.supplier_name||''}</td><td>${fmtDate(r.received_date)}</td><td>${r.items?.length||0}</td><td>${r.actor||'—'}</td><td>${(r.created_at||'').slice(0,10)}</td>
   </tr>`).join('');
 }
+
+function renderPagination(total, offset, limit) {
+  const start = total === 0 ? 0 : offset + 1;
+  const end = Math.min(offset + limit, total);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  currentPage = Math.min(Math.max(1, Math.floor(offset / limit) + 1), totalPages);
+  document.getElementById('pageInfo').textContent = total === 0 ? 'Không có phiếu nào' : `Hiển thị ${start}-${end} / ${total} phiếu`;
+  document.getElementById('pageNumber').textContent = `Trang ${currentPage} / ${totalPages}`;
+  document.getElementById('prevBtn').disabled = currentPage <= 1;
+  document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+}
+
+function changePage(step) {
+  currentPage = Math.max(1, currentPage + step);
+  load();
+}
+
+function changePageSize() {
+  pageSize = Number(document.getElementById('pageSize').value || 50);
+  currentPage = 1;
+  load();
+}
+
 load().catch(e=>toast(e.message,'error'));
 </script>
 </body>

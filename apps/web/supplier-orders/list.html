@@ -19,6 +19,16 @@
       <a class="nav-item" href="/return-slips/list.html"><span class="icon">🧾</span>Phiếu trả khách</a>
     </div>
     <div class="page">
+      <div class="filter-bar" style="margin-bottom:1rem">
+        <div class="search-wrap"><span class="search-icon">📄</span><input class="form-control" value="Danh sách phiếu gửi NCC" readonly style="padding-left:2.2rem;min-width:300px;background:var(--surface-2)"/></div>
+        <label class="text-sm text-muted" for="pageSize" style="align-self:center">Hiển thị</label>
+        <select id="pageSize" class="form-control" style="max-width:110px" onchange="changePageSize()">
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
       <div class="card">
         <div class="table-wrap">
           <table>
@@ -39,6 +49,14 @@
         <div id="loading" class="loading">Đang tải...</div>
         <div id="empty" class="empty-state" style="display:none">
           <div class="icon">🚚</div><p>Chưa có phiếu gửi NCC nào</p>
+        </div>
+        <div id="paginationBar" style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:1rem 1.25rem;border-top:1px solid var(--border)">
+          <div id="pageInfo" class="text-sm text-muted">Đang tải...</div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="changePage(-1)">← Trước</button>
+            <span id="pageNumber" class="text-sm text-muted"></span>
+            <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="changePage(1)">Sau →</button>
+          </div>
         </div>
       </div>
     </div>
@@ -72,14 +90,19 @@
 <script>
 let activeOrderId = null;
 let activeOrderItems = [];
+let currentPage = 1;
+let pageSize = 50;
 
 const STATUS_LABELS = { draft:"Nháp", sent:"Đã gửi NCC", received:"Đã nhận về" };
 const STATUS_BADGE  = { draft:"badge-gray", sent:"badge-yellow", received:"badge-green" };
 
 async function load() {
   await checkAuth();
-  const orders = await api.get("/api/supplier-orders");
+  const offset = (currentPage - 1) * pageSize;
+  const data = await api.get(`/api/supplier-orders?limit=${pageSize}&offset=${offset}`);
+  const orders = data.items || [];
   document.getElementById("loading").style.display = "none";
+  renderPagination(data.total || 0, data.offset ?? offset, data.limit ?? pageSize);
   if (!orders.length) { document.getElementById("empty").style.display = "block"; return; }
 
   document.getElementById("tbody").innerHTML = orders.map(o => `
@@ -98,6 +121,28 @@ async function load() {
         </div>
       </td>
     </tr>`).join("");
+}
+
+function renderPagination(total, offset, limit) {
+  const start = total === 0 ? 0 : offset + 1;
+  const end = Math.min(offset + limit, total);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  currentPage = Math.min(Math.max(1, Math.floor(offset / limit) + 1), totalPages);
+  document.getElementById("pageInfo").textContent = total === 0 ? "Không có phiếu nào" : `Hiển thị ${start}-${end} / ${total} phiếu`;
+  document.getElementById("pageNumber").textContent = `Trang ${currentPage} / ${totalPages}`;
+  document.getElementById("prevBtn").disabled = currentPage <= 1;
+  document.getElementById("nextBtn").disabled = currentPage >= totalPages;
+}
+
+function changePage(step) {
+  currentPage = Math.max(1, currentPage + step);
+  load();
+}
+
+function changePageSize() {
+  pageSize = Number(document.getElementById('pageSize').value || 50);
+  currentPage = 1;
+  load();
 }
 
 async function sendOrder(id) {

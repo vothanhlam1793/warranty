@@ -388,9 +388,9 @@ function renderTaskGroups(data) {
           deadlineBadge = `<span style="background:#d97706;color:#fff;font-size:.7rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;white-space:nowrap">⚠ Còn ${item.days_to_deadline}n</span>`;
         }
 
-        // Nút báo khách nếu trễ và chưa báo
+        // Dashboard chỉ điều hướng sang item detail để xử lý notify trễ
         const notifyBtn = (isDeadlineOverdue && !notifiedLate)
-          ? `<button class="btn-task danger" onclick="notifyLate(${item.ticket_id},this)" title="Ghi nhận đã gọi báo khách trễ">📞 Báo KH</button>`
+          ? `<a class="btn-task danger" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}" title="Mở mã xử lý để báo khách trễ">📞 Báo KH</a>`
           : "";
 
         const rowClass = item.is_overdue || isDeadlineOverdue ? "task-item overdue" : "task-item";
@@ -418,7 +418,7 @@ function renderTaskGroups(data) {
             actionHtml += `<button class="btn-task" onclick="quickState(${item.ticket_id},${item.item_id},'${qs.state}',this)">${qs.label}</button>`;
           }
         } else if (cfg.actionType === "contact_customer") {
-          actionHtml = `<button class="btn-task primary" onclick="openContactModal(${item.ticket_id},${item.item_id},'${item.item_code || ""}','${(item.customer_name || "").replace(/'/g, "\\'")}')">📞 Đã liên hệ KH</button>`;
+          actionHtml = `<a class="btn-task primary" href="/ticket-items/detail.html?item_code=${encodeURIComponent(item.item_code || '')}">📞 Mở mã xử lý</a>`;
         } else if (cfg.actionType === "create_supplier_order") {
           actionHtml = `<a class="btn-task primary" href="/supplier-orders/new.html?item_id=${item.item_id}">📦 Tạo phiếu gửi NCC</a>`;
         } else if (cfg.actionType === "confirm_supplier_sent") {

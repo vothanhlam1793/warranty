@@ -47,6 +47,16 @@
     </div>
 
     <div class="page">
+      <div class="filter-bar" style="margin-bottom:1rem">
+        <div class="search-wrap"><span class="search-icon">🧾</span><input class="form-control" value="Danh sách phiếu trả khách" readonly style="padding-left:2.2rem;min-width:300px;background:var(--surface-2)"/></div>
+        <label class="text-sm text-muted" for="pageSize" style="align-self:center">Hiển thị</label>
+        <select id="pageSize" class="form-control" style="max-width:110px" onchange="changePageSize()">
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
       <!-- Tabs trạng thái -->
       <div class="state-tabs">
         <button class="state-tab active" data-state="" onclick="switchTab(this,'')">
@@ -64,6 +74,14 @@
       </div>
 
       <div id="listArea"><div class="empty">Đang tải...</div></div>
+      <div id="paginationBar" style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:1rem 0 0 0">
+        <div id="pageInfo" class="text-sm text-muted">Đang tải...</div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="changePage(-1)">← Trước</button>
+          <span id="pageNumber" class="text-sm text-muted"></span>
+          <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="changePage(1)">Sau →</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -119,6 +137,8 @@
 let allSlips = [];
 let activeState = '';
 let activeSlipId = null;
+let currentPage = 1;
+let pageSize = 50;
 
 async function init() {
   await checkAuth();
@@ -127,27 +147,40 @@ async function init() {
 }
 
 async function reload() {
-  const res = await api.get('/api/return-slips/list');
+  const offset = (currentPage - 1) * pageSize;
+  const statusQuery = activeState ? `&status=${activeState}` : '';
+  const res = await api.get(`/api/return-slips/list?limit=${pageSize}&offset=${offset}${statusQuery}`);
   allSlips = res.items || [];
 
-  // cập nhật count badges
-  document.getElementById('cnt-all').textContent = allSlips.length;
-  ['C4','C5','C6'].forEach(s => {
-    document.getElementById(`cnt-${s}`).textContent = allSlips.filter(x => x.status === s).length;
-  });
+  await refreshTabCounts();
+  renderPagination(res.total || 0, res.offset ?? offset, res.limit ?? pageSize);
 
   renderList();
+}
+
+async function refreshTabCounts() {
+  const [all, c4, c5, c6] = await Promise.all([
+    api.get('/api/return-slips/list?limit=1&offset=0'),
+    api.get('/api/return-slips/list?limit=1&offset=0&status=C4'),
+    api.get('/api/return-slips/list?limit=1&offset=0&status=C5'),
+    api.get('/api/return-slips/list?limit=1&offset=0&status=C6'),
+  ]);
+  document.getElementById('cnt-all').textContent = all.total || 0;
+  document.getElementById('cnt-C4').textContent = c4.total || 0;
+  document.getElementById('cnt-C5').textContent = c5.total || 0;
+  document.getElementById('cnt-C6').textContent = c6.total || 0;
 }
 
 function switchTab(btn, state) {
   document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   activeState = state;
-  renderList();
+  currentPage = 1;
+  reload();
 }
 
 function renderList() {
-  const items = activeState ? allSlips.filter(x => x.status === activeState) : allSlips;
+  const items = allSlips;
   const area = document.getElementById('listArea');
   if (!items.length) {
     area.innerHTML = '<div class="empty">Không có phiếu nào trong trạng thái này.</div>';
@@ -212,6 +245,28 @@ function renderCard(x) {
     ${thumb}
     <div class="slip-actions">${actionBtns}</div>
   </div>`;
+}
+
+function renderPagination(total, offset, limit) {
+  const start = total === 0 ? 0 : offset + 1;
+  const end = Math.min(offset + limit, total);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  currentPage = Math.min(Math.max(1, Math.floor(offset / limit) + 1), totalPages);
+  document.getElementById('pageInfo').textContent = total === 0 ? 'Không có phiếu nào' : `Hiển thị ${start}-${end} / ${total} phiếu`;
+  document.getElementById('pageNumber').textContent = `Trang ${currentPage} / ${totalPages}`;
+  document.getElementById('prevBtn').disabled = currentPage <= 1;
+  document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+}
+
+function changePage(step) {
+  currentPage = Math.max(1, currentPage + step);
+  reload();
+}
+
+function changePageSize() {
+  pageSize = Number(document.getElementById('pageSize').value || 50);
+  currentPage = 1;
+  reload();
 }
 
 init().catch(e => toast(e.message || 'Lỗi tải trang', 'error'));

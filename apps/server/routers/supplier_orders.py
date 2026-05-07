@@ -3,7 +3,7 @@
 import os, shutil, uuid
 from datetime import date
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request, Query
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
@@ -13,6 +13,7 @@ from .auth import resolve_actor
 from ..models import (
     SupplierOrder, SupplierOrderItem, SupplierOrderStatus,
     TicketItem, Supplier, WorkflowLog, WorkflowState,
+    Transaction, TransactionType, TransactionStatus,
 )
 
 router = APIRouter(prefix="/api/supplier-orders", tags=["supplier-orders"])
@@ -159,8 +160,12 @@ def list_sent_orders(db: Session = Depends(get_db)):
 
 
 @router.get("")
-def list_orders(db: Session = Depends(get_db)):
-    orders = (
+def list_orders(
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    query = (
         db.query(SupplierOrder)
         .options(
             joinedload(SupplierOrder.supplier),
@@ -170,9 +175,10 @@ def list_orders(db: Session = Depends(get_db)):
                 .joinedload(TicketItem.ticket),
         )
         .order_by(SupplierOrder.id.desc())
-        .all()
     )
-    return [_serialize_order(o) for o in orders]
+    total = query.count()
+    orders = query.offset(offset).limit(limit).all()
+    return {"total": total, "limit": limit, "offset": offset, "items": [_serialize_order(o) for o in orders]}
 
 
 @router.get("/{order_id}")
@@ -264,6 +270,18 @@ def receive_back(order_id: int, payload: ReceiveBackIn, request: Request, db: Se
         oi.received_back = True
         ti = oi.ticket_item
         if ti:
+            draft_supplier_txn = (
+                db.query(Transaction)
+                .filter(
+                    Transaction.ticket_item_id == ti.id,
+                    Transaction.type == TransactionType.chi,
+                    Transaction.status == TransactionStatus.draft,
+                )
+                .order_by(Transaction.id.desc())
+                .first()
+            )
+            if draft_supplier_txn:
+                draft_supplier_txn.status = TransactionStatus.posted
             old = ti.workflow_state
             ti.workflow_state = WorkflowState.C1
             ti.result_note = rb.result_note

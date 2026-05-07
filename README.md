@@ -2,7 +2,7 @@
 
 Hệ thống quản lý bảo hành nội bộ cho CRETA.
 
-Phiên bản `1.3.0` hiện có:
+Phiên bản `1.3.2` hiện có:
 
 - backend FastAPI + SQLAlchemy
 - frontend multi-page HTML/CSS/JS
@@ -160,6 +160,8 @@ Warranty/
 
 - mở trực tiếp theo `item_code`
 - xem trạng thái, lịch sử, ảnh minh chứng, checklist và quan hệ nghiệp vụ của từng mã
+- hỗ trợ tạo báo giá sửa chữa từ `B2 -> B4`, chốt khách đồng ý / không đồng ý ngay trên item detail
+- cho phép sửa số tiền transaction nháp trước khi chuyển sang `posted`
 - phù hợp cho mô hình vận hành item-first
 
 ### Supplier flow
@@ -189,6 +191,7 @@ Warranty/
 ### Finance
 
 - thu/chi
+- transaction có `draft` / `posted` / `cancelled`
 - báo cáo tổng hợp
 
 ### Admin

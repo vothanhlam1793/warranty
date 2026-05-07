@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
-from sqlalchemy import cast, Integer
+from sqlalchemy import cast, Integer, or_
 from sqlalchemy.orm import Session, joinedload
 
 from ..database import get_db
@@ -15,7 +15,7 @@ from ..models import (
     Ticket, TicketItem, Customer, Product,
     WorkflowState, RequestedAction, WorkflowLog,
     SupplierOrderItem, SupplierOrder, SupplierOrderStatus,
-    Transaction, TransactionType,
+    Transaction, TransactionType, TransactionStatus,
 )
 
 router = APIRouter(prefix="/api/tickets", tags=["tickets"])
@@ -47,6 +47,12 @@ class StateTransitionIn(BaseModel):
     expected_return_date: Optional[date] = None
 
 
+class QuoteDecisionIn(BaseModel):
+    actor: Optional[str] = None
+    note: str
+    customer_approved: bool
+
+
 # Ma trận chuyển trạng thái THỦ CÔNG hợp lệ
 # Các bước tự động (A3→B1, B1→B2, B2→C1, C4→C5, C5→C6) KHÔNG có ở đây
 ALLOWED_TRANSITIONS: dict[WorkflowState, list[WorkflowState]] = {
@@ -54,7 +60,8 @@ ALLOWED_TRANSITIONS: dict[WorkflowState, list[WorkflowState]] = {
     WorkflowState.A2: [WorkflowState.A3, WorkflowState.C2, WorkflowState.C4],
     WorkflowState.A3: [],        # chỉ tự động qua B1 khi tạo phiếu NCC
     WorkflowState.B1: [],        # chỉ tự động qua B2 khi phiếu NCC xác nhận gửi
-    WorkflowState.B2: [],        # chỉ tự động qua C1 khi phiếu NCC trả về
+    WorkflowState.B2: [WorkflowState.B4],
+    WorkflowState.B4: [WorkflowState.B2],
     WorkflowState.C1: [WorkflowState.C2, WorkflowState.C3],
     WorkflowState.C2: [WorkflowState.C5],
     WorkflowState.C3: [WorkflowState.C4, WorkflowState.C2],
@@ -75,6 +82,12 @@ class NotifyLateIn(BaseModel):
     actor: Optional[str] = None
 
 
+class ItemNotifyLateIn(BaseModel):
+    note: str
+    actor: Optional[str] = None
+    new_deadline_date: date
+
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _next_ticket_no(db: Session) -> str:
@@ -90,6 +103,11 @@ def _next_ticket_no(db: Session) -> str:
     return str(int(last_numeric[0]) + 1)
 
 def _serialize_item(item: TicketItem) -> dict:
+    today = date.today()
+    deadline = item.deadline_date
+    item_days_to_deadline = (deadline - today).days if deadline else None
+    item_is_deadline_overdue = item_days_to_deadline is not None and item_days_to_deadline < 0
+    item_is_urgent = item_days_to_deadline is not None and 0 <= item_days_to_deadline <= 2
     return {
         "id": item.id,
         "ticket_id": item.ticket_id,
@@ -105,11 +123,31 @@ def _serialize_item(item: TicketItem) -> dict:
         "customer_complaint": item.customer_complaint,
         "diagnosis_note": item.diagnosis_note,
         "result_note": item.result_note,
+        "deadline_date": item.deadline_date.isoformat() if item.deadline_date else None,
+        "extension_days": item.extension_days or 0,
+        "notified_late": bool(item.notified_late),
+        "item_days_to_deadline": item_days_to_deadline,
+        "item_is_deadline_overdue": item_is_deadline_overdue,
+        "item_is_urgent": item_is_urgent,
         "expected_return_date": item.expected_return_date.isoformat() if item.expected_return_date else None,
         "returned_date": item.returned_date.isoformat() if item.returned_date else None,
         "evidence_url": item.evidence_url,
+        "requires_customer_payment": bool(item.requires_customer_payment),
         "created_at": item.created_at.isoformat(),
     }
+
+
+def _get_quote_transactions(db: Session, item_id: int) -> list[Transaction]:
+    return (
+        db.query(Transaction)
+        .filter(
+            Transaction.ticket_item_id == item_id,
+            Transaction.status == TransactionStatus.draft,
+            Transaction.type.in_([TransactionType.chi, TransactionType.thu]),
+        )
+        .order_by(Transaction.id.asc())
+        .all()
+    )
 
 
 def _serialize_ticket(ticket: Ticket) -> dict:
@@ -216,21 +254,28 @@ def list_tickets(
         query = query.filter(Ticket.customer_id == customer_id)
     if q:
         like = f"%{q}%"
-        # Search ticket_no, customer name, or item_code (e.g. "742-1")
         query = query.join(Customer).outerjoin(TicketItem).filter(
-            Customer.name.ilike(like)
-            | Ticket.ticket_no.ilike(like)
-            | TicketItem.item_code.ilike(like)
-            | TicketItem.serial_no.ilike(like)
+            or_(
+                Customer.name.ilike(like),
+                Ticket.ticket_no.ilike(like),
+                TicketItem.item_code.ilike(like),
+                TicketItem.serial_no.ilike(like),
+            )
         )
-
-    tickets = query.offset(offset).limit(limit).all()
-
     if state:
-        tickets = [t for t in tickets if any(i.workflow_state == state for i in t.items)]
+        try:
+            wf_state = WorkflowState(state)
+        except ValueError:
+            raise HTTPException(400, f"state không hợp lệ: {state}")
+        query = query.join(Ticket.items).filter(TicketItem.workflow_state == wf_state)
+
+    total = query.distinct(Ticket.id).count()
+    tickets = query.distinct(Ticket.id).offset(offset).limit(limit).all()
 
     return {
-        "total": len(tickets),
+        "total": total,
+        "limit": limit,
+        "offset": offset,
         "items": [_serialize_ticket(t) for t in tickets],
     }
 
@@ -309,11 +354,12 @@ def transition_state(
 
     # C4 → C5: bắt buộc đã có transaction thu tiền
     if old_state == WorkflowState.C4 and payload.to_state == WorkflowState.C5:
-        has_thu = db.query(Transaction).filter(
+        has_posted_thu = db.query(Transaction).filter(
             Transaction.ticket_item_id == item_id,
             Transaction.type == TransactionType.thu,
+            Transaction.status == TransactionStatus.posted,
         ).first()
-        if not has_thu:
+        if item.requires_customer_payment and not has_posted_thu:
             raise HTTPException(
                 400,
                 "Chưa ghi nhận thu tiền khách. "
@@ -329,6 +375,19 @@ def transition_state(
                 "Vui lòng upload ảnh bằng chứng trước khi hoàn thành."
             )
 
+    # Item quá hạn phải báo khách và gia hạn trước khi được chuyển trạng thái tiếp
+    today = date.today()
+    if (
+        item.workflow_state != WorkflowState.C6
+        and item.deadline_date is not None
+        and item.deadline_date < today
+        and not item.notified_late
+    ):
+        raise HTTPException(
+            400,
+            "Mã hàng đang trễ hạn và chưa báo khách. Vui lòng thực hiện thao tác thông báo khách hàng/gia hạn trước khi chuyển trạng thái."
+        )
+
     # ── 5. Cập nhật item ──────────────────────────────────────────────────────
     item.workflow_state = payload.to_state
 
@@ -336,6 +395,8 @@ def transition_state(
         item.diagnosis_note = payload.diagnosis_note
     if payload.expected_return_date:
         item.expected_return_date = payload.expected_return_date
+    if old_state == WorkflowState.B4 and payload.to_state == WorkflowState.B2:
+        raise HTTPException(400, "B4 chỉ được xử lý qua thao tác chốt báo giá")
     if payload.to_state == WorkflowState.C6:
         item.returned_date = date.today()
 
@@ -347,6 +408,110 @@ def transition_state(
         actor=actor,
     )
     db.add(log)
+    db.commit()
+    db.refresh(item)
+    return _serialize_item(item)
+
+
+@router.post("/{ticket_id}/items/{item_id}/quote-request")
+def create_quote_request(
+    ticket_id: int,
+    item_id: int,
+    payload: dict,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    item = db.query(TicketItem).filter(
+        TicketItem.id == item_id,
+        TicketItem.ticket_id == ticket_id,
+    ).first()
+    if not item:
+        raise HTTPException(404, "Item not found")
+    if item.workflow_state != WorkflowState.B2:
+        raise HTTPException(400, "Chỉ tạo báo giá khi item đang ở B2")
+
+    actor = resolve_actor(request, db, payload.get("actor"), required=True)
+    note = (payload.get("note") or "").strip()
+    supplier_amount = float(payload.get("supplier_amount") or 0)
+    customer_amount = float(payload.get("customer_amount") or 0)
+    if supplier_amount <= 0:
+        raise HTTPException(400, "Chi phí dự kiến NCC phải lớn hơn 0")
+    if customer_amount <= 0:
+        raise HTTPException(400, "Số tiền dự kiến thu khách phải lớn hơn 0")
+    if _get_quote_transactions(db, item.id):
+        raise HTTPException(400, "Item đang có giao dịch báo giá nháp")
+
+    item.workflow_state = WorkflowState.B4
+    item.requires_customer_payment = False
+    db.add(Transaction(
+        ticket_item_id=item.id,
+        type=TransactionType.chi,
+        status=TransactionStatus.draft,
+        amount=supplier_amount,
+        note=(payload.get("supplier_note") or note or "Dự kiến chi NCC khi chờ khách chốt báo giá").strip(),
+        created_by=actor,
+    ))
+    db.add(Transaction(
+        ticket_item_id=item.id,
+        type=TransactionType.thu,
+        status=TransactionStatus.draft,
+        amount=customer_amount,
+        note=(payload.get("customer_note") or note or "Dự kiến thu khách khi chờ khách chốt báo giá").strip(),
+        created_by=actor,
+    ))
+    db.add(WorkflowLog(
+        ticket_item_id=item.id,
+        from_state=WorkflowState.B2,
+        to_state=WorkflowState.B4,
+        note=note or "NCC đã báo giá, chờ khách chốt phương án sửa chữa",
+        actor=actor,
+    ))
+    db.commit()
+    db.refresh(item)
+    return _serialize_item(item)
+
+
+@router.post("/{ticket_id}/items/{item_id}/quote-decision")
+def finalize_quote_decision(
+    ticket_id: int,
+    item_id: int,
+    payload: QuoteDecisionIn,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    item = db.query(TicketItem).filter(
+        TicketItem.id == item_id,
+        TicketItem.ticket_id == ticket_id,
+    ).first()
+    if not item:
+        raise HTTPException(404, "Item not found")
+    if item.workflow_state != WorkflowState.B4:
+        raise HTTPException(400, "Item không ở trạng thái B4")
+    if not payload.note or not payload.note.strip():
+        raise HTTPException(400, "Bắt buộc phải có ghi chú")
+
+    actor = resolve_actor(request, db, payload.actor, required=True)
+    drafts = _get_quote_transactions(db, item.id)
+    if len(drafts) < 2:
+        raise HTTPException(400, "Thiếu giao dịch nháp của báo giá")
+
+    if payload.customer_approved:
+        item.requires_customer_payment = True
+        decision_note = f"Khách đồng ý báo giá. {payload.note.strip()}"
+    else:
+        item.requires_customer_payment = False
+        decision_note = f"Khách không đồng ý báo giá. {payload.note.strip()}"
+        for txn in drafts:
+            txn.status = TransactionStatus.cancelled
+
+    item.workflow_state = WorkflowState.B2
+    db.add(WorkflowLog(
+        ticket_item_id=item.id,
+        from_state=WorkflowState.B4,
+        to_state=WorkflowState.B2,
+        note=decision_note,
+        actor=actor,
+    ))
     db.commit()
     db.refresh(item)
     return _serialize_item(item)
@@ -526,6 +691,60 @@ def rollback_state(
     db.commit()
     db.refresh(item)
     return _serialize_item(item)
+
+
+@router.post("/{ticket_id}/items/{item_id}/notify-late")
+def notify_item_late(
+    ticket_id: int,
+    item_id: int,
+    payload: ItemNotifyLateIn,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    item = db.query(TicketItem).filter(
+        TicketItem.id == item_id,
+        TicketItem.ticket_id == ticket_id,
+    ).first()
+    if not item:
+        raise HTTPException(404, "Item not found")
+    if item.workflow_state == WorkflowState.C6:
+        raise HTTPException(400, "Item đã hoàn thành, không cần báo trễ")
+    if not payload.note or not payload.note.strip():
+        raise HTTPException(400, "Bắt buộc phải có ghi chú thông báo khách")
+
+    actor = resolve_actor(request, db, payload.actor, required=True)
+    old_deadline = item.deadline_date or item.expected_return_date or item.ticket.received_date or date.today()
+    new_deadline = payload.new_deadline_date
+    extra_days = (new_deadline - old_deadline).days
+    if extra_days <= 0:
+        raise HTTPException(400, "Ngày gia hạn mới phải lớn hơn deadline hiện tại")
+
+    item.notified_late = True
+    item.extension_days = (item.extension_days or 0) + extra_days
+    item.deadline_date = new_deadline
+    if item.expected_return_date:
+        item.expected_return_date = item.expected_return_date + timedelta(days=extra_days)
+    else:
+        item.expected_return_date = new_deadline
+
+    db.add(WorkflowLog(
+        ticket_item_id=item.id,
+        from_state=item.workflow_state,
+        to_state=item.workflow_state,
+        note=(
+            f"📞 Đã thông báo khách hàng bị trễ. Gia hạn +{extra_days} ngày. "
+            f"Deadline mới: {new_deadline.strftime('%d/%m/%Y')}. Ghi chú: {payload.note.strip()}"
+        ),
+        actor=actor,
+    ))
+    db.commit()
+    db.refresh(item)
+    return {
+        "ok": True,
+        "item": _serialize_item(item),
+        "old_deadline": old_deadline.isoformat() if old_deadline else None,
+        "new_deadline": new_deadline.isoformat(),
+    }
 
 
 def notify_late(

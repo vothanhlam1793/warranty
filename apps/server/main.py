@@ -20,7 +20,7 @@ from .routers.supplier_receives import router as supplier_receives_router
 from .routers.checklists import router as checklists_router
 from .routers.return_slips import router as return_slips_router
 
-app = FastAPI(title="Warranty Management System", version="1.0.2")
+app = FastAPI(title="Warranty Management System", version="1.3.2")
 
 _extra_origins = [origin.strip() for origin in os.environ.get("CORS_ALLOW_ORIGINS", "").split(",") if origin.strip()]
 _default_origins = [
@@ -87,4 +87,4 @@ def on_startup():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "1.0.2"}
+    return {"status": "ok", "version": "1.3.2"}

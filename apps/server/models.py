@@ -30,6 +30,7 @@ class WorkflowState(str, enum.Enum):
     A3 = "A3"  # Chuyển NCC
     B1 = "B1"  # NCC đang xử lý
     B2 = "B2"  # Xử lý dài hạn
+    B4 = "B4"  # Chờ khách chốt báo giá
     C1 = "C1"  # NCC trả về - kiểm tra
     C2 = "C2"  # PASS - chờ trả khách
     C3 = "C3"  # NO PASS - xử lý tiếp
@@ -41,6 +42,12 @@ class WorkflowState(str, enum.Enum):
 class TransactionType(str, enum.Enum):
     thu = "thu"  # Thu tiền từ khách
     chi = "chi"  # Chi tiền cho NCC hoặc nội bộ
+
+
+class TransactionStatus(str, enum.Enum):
+    draft = "draft"
+    posted = "posted"
+    cancelled = "cancelled"
 
 
 class SupplierOrderStatus(str, enum.Enum):
@@ -152,6 +159,9 @@ class TicketItem(Base):
     customer_complaint: Mapped[Optional[str]] = mapped_column(Text)  # Yêu cầu khách
     diagnosis_note: Mapped[Optional[str]] = mapped_column(Text)      # Kỹ thuật ghi chú
     result_note: Mapped[Optional[str]] = mapped_column(Text)         # Kết quả xử lý
+    deadline_date: Mapped[Optional[date]] = mapped_column(Date)
+    extension_days: Mapped[int] = mapped_column(Integer, default=0)
+    notified_late: Mapped[bool] = mapped_column(Boolean, default=False)
     expected_return_date: Mapped[Optional[date]] = mapped_column(Date)
     returned_date: Mapped[Optional[date]] = mapped_column(Date)
     evidence_url: Mapped[Optional[str]] = mapped_column(Text)        # Ảnh bằng chứng (B1/C5)
@@ -162,6 +172,7 @@ class TicketItem(Base):
     c1_template_id: Mapped[Optional[int]] = mapped_column(ForeignKey("checklist_templates.id"))
     a2_template_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     c1_template_locked: Mapped[bool] = mapped_column(Boolean, default=False)
+    requires_customer_payment: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     ticket: Mapped["Ticket"] = relationship(back_populates="items")
@@ -372,6 +383,7 @@ class Transaction(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     ticket_item_id: Mapped[Optional[int]] = mapped_column(ForeignKey("ticket_items.id"))
     type: Mapped[TransactionType] = mapped_column(SAEnum(TransactionType), nullable=False)
+    status: Mapped[TransactionStatus] = mapped_column(SAEnum(TransactionStatus), default=TransactionStatus.posted, nullable=False)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
     note: Mapped[Optional[str]] = mapped_column(Text)
     created_by: Mapped[Optional[str]] = mapped_column(String(100))

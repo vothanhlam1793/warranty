@@ -22,6 +22,13 @@
       <div class="card mb-2">
         <div class="card-header"><h2>Khách hàng</h2></div>
         <div class="card-body">
+          <div class="form-group" style="margin-bottom:1rem">
+            <label class="form-label">Chọn nhanh khách đang có hàng đủ điều kiện trả</label>
+            <select id="candidateCustomerSelect" class="form-control" onchange="selectCandidateCustomerFromSelect()">
+              <option value="">Đang tải danh sách khách có item ở C2/C3...</option>
+            </select>
+            <div id="candidateCustomerHint" class="text-sm text-muted" style="margin-top:.4rem"></div>
+          </div>
           <div class="form-grid">
             <div class="form-group full">
               <label class="form-label">Tìm khách hàng</label>
@@ -71,6 +78,7 @@
 <script>
 let selectedCustomer = null;
 let candidates = [];
+let candidateCustomers = [];
 
 function qs(key) {
   return new URLSearchParams(location.search).get(key);
@@ -79,6 +87,7 @@ function qs(key) {
 async function init() {
   await checkAuth();
   setupCustomerAutocomplete();
+  await loadCandidateCustomers();
 
   const customerId = parseInt(qs('customer_id'), 10);
   if (customerId) {
@@ -89,6 +98,28 @@ async function init() {
       return;
     }
   }
+}
+
+async function loadCandidateCustomers() {
+  const res = await api.get('/api/return-slips/candidate-customers?limit=12');
+  candidateCustomers = res.items || [];
+  const select = document.getElementById('candidateCustomerSelect');
+  select.innerHTML = candidateCustomers.length
+    ? `<option value="">Chọn khách đang có hàng C2/C3...</option>` + candidateCustomers.map((c, idx) =>
+        `<option value="${idx}">${c.customer_code ? `${c.customer_code} - ` : ''}${c.name || '—'}${c.phone ? ` · ${c.phone}` : ''} · ${c.candidate_count} món</option>`
+      ).join('')
+    : `<option value="">Hiện chưa có khách nào có item đủ điều kiện trả</option>`;
+  document.getElementById('candidateCustomerHint').textContent = candidateCustomers.length
+    ? `Có ${candidateCustomers.length} khách đang có item ở C2/C3.`
+    : 'Hiện chưa có khách nào có item đủ điều kiện trả.';
+}
+
+function selectCandidateCustomerFromSelect() {
+  const idx = document.getElementById('candidateCustomerSelect').value;
+  if (idx === '') return;
+  const customer = candidateCustomers[Number(idx)];
+  if (!customer) return;
+  selectCustomer(customer);
 }
 
 function setupCustomerAutocomplete() {
@@ -120,6 +151,7 @@ function clearCustomer() {
   candidates = [];
   document.getElementById('selectedCustomerBox').style.display = 'none';
   document.getElementById('customerSearch').value = '';
+   document.getElementById('candidateCustomerSelect').value = '';
   document.getElementById('candidateHint').textContent = 'Chọn khách hàng để tải danh sách item ở trạng thái C2/C3.';
   document.getElementById('candidateList').innerHTML = '';
 }

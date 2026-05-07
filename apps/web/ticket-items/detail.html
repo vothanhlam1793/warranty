@@ -58,14 +58,12 @@
           </div>
         </div>
 
-        <div class="card mb-2">
-          <div class="card-header"><h2>📝 Nội dung xử lý</h2></div>
+        <div id="overduePriorityCard" class="card mb-2" style="display:none;border-color:var(--danger)">
+          <div class="card-header"><h2>🚨 Ưu tiên xử lý trễ hạn</h2></div>
           <div class="card-body">
-            <div class="form-grid">
-              <div class="form-group full"><label class="form-label">Yêu cầu khách</label><div id="complaintBox" class="text-sm"></div></div>
-              <div class="form-group full"><label class="form-label">Ghi chú kỹ thuật</label><div id="diagnosisBox" class="text-sm"></div></div>
-              <div class="form-group full"><label class="form-label">Kết quả / ghi chú</label><div id="resultBox" class="text-sm"></div></div>
-            </div>
+            <div id="overdueAlertTop" style="padding:.85rem 1rem;border:1px solid var(--danger);border-radius:10px;background:#fff1f2;color:#9f1239;font-weight:600"></div>
+            <div id="overdueActionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem"></div>
+            <div id="overdueFormTopWrap" style="margin-top:1rem"></div>
           </div>
         </div>
 
@@ -81,6 +79,11 @@
         </div>
 
         <div class="card mb-2">
+          <div class="card-header"><h2>💰 Thu / Chi theo mã hàng</h2></div>
+          <div class="card-body" id="transactionsBox">Đang tải...</div>
+        </div>
+
+        <div class="card mb-2">
           <div class="card-header"><h2>🧪 Checklist</h2></div>
           <div id="checklistAlert" style="display:none;padding:.85rem 1rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#fff7ed;color:#9a3412;font-weight:600"></div>
           <div class="card-body" id="checklistBox">Đang tải...</div>
@@ -89,6 +92,17 @@
         <div class="card mb-2">
           <div class="card-header"><h2>⚙ Hành động</h2></div>
           <div class="card-body" id="actionsBox"></div>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-header"><h2>📝 Nội dung xử lý</h2></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group full"><label class="form-label">Yêu cầu khách</label><div id="complaintBox" class="text-sm"></div></div>
+              <div class="form-group full"><label class="form-label">Ghi chú kỹ thuật</label><div id="diagnosisBox" class="text-sm"></div></div>
+              <div class="form-group full"><label class="form-label">Kết quả / ghi chú</label><div id="resultBox" class="text-sm"></div></div>
+            </div>
+          </div>
         </div>
 
         <div class="card">
@@ -150,9 +164,14 @@ let checklistTemplates = [];
 let checklistMap = null;
 let checklistRuns = [];
 let activeTemplateMapping = null;
+let transactions = [];
 
 function textOrDash(value) {
   return value ? value : '—';
+}
+
+function isItemOverdue() {
+  return !!item && item.workflow_state !== 'C6' && item.item_is_deadline_overdue;
 }
 
 function escapeHtml(value) {
@@ -199,7 +218,7 @@ async function loadPage() {
   document.getElementById('expectedReturn').textContent = fmtDate(item.expected_return_date);
   document.getElementById('returnedDate').textContent = fmtDate(item.returned_date);
   document.getElementById('ticketNo').innerHTML = `<a href="/tickets/detail.html?id=${ticket.id}"><b>${ticket.ticket_no}</b></a>`;
-  document.getElementById('ticketDeadline').textContent = fmtDate(ticket.deadline_date);
+  document.getElementById('ticketDeadline').textContent = `${fmtDate(item.deadline_date || ticket.deadline_date)}${item.extension_days ? ` (+${item.extension_days} ngày)` : ''}`;
   document.getElementById('customerName').textContent = ticket.customer_name || '—';
   document.getElementById('customerPhone').textContent = ticket.customer_phone || '';
   document.getElementById('itemCreatedBy').textContent = ticket.created_by ? `Người tạo phiếu: ${ticket.created_by}` : '';
@@ -210,7 +229,7 @@ async function loadPage() {
   renderTextBlock('resultBox', item.result_note, 'var(--accent)');
 
   renderEvidence();
-  await Promise.all([renderRelations(), renderChecklist(), renderLogs()]);
+  await Promise.all([renderRelations(), renderTransactions(), renderChecklist(), renderLogs()]);
   renderActions();
 
   document.getElementById('loadingState').style.display = 'none';
@@ -231,11 +250,12 @@ function renderEvidence() {
 }
 
 async function renderRelations() {
-  const [orders, slips] = await Promise.all([
-    api.get('/api/supplier-orders').catch(() => []),
+  const [ordersRes, slips] = await Promise.all([
+    api.get('/api/supplier-orders?limit=100&offset=0').catch(() => ({ items: [] })),
     api.get('/api/return-slips/list').catch(() => ({ items: [] })),
   ]);
-  const order = (orders || []).find(o => (o.items || []).some(oi => oi.ticket_item_id === item.id));
+  const orders = ordersRes.items || [];
+  const order = orders.find(o => (o.items || []).some(oi => oi.ticket_item_id === item.id));
   const slip = (slips.items || []).find(s => (s.items || []).some(si => si.ticket_item_id === item.id));
   const rows = [];
   rows.push(`<div class="text-sm"><b>Phiếu gốc:</b> <a href="/tickets/detail.html?id=${ticket.id}">${ticket.ticket_no}</a></div>`);
@@ -302,14 +322,84 @@ async function renderChecklist() {
     </div>`;
 }
 
+function transactionTypeLabel(type) {
+  return type === 'thu' ? 'Thu khách' : 'Chi NCC';
+}
+
+function transactionStatusBadge(status) {
+  const map = {
+    draft: '<span class="badge badge-yellow">Nháp</span>',
+    posted: '<span class="badge badge-green">Đã ghi sổ</span>',
+    cancelled: '<span class="badge badge-gray">Đã hủy</span>',
+  };
+  return map[status] || `<span class="badge badge-gray">${escapeHtml(status || '—')}</span>`;
+}
+
+async function renderTransactions() {
+  transactions = await api.get(`/api/transactions?ticket_item_id=${item.id}`).catch(() => []);
+  const el = document.getElementById('transactionsBox');
+  if (!transactions.length) {
+    el.innerHTML = '<div class="text-muted">Chưa có giao dịch nào cho mã này</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div style="display:grid;gap:.75rem">
+      ${transactions.map(t => {
+        const canEdit = t.status === 'draft';
+        return `
+          <div style="border:1px solid var(--border);border-radius:10px;padding:.9rem;background:#fff">
+            <div style="display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap;align-items:center">
+              <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+                <b>${transactionTypeLabel(t.type)}</b>
+                ${transactionStatusBadge(t.status)}
+                <span class="text-muted text-sm">#${t.id}</span>
+              </div>
+              <div class="text-sm text-muted">${t.created_at.replace('T', ' ').slice(0, 16)} ${t.created_by ? `· ${escapeHtml(t.created_by)}` : ''}</div>
+            </div>
+            <div class="form-grid" style="margin-top:.75rem">
+              <div class="form-group">
+                <label class="form-label">Số tiền</label>
+                <input id="txnAmount${t.id}" class="form-control" type="number" min="0" step="1000" value="${Number(t.amount || 0)}" ${canEdit ? '' : 'disabled'} />
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Ghi chú</label>
+                <input id="txnNote${t.id}" class="form-control" value="${escapeHtml(t.note || '')}" ${canEdit ? '' : 'disabled'} />
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;margin-top:.75rem">
+              ${canEdit ? `
+                <button class="btn btn-secondary btn-sm" onclick="saveDraftTransaction(${t.id})">Lưu nháp</button>
+                <button class="btn btn-primary btn-sm" onclick="postDraftTransaction(${t.id})">Ghi sổ</button>
+                <button class="btn btn-ghost btn-sm" onclick="cancelDraftTransaction(${t.id})">Hủy nháp</button>
+              ` : ''}
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
 function renderActions() {
   const links = [];
+  const overdueCard = document.getElementById('overduePriorityCard');
+  const overdueAlertTop = document.getElementById('overdueAlertTop');
+  const overdueActionBar = document.getElementById('overdueActionBar');
+  const overdueFormTopWrap = document.getElementById('overdueFormTopWrap');
+  overdueCard.style.display = 'none';
+  overdueActionBar.innerHTML = '';
+  overdueFormTopWrap.innerHTML = '';
   links.push(`<a class="btn btn-secondary btn-sm" href="/tickets/detail.html?id=${ticket.id}">📋 Mở phiếu gốc</a>`);
   if (item.workflow_state === 'A3') {
     links.push(`<a class="btn btn-primary btn-sm" href="/supplier-orders/new.html?item_id=${item.id}">📦 Tạo phiếu gửi NCC</a>`);
   }
   if (item.workflow_state === 'B1' || item.workflow_state === 'B2') {
     links.push(`<a class="btn btn-primary btn-sm" href="/supplier-orders/list.html">🚚 Xử lý phiếu NCC</a>`);
+  }
+  if (item.workflow_state === 'B2') {
+    links.push(`<button class="btn btn-primary btn-sm" onclick="toggleQuoteForm()">💬 Tạo báo giá sửa chữa</button>`);
+  }
+  if (item.workflow_state === 'B4') {
+    links.push(`<button class="btn btn-primary btn-sm" onclick="submitQuoteDecision(true)">✅ Khách đồng ý báo giá</button>`);
+    links.push(`<button class="btn btn-secondary btn-sm" onclick="submitQuoteDecision(false)">✕ Khách không đồng ý</button>`);
   }
   if (item.workflow_state === 'C2' || item.workflow_state === 'C3' || item.workflow_state === 'C4' || item.workflow_state === 'C5') {
     links.push(`<a class="btn btn-primary btn-sm" href="/return-slips/list.html">🧾 Mở phiếu trả khách</a>`);
@@ -324,9 +414,182 @@ function renderActions() {
       links.push(`<button class="btn btn-primary btn-sm" onclick="startRun(${item.id}, 'C1_RETURN')">🧪 Tạo run C1</button>`);
     }
   }
+  if (isItemOverdue()) {
+    overdueCard.style.display = 'block';
+    overdueAlertTop.innerHTML = item.notified_late
+      ? `Đã thông báo khách trễ cho mã này. Deadline hiện tại: <b>${fmtDate(item.deadline_date)}</b>.`
+      : `Mã này đang trễ hạn. Bắt buộc thông báo khách hàng và gia hạn trước khi chuyển trạng thái tiếp theo.`;
+    overdueActionBar.innerHTML = `<button class="btn btn-danger btn-sm" onclick="toggleOverdueForm()">📞 ${item.notified_late ? 'Thông báo lại / gia hạn thêm' : 'Thông báo khách hàng bị trễ'}</button>`;
+    overdueFormTopWrap.innerHTML = renderOverdueForm();
+    if (typeof enhanceDateInputs === 'function') enhanceDateInputs();
+  }
   document.getElementById('actionsBox').innerHTML = links.length
-    ? `<div style="display:flex;gap:.5rem;flex-wrap:wrap">${links.join('')}</div>`
+    ? `<div style="display:flex;gap:.5rem;flex-wrap:wrap">${links.join('')}</div>${renderQuoteActionPanel()}`
     : '<div class="text-muted">Không có hành động nhanh ở màn này</div>';
+}
+
+function renderQuoteActionPanel() {
+  if (item.workflow_state === 'B2') {
+    return `
+      <div id="quoteRequestPanel" style="display:none;margin-top:1rem;padding:1rem;border:1px solid var(--border);border-radius:10px;background:#fff">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Người thực hiện</label>
+            <input id="quoteActor" class="form-control" value="${escapeHtml(getCurrentActorName() || '')}" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Chi phí dự kiến NCC</label>
+            <input id="quoteSupplierAmount" class="form-control" type="number" min="0" step="1000" placeholder="Ví dụ: 150000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Số tiền dự kiến thu khách</label>
+            <input id="quoteCustomerAmount" class="form-control" type="number" min="0" step="1000" placeholder="Ví dụ: 300000" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Ghi chú</label>
+            <textarea id="quoteNote" class="form-control" rows="3" placeholder="Ví dụ: NCC báo giá sửa main, đang chờ khách chốt phương án..."></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.75rem">
+          <button class="btn btn-secondary" onclick="toggleQuoteForm(false)">Hủy</button>
+          <button class="btn btn-primary" onclick="submitQuoteRequest()">Tạo B4 và giao dịch nháp</button>
+        </div>
+      </div>`;
+  }
+  if (item.workflow_state === 'B4') {
+    return `
+      <div style="margin-top:1rem;padding:1rem;border:1px solid #facc15;border-radius:10px;background:#fffbeb">
+        <div class="text-sm" style="font-weight:600;color:#92400e">Item đang ở B4 - chờ khách chốt báo giá.</div>
+        <div class="form-grid" style="margin-top:.75rem">
+          <div class="form-group">
+            <label class="form-label">Người thực hiện</label>
+            <input id="quoteDecisionActor" class="form-control" value="${escapeHtml(getCurrentActorName() || '')}" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Ghi chú chốt với khách</label>
+            <textarea id="quoteDecisionNote" class="form-control" rows="3" placeholder="Ví dụ: Khách đã đồng ý sửa chữa theo báo giá của NCC..."></textarea>
+          </div>
+        </div>
+      </div>`;
+  }
+  return '';
+}
+
+function toggleQuoteForm(force) {
+  const box = document.getElementById('quoteRequestPanel');
+  if (!box) return;
+  const show = typeof force === 'boolean' ? force : box.style.display === 'none';
+  box.style.display = show ? 'block' : 'none';
+}
+
+async function submitQuoteRequest() {
+  const actor = document.getElementById('quoteActor')?.value.trim();
+  const supplier_amount = Number(document.getElementById('quoteSupplierAmount')?.value || 0);
+  const customer_amount = Number(document.getElementById('quoteCustomerAmount')?.value || 0);
+  const note = document.getElementById('quoteNote')?.value.trim();
+  if (supplier_amount <= 0) return toast('Vui lòng nhập chi phí dự kiến NCC', 'error');
+  if (customer_amount <= 0) return toast('Vui lòng nhập số tiền dự kiến thu khách', 'error');
+  await api.post(`/api/tickets/${ticket.id}/items/${item.id}/quote-request`, {
+    actor,
+    supplier_amount,
+    customer_amount,
+    note,
+  });
+  toast('Đã chuyển item sang B4 và tạo giao dịch nháp');
+  await loadPage();
+}
+
+async function submitQuoteDecision(customerApproved) {
+  const actor = document.getElementById('quoteDecisionActor')?.value.trim();
+  const note = document.getElementById('quoteDecisionNote')?.value.trim();
+  if (!note) return toast('Vui lòng nhập ghi chú chốt với khách', 'error');
+  await api.post(`/api/tickets/${ticket.id}/items/${item.id}/quote-decision`, {
+    actor,
+    note,
+    customer_approved: customerApproved,
+  });
+  toast(customerApproved ? 'Đã ghi nhận khách đồng ý báo giá' : 'Đã ghi nhận khách không đồng ý báo giá');
+  await loadPage();
+}
+
+async function saveDraftTransaction(transactionId) {
+  const amount = Number(document.getElementById(`txnAmount${transactionId}`)?.value || 0);
+  const note = document.getElementById(`txnNote${transactionId}`)?.value.trim();
+  if (amount <= 0) return toast('Số tiền phải lớn hơn 0', 'error');
+  await api.patch(`/api/transactions/${transactionId}`, { amount, note, actor: getCurrentActorName() });
+  toast('Đã lưu giao dịch nháp');
+  await renderTransactions();
+}
+
+async function postDraftTransaction(transactionId) {
+  await saveDraftTransaction(transactionId);
+  await api.post(`/api/transactions/${transactionId}/post`, { actor: getCurrentActorName() });
+  toast('Đã ghi sổ giao dịch');
+  await loadPage();
+}
+
+async function cancelDraftTransaction(transactionId) {
+  await api.post(`/api/transactions/${transactionId}/cancel`, {
+    actor: getCurrentActorName(),
+    note: document.getElementById(`txnNote${transactionId}`)?.value.trim() || 'Hủy giao dịch nháp',
+  });
+  toast('Đã hủy giao dịch nháp');
+  await loadPage();
+}
+
+function renderOverdueForm() {
+  if (!isItemOverdue()) return '';
+  return `
+    <div id="overdueForm" style="display:none;margin-top:1rem;padding:1rem;border:1px solid var(--danger);border-radius:10px;background:#fff">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Người thực hiện</label>
+          <input id="lateActor" class="form-control" value="${escapeHtml(getCurrentActorName() || '')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gia hạn đến</label>
+          <input id="lateNewDeadline" type="date" class="form-control" value="${computeSuggestedDeadline()}" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Nội dung trao đổi với khách</label>
+          <textarea id="lateNote" class="form-control" rows="3" placeholder="Ví dụ: Đã gọi khách, khách đồng ý chờ thêm 3 ngày do NCC trả chậm..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.75rem">
+        <button class="btn btn-secondary" onclick="toggleOverdueForm(false)">Hủy</button>
+        <button class="btn btn-primary" onclick="submitLateNotify()">✓ Xác nhận đã thông báo và gia hạn</button>
+      </div>
+    </div>`;
+}
+
+function toggleOverdueForm(force) {
+  const box = document.getElementById('overdueForm');
+  if (!box) return;
+  const show = typeof force === 'boolean' ? force : box.style.display === 'none';
+  box.style.display = show ? 'block' : 'none';
+}
+
+function computeSuggestedDeadline() {
+  const base = item?.deadline_date || item?.expected_return_date || ticket?.deadline_date;
+  if (!base) return '';
+  const dt = new Date(base + 'T00:00:00');
+  dt.setDate(dt.getDate() + 3);
+  return dt.toISOString().slice(0, 10);
+}
+
+async function submitLateNotify() {
+  const actor = document.getElementById('lateActor')?.value.trim();
+  const note = document.getElementById('lateNote')?.value.trim();
+  const new_deadline_date = document.getElementById('lateNewDeadline')?.value;
+  if (!note) return toast('Vui lòng nhập nội dung trao đổi với khách', 'error');
+  if (!new_deadline_date) return toast('Vui lòng chọn ngày gia hạn mới', 'error');
+  await api.post(`/api/tickets/${ticket.id}/items/${item.id}/notify-late`, {
+    actor,
+    note,
+    new_deadline_date,
+  });
+  toast('Đã ghi nhận thông báo khách trễ và gia hạn');
+  await loadPage();
 }
 
 function chooseTemplate(itemId, stage, locked) {

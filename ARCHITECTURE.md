@@ -9,7 +9,7 @@ Tài liệu này mô tả:
 - cac thanh phan chinh cua he thong
 - ranh gioi giua frontend, backend, database, file storage
 - cau truc module hien tai
-- một số quyết định kỹ thuật quan trọng của bản `1.3.0`
+- một số quyết định kỹ thuật quan trọng của bản `1.3.2`
 
 `README.md` duoc dung cho setup va runbook.
 
@@ -249,7 +249,7 @@ Backend mount uploads qua route:
 Workflow item-level hiện tại:
 
 ```text
-A1 -> A2 -> A3 -> B1 -> B2 -> C1 -> C2/C3 -> C4 -> C5 -> C6
+A1 -> A2 -> A3 -> B1 -> B2 -> B4 -> B2 -> C1 -> C2/C3 -> C4 -> C5 -> C6
 ```
 
 Hệ thống hỗ trợ thêm:
@@ -258,6 +258,35 @@ Hệ thống hỗ trợ thêm:
 - checklist A2/C1
 - supplier send/receive flow
 - return slip flow
+
+### B4 quote flow
+
+`B4` là state item-level dùng cho trường hợp NCC đã báo giá sửa chữa và cần chờ khách chốt.
+
+Rule hiện tại:
+
+- từ `B2` có thể tạo báo giá để chuyển sang `B4`
+- khi vào `B4`, hệ thống tạo 2 transaction `draft` ở mức `ticket_item`:
+  - `chi`: chi phí dự kiến cho NCC
+  - `thu`: số tiền dự kiến thu khách
+- nếu khách đồng ý:
+  - giữ nguyên 2 transaction `draft`
+  - set `ticket_items.requires_customer_payment = true`
+  - quay lại `B2`
+- nếu khách không đồng ý:
+  - chuyển 2 transaction sang `cancelled`
+  - set `ticket_items.requires_customer_payment = false`
+  - quay lại `B2`
+- khi hàng về từ NCC (`B2 -> C1`), transaction `chi` nháp gần nhất của item sẽ được chuyển sang `posted`
+- ở `C4 -> C5`, chỉ bắt buộc có transaction `thu posted` nếu item có `requires_customer_payment = true`
+
+### Transaction state model
+
+`transactions` hiện có 3 trạng thái nghiệp vụ:
+
+- `draft`: đã ghi nhận dự kiến, còn cho phép sửa số tiền / ghi chú
+- `posted`: đã chốt và được tính vào báo cáo tài chính
+- `cancelled`: giao dịch dự kiến bị hủy, không tính vào báo cáo
 - transaction ghi thu/chi
 
 ## Runtime Configuration

@@ -39,6 +39,13 @@
           <option value="C5">C5 – Đã phiếu</option>
           <option value="C6">C6 – Hoàn thành</option>
         </select>
+        <label class="text-sm text-muted" for="pageSize" style="align-self:center">Hiển thị</label>
+        <select id="pageSize" class="form-control" style="max-width:110px" onchange="changePageSize()">
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
         <button class="btn btn-secondary" onclick="load()">Lọc</button>
         <span id="resultCount" class="text-sm text-muted" style="align-self:center"></span>
       </div>
@@ -63,6 +70,14 @@
         <div id="emptyState" class="empty-state" style="display:none">
           <div class="icon">📋</div><p>Không tìm thấy phiếu nào</p>
         </div>
+        <div id="paginationBar" style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:1rem 1.25rem;border-top:1px solid var(--border)">
+          <div id="pageInfo" class="text-sm text-muted">Đang tải...</div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <button id="prevBtn" class="btn btn-secondary btn-sm" onclick="changePage(-1)">← Trước</button>
+            <span id="pageNumber" class="text-sm text-muted"></span>
+            <button id="nextBtn" class="btn btn-secondary btn-sm" onclick="changePage(1)">Sau →</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -72,16 +87,25 @@
 <script src="../assets/layout.js"></script>
 <script>
 let debounceTimer;
+let currentPage = 1;
+let pageSize = 50;
 document.getElementById("searchQ").addEventListener("input", () => {
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(load, 350);
+  debounceTimer = setTimeout(() => {
+    currentPage = 1;
+    load();
+  }, 350);
 });
-document.getElementById("stateFilter").addEventListener("change", load);
+document.getElementById("stateFilter").addEventListener("change", () => {
+  currentPage = 1;
+  load();
+});
 
 async function load() {
   const q = document.getElementById("searchQ").value.trim();
   const state = document.getElementById("stateFilter").value;
-  let url = `/api/tickets?limit=100`;
+  const offset = (currentPage - 1) * pageSize;
+  let url = `/api/tickets?limit=${pageSize}&offset=${offset}`;
   if (q) url += `&q=${encodeURIComponent(q)}`;
   if (state) url += `&state=${state}`;
 
@@ -92,6 +116,7 @@ async function load() {
   const data = await api.get(url);
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("resultCount").textContent = `${data.total} phiếu`;
+  renderPagination(data.total, data.offset ?? offset, data.limit ?? pageSize);
 
   if (!data.items.length) {
     document.getElementById("emptyState").style.display = "block";
@@ -121,6 +146,30 @@ async function load() {
         <td class="td-muted">${t.created_by || "—"}</td>
       </tr>`;
   }).join("");
+}
+
+function renderPagination(total, offset, limit) {
+  const start = total === 0 ? 0 : offset + 1;
+  const end = Math.min(offset + limit, total);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  currentPage = Math.min(Math.max(1, Math.floor(offset / limit) + 1), totalPages);
+  document.getElementById("pageInfo").textContent = total === 0
+    ? "Không có phiếu nào"
+    : `Hiển thị ${start}-${end} / ${total} phiếu`;
+  document.getElementById("pageNumber").textContent = `Trang ${currentPage} / ${totalPages}`;
+  document.getElementById("prevBtn").disabled = currentPage <= 1;
+  document.getElementById("nextBtn").disabled = currentPage >= totalPages;
+}
+
+function changePage(step) {
+  currentPage = Math.max(1, currentPage + step);
+  load();
+}
+
+function changePageSize() {
+  pageSize = Number(document.getElementById('pageSize').value || 50);
+  currentPage = 1;
+  load();
 }
 
 checkAuth().then(() => load());
