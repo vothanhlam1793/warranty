@@ -390,6 +390,9 @@ function renderActions() {
   overdueActionBar.innerHTML = '';
   overdueFormTopWrap.innerHTML = '';
   links.push(`<a class="btn btn-secondary btn-sm" href="/tickets/detail.html?id=${ticket.id}">📋 Mở phiếu gốc</a>`);
+  if (item.workflow_state === 'A2') {
+    links.push(`<button class="btn btn-primary btn-sm" onclick="submitA2Advance()">📞 Xác nhận liên hệ xong → A3</button>`);
+  }
   if (item.workflow_state === 'A3') {
     links.push(`<a class="btn btn-primary btn-sm" href="/supplier-orders/new.html?item_id=${item.id}">📦 Tạo phiếu gửi NCC</a>`);
   }
@@ -475,6 +478,21 @@ function renderQuoteActionPanel() {
       </div>`;
   }
   return '';
+}
+
+async function submitA2Advance() {
+  const actor = getCurrentActorName();
+  if (!actor.trim()) return toast('Không xác định được người đang đăng nhập', 'error');
+  const note = prompt('Ghi chú liên hệ khách để chuyển A3:');
+  if (note === null) return;
+  if (!note.trim()) return toast('Vui lòng nhập ghi chú liên hệ', 'error');
+  await api.patch(`/api/tickets/${ticket.id}/items/${item.id}/state`, {
+    to_state: 'A3',
+    note: note.trim(),
+    actor,
+  });
+  toast('Đã chuyển item sang A3');
+  await loadPage();
 }
 
 function toggleQuoteForm(force) {

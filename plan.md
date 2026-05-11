@@ -143,6 +143,12 @@ Nó được dùng để ghi:
 
 ## Working Notes
 
+### Hotfix Notes
+
+- hotfix branch `hotfix/a2-to-a3-action` bổ sung lại action `A2 -> A3` trên `ticket-items/detail.html`
+- nguyên nhân: sau khi mở rộng item detail cho checklist workflow, UI detail page bị sót nút chuyển `A2 -> A3` dù backend vẫn cho phép transition này
+- đã deploy lại Docker Compose trên runtime hiện tại để bản chạy ở cổng `3001` nhận hotfix
+
 Khi có release mới, file này nên được cập nhật theo hướng:
 
 - bổ sung current state mới
